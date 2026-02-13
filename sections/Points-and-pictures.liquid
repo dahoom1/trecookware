@@ -1,0 +1,226 @@
+{% comment %}
+  Image with Hotspots - Final Dynamic Version
+  - Specific to each product via Metaobjects
+  - Smooth scroll to description on click
+  - "Back to Board" button for easy navigation
+{% endcomment %}
+
+{% liquid
+  assign hotspot_data = product.metafields.custom.product_hotspots.value
+  if hotspot_data == blank
+    assign hotspot_data = section.blocks
+  endif
+%}
+
+{% schema %}
+{
+  "name": "Image with Hotspots",
+  "class": "image-with-hotspots-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback Product Image",
+      "info": "Used if no dynamic image is set via metafields."
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "WHY END-GRAIN WOOD?"
+    },
+    {
+      "type": "range",
+      "id": "text_width_desktop",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "label": "Text Column Width (Desktop)",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot_point",
+      "name": "Fallback Hotspot",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        { "type": "range", "id": "top_position", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Top", "default": 50 },
+        { "type": "range", "id": "left_position", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Left", "default": 50 }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Image with Hotspots" }
+  ]
+}
+{% endschema %}
+
+<style>
+  .image-with-hotspots-section { background-color:rgb(255, 255, 255); padding: 30px 0; }
+  .iwh-container { display: flex; flex-direction: column; max-width: 1200px; margin: 0 auto; padding: 0 55px; gap: 30px; }
+  
+  .iwh-image-column { 
+    position: relative; 
+    width: 100%; 
+    scroll-margin-top: 120px; /* Buffer for sticky headers when scrolling back */
+  }
+  .iwh-image-column img { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+  .iwh-hotspot {
+    position: absolute; width: 34px; height: 34px; border-radius: 50%;
+    background-color: #ffffff; color: #333333; display: flex;
+    justify-content: center; align-items: center; font-weight: bold;
+    border: 2px solid #333333; transform: translate(-50%, -50%);
+    cursor: pointer; transition: all 0.3s ease; z-index: 2;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .iwh-hotspot:hover, .iwh-hotspot.is-active { 
+    background-color: #333333; color: #ffffff; transform: translate(-50%, -50%) scale(1.1); 
+  }
+
+  .iwh-text-column { width: 100%; display: flex; flex-direction: column; }
+  .iwh-section-title { font-size: 1.8em; margin-bottom: 20px; color: #333333; text-align: center; }
+  
+  .iwh-point-item { 
+    margin-bottom: 20px; padding: 20px; border-radius: 8px; transition: 0.3s ease; 
+    scroll-margin-top: 100px; /* Buffer for smooth scroll */
+    border: 1px solid transparent;
+  }
+  .iwh-point-item.is-highlighted { background-color: #ffffff; border-color: #e8e8e4; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+  
+  .iwh-point-title { font-size: 1.1em; font-weight: bold; margin-bottom: 8px; color: #333333; text-transform: uppercase; }
+  .iwh-point-description { color: #666666; line-height: 1.6; font-size: 0.95em; }
+  .iwh-point-description p { margin-bottom: 10px; }
+  .iwh-point-description p:last-child { margin-bottom: 0; }
+
+  /* Back to Image Button */
+  .iwh-back-to-image {
+    background: none; border: none; color: #a1a1a1; font-size: 0.8em;
+    text-decoration: underline; cursor: pointer; margin-top: 15px;
+    padding: 0; display: inline-flex; align-items: center; transition: color 0.2s;
+  }
+  .iwh-back-to-image:hover { color: #333; }
+
+  @media (min-width: 769px) {
+    .iwh-container { flex-direction: row; align-items: flex-start; gap: 60px; }
+    .iwh-image-column { width: calc(100% - {{ section.settings.text_width_desktop }}% - 60px); position: sticky; top: 120px; }
+    .iwh-text-column { width: {{ section.settings.text_width_desktop }}%; }
+    .iwh-section-title { text-align: left; }
+  }
+</style>
+
+<div class="iwh-container" id="iwh-section-{{ section.id }}">
+  {% comment %} Image Column {% endcomment %}
+  <div class="iwh-image-column" id="iwh-image-{{ section.id }}">
+    {% liquid 
+        assign display_image = section.settings.image
+        if product.metafields.custom.hotspot_image != blank
+            assign display_image = product.metafields.custom.hotspot_image
+        endif
+    %}
+
+    {% if display_image != blank %}
+      {{ display_image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {% endif %}
+
+    {% for item in hotspot_data %}
+      {% liquid
+        if item.settings
+          assign t_pos = item.settings.top_position
+          assign l_pos = item.settings.left_position
+        else
+          assign t_pos = item.top_position
+          assign l_pos = item.left_position
+        endif
+      %}
+      <div class="iwh-hotspot"
+           style="top: {{ t_pos }}%; left: {{ l_pos }}%;"
+           data-point-index="{{ forloop.index }}">
+        {{ forloop.index }}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% comment %} Text Column {% endcomment %}
+  <div class="iwh-text-column">
+    {% if section.settings.section_title != blank %}
+      <h2 class="iwh-section-title">{{ section.settings.section_title }}</h2>
+    {% endif %}
+
+    {% for item in hotspot_data %}
+      {% liquid
+        assign is_metaobject = false
+        if item.settings
+          assign title = item.settings.title
+          assign desc = item.settings.description
+        else
+          assign title = item.title
+          assign desc = item.description
+          assign is_metaobject = true
+        endif
+      %}
+      <div class="iwh-point-item" id="point-item-{{ section.id }}-{{ forloop.index }}">
+        {% if title != blank %}<div class="iwh-point-title">{{ title }}</div>{% endif %}
+        
+        <div class="iwh-point-description">
+          {% if is_metaobject %}
+            {{ desc | metafield_tag }}
+          {% else %}
+            {{ desc }}
+          {% endif %}
+        </div>
+
+        <button type="button" class="iwh-back-to-image" data-target="iwh-image-{{ section.id }}">
+          ↑ Back to board
+        </button>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sectionContainer = document.getElementById('iwh-section-{{ section.id }}');
+    const hotspots = sectionContainer.querySelectorAll('.iwh-hotspot');
+    const backButtons = sectionContainer.querySelectorAll('.iwh-back-to-image');
+    const imageCol = document.getElementById('iwh-image-{{ section.id }}');
+
+    hotspots.forEach(hotspot => {
+      const index = hotspot.dataset.pointIndex;
+      const correspondingTextItem = sectionContainer.querySelector(`#point-item-{{ section.id }}-${index}`);
+
+      // 1. Hover Effect
+      hotspot.addEventListener('mouseenter', () => {
+        hotspot.classList.add('is-active');
+        correspondingTextItem?.classList.add('is-highlighted');
+      });
+
+      hotspot.addEventListener('mouseleave', () => {
+        hotspot.classList.remove('is-active');
+        correspondingTextItem?.classList.remove('is-highlighted');
+      });
+
+      // 2. Click to Scroll down to Text
+      hotspot.addEventListener('click', () => {
+        if (correspondingTextItem) {
+          correspondingTextItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Briefly flash highlight for focus
+          correspondingTextItem.classList.add('is-highlighted');
+        }
+      });
+    });
+
+    // 3. Back to Image Button Logic
+    backButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        imageCol.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+</script>

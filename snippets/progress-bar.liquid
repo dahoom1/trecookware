@@ -1,0 +1,212 @@
+{% comment %}
+  STATE OF THE ART PROGRESS BAR
+  - Configuration: Change 'free_shipping_threshold' below (value in cents, e.g., 5000 = $50.00)
+{% endcomment %}
+
+{%- liquid
+  assign free_shipping_threshold = 50000
+  assign current_total = cart.total_price
+  assign remaining_amount = free_shipping_threshold | minus: current_total
+  
+  assign progress_percentage = current_total | times: 100.0 | divided_by: free_shipping_threshold
+  if progress_percentage > 100
+    assign progress_percentage = 100
+  endif
+-%}
+
+<div class="shipping-progress-wrapper" 
+     data-shipping-wrapper
+     data-threshold="{{ free_shipping_threshold }}"
+     data-currency="{{ cart.currency.iso_code }}">
+  
+  <div class="shipping-progress-bar">
+    <div class="shipping-progress-fill" 
+         style="width: {{ progress_percentage }}%;">
+      <span class="shipping-progress-shine"></span>
+    </div>
+  </div>
+
+  <div class="shipping-progress-text">
+    {%- if remaining_amount > 0 -%}
+      <p>
+        Add <strong>{{ remaining_amount | money }}</strong> for free shipping
+      </p>
+    {%- else -%}
+      <p class="success-text">
+        🎉 You qualify for free shipping!
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .shipping-progress-wrapper {
+    width: 100%;
+    padding: 15px 0;
+    display: block;
+  }
+  
+  .shipping-progress-bar {
+    background-color: #e6e6e6;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .shipping-progress-fill {
+    background: linear-gradient(90deg, #c0ddea 0%, #4CAF50 100%);
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth eased transition */
+    position: relative;
+    min-width: 2%; /* Ensure visibility even at low amounts */
+  }
+
+  /* Optional: Adds a shiny animation effect */
+  .shipping-progress-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(
+      90deg, 
+      rgba(255,255,255,0) 0%, 
+      rgba(255,255,255,0.4) 50%, 
+      rgba(255,255,255,0) 100%
+    );
+    transform: translateX(-100%);
+    animation: shimmer 0.5s infinite;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  .shipping-progress-text p {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+  }
+
+  .shipping-progress-text strong {
+    font-weight: bold;
+    color: #000;
+  }
+
+  .success-text {
+    color: #2E7D32 !important;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+(function() {
+  // CONFIGURATION
+  // We use a global variable to share state across re-renders
+  window.shippingBarState = window.shippingBarState || {
+    total: {{ cart.total_price }}, // Initialize with Liquid
+    threshold: {{ free_shipping_threshold }},
+    currency: "{{ cart.currency.iso_code }}"
+  };
+
+  const formatMoney = (cents, currency) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency
+    }).format(cents / 100);
+  };
+
+  const updateDOM = () => {
+    // Select ALL instances of the bar (Cart drawer + Main page + Cart page)
+    const wrappers = document.querySelectorAll('[data-shipping-wrapper]');
+    
+    wrappers.forEach(wrapper => {
+      const fill = wrapper.querySelector('.shipping-progress-fill');
+      const textDiv = wrapper.querySelector('.shipping-progress-text');
+      
+      if (!fill || !textDiv) return;
+
+      const { total, threshold, currency } = window.shippingBarState;
+      
+      // Calculate Math
+      let percentage = (total / threshold) * 100;
+      if (percentage > 100) percentage = 100;
+      if (percentage < 0) percentage = 0;
+      
+      const remaining = threshold - total;
+
+      // Update Visuals
+      fill.style.width = `${percentage}%`;
+
+      // Update Text
+      if (remaining > 0) {
+        textDiv.innerHTML = `<p>Add <strong>${formatMoney(remaining, currency)}</strong> for free shipping</p>`;
+      } else {
+        textDiv.innerHTML = `<p class="success-text">🎉 You qualify for free shipping!</p>`;
+      }
+    });
+  };
+
+  // 1. Listen for Shopify Fetch Events (The standard way themes update)
+  // We hook into the fetch API to detect cart changes instantly
+  const originalFetch = window.fetch;
+  window.fetch = async function (...args) {
+    const response = await originalFetch(...args);
+    
+    // Check if this request was a cart update
+    if (args[0].toString().includes('/cart/add') || 
+        args[0].toString().includes('/cart/change') || 
+        args[0].toString().includes('/cart/update')) {
+      
+      // Clone the response so we can read the JSON without consuming the original stream
+      const clone = response.clone();
+      try {
+        const data = await clone.json();
+        // Update global state
+        window.shippingBarState.total = data.total_price || data.items_subtotal_price;
+        updateDOM();
+      } catch (e) {
+        // If parsing fails, fall back to fetching cart.js manually
+        fetchCartManually();
+      }
+    }
+    return response;
+  };
+
+  const fetchCartManually = () => {
+    fetch(window.Shopify.routes.root + 'cart.js')
+      .then(res => res.json())
+      .then(cart => {
+        window.shippingBarState.total = cart.total_price;
+        updateDOM();
+      });
+  };
+
+  // 2. Observer for HTML Replacements (Fixes "Disappearing" issue)
+  // This watches the body for ANY added nodes. If a new cart drawer appears, update it immediately.
+  const observer = new MutationObserver((mutations) => {
+    let shouldUpdate = false;
+    for (const mutation of mutations) {
+      if (mutation.addedNodes.length) {
+        // Check if the added node contains our progress bar
+        if (mutation.target.querySelector && mutation.target.querySelector('[data-shipping-wrapper]')) {
+          shouldUpdate = true;
+          break;
+        }
+      }
+    }
+    if (shouldUpdate) updateDOM();
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // 3. Standard Events
+  document.addEventListener('DOMContentLoaded', updateDOM);
+  document.addEventListener('cart:updated', fetchCartManually); // Legacy themes
+})();
+</script>

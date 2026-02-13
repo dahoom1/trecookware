@@ -1,0 +1,108 @@
+{% comment %}
+  Enhanced Product Card Wrapper with Badge Support
+  
+  Accepts:
+  - card_product: {Object} Product object
+  - show_badges: {Boolean} Whether to show Limited/Sale badges (default: true)
+  - limited_tag: {String} Tag to check for limited products (default: 'limited')
+  - limited_text: {String} Text for limited badge (default: 'Limited')
+  - sale_text: {String} Text for sale badge (default: 'Save [percent]%')
+  - media_aspect_ratio: {String} Image aspect ratio
+  - image_shape: {String} Image shape
+  - show_secondary_image: {Boolean}
+  - show_vendor: {Boolean}
+  - show_rating: {Boolean}
+  - lazy_load: {Boolean}
+  - skip_styles: {Boolean}
+  - quick_add: {String}
+  - section_id: {String}
+  
+  Usage:
+  {% render 'card-product-enhanced',
+    card_product: product,
+    show_badges: true,
+    limited_tag: 'limited',
+    media_aspect_ratio: section.settings.image_ratio,
+    quick_add: section.settings.quick_add
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign show_badges = show_badges | default: true
+  assign limited_tag = limited_tag | default: 'limited'
+  assign limited_text = limited_text | default: 'Limited'
+  assign sale_text = sale_text | default: 'Save [percent]%'
+-%}
+
+<div class="card-wrapper product-card-wrapper underline-links-hover" style="position: relative;">
+  
+  {% comment %} Badge Container {% endcomment %}
+  {%- if show_badges and card_product -%}
+    <div class="product-badges">
+      {% comment %} Limited Badge {% endcomment %}
+      {%- if card_product.tags contains limited_tag -%}
+        <span class="product-badge product-badge--limited">
+          {{ limited_text }}
+        </span>
+      {%- endif -%}
+      
+      {% comment %} Sale Badge {% endcomment %}
+      {%- if card_product.compare_at_price > card_product.price -%}
+        {%- assign savings_percent = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price | round -%}
+        <span class="product-badge product-badge--sale">
+          {{ sale_text | replace: '[percent]', savings_percent }}
+        </span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  
+  {% comment %} Standard Product Card Render {% endcomment %}
+  {% render 'card-product',
+    card_product: card_product,
+    media_aspect_ratio: media_aspect_ratio,
+    image_shape: image_shape,
+    show_secondary_image: show_secondary_image,
+    show_vendor: show_vendor,
+    show_rating: show_rating,
+    lazy_load: lazy_load,
+    skip_styles: skip_styles,
+    quick_add: quick_add,
+    section_id: section_id
+  %}
+</div>
+
+<style>
+  .product-badges {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .product-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+
+  .product-badge--limited {
+    background-color: #B8D4D1;
+    color: #1a1a1a;
+  }
+
+  .product-badge--sale {
+    background-color: #B8D4D1;
+    color: #1a1a1a;
+  }
+  
+  {% comment %} Stack badges if both are present {% endcomment %}
+  .product-badge--limited + .product-badge--sale {
+    top: 38px;
+  }
+</style>

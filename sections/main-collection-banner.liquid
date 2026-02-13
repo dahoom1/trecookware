@@ -1,0 +1,533 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  @media screen and (max-width: 749px) {
+    .collection-hero--with-image .collection-hero__inner {
+      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
+    }
+  }
+
+  .collection-hero__inner {
+    display: block !important;
+  }
+
+  .collection-hero__content-wrapper {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 60px;
+    align-items: start;
+    margin-bottom: 50px;
+  }
+
+  .collection-hero__text-wrapper {
+    padding-right: 20px;
+  }
+
+  .collection-hero__image-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .collection-hero__carousel {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .collection-hero__carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform {{ section.settings.transition_duration }}ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  .collection-hero__carousel-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .collection-hero__carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .collection-hero__title {
+    
+    font-size: 14px;
+    font-weight: 300;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 40px;
+    color: #000000;
+    line-height: 1.4;
+  }
+
+  .collection-header-text {
+    font-size: 56px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin-top: 10px;
+    margin-bottom: 32px;
+    text-transform: none;
+    font-family: var(--font-heading-family);
+    line-height: 1.1;
+  }
+
+  .collection-hero__description {
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 0;
+    color: #000000;
+  }
+
+  .collection-hero__features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 40px;
+    margin-top: 0;
+    list-style: none;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .collection-hero__feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: var(--font-heading-family);
+  }
+
+  .collection-hero__feature-item::before {
+    content: '';
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 9L7 14L16 4' stroke='%23000000' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  @media screen and (min-width: 750px) {
+    .collection-header-text.hide-desktop {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-header-text.hide-mobile {
+      display: none;
+    }
+
+    .collection-hero__content-wrapper {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 2px;
+    }
+
+    .collection-hero__text-wrapper {
+      padding-right: 0;
+      order: 2;
+    }
+
+    .collection-hero__image-container {
+      order: 1;
+    }
+
+    .collection-hero__carousel {
+      aspect-ratio: 4 / 3;
+    }
+
+    .collection-header-text {
+      font-size: 45px;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .collection-hero__title {
+      display: none;
+      font-size: 13px;
+      margin-bottom: 1px;
+    }
+
+    .collection-hero__description {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .collection-hero__features {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 8px;
+      margin-top: 0px;
+    }
+
+    .collection-hero__feature-item {
+      font-size: 14px;
+    }
+
+    .collection-hero__feature-item::before {
+      width: 16px;
+      height: 16px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="collection-hero{% if section.settings.show_collection_image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
+  <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    
+    <div class="collection-hero__content-wrapper">
+      <div class="collection-hero__text-wrapper">
+        <h4 class="collection-hero__title">
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- collection.title | escape -}}
+        </h4>
+
+        {%- if section.settings.show_header_text and section.settings.header_text != blank -%}
+          {%- assign header_classes = 'collection-header-text' -%}
+          {%- unless section.settings.show_header_text_desktop -%}
+            {%- assign header_classes = header_classes | append: ' hide-desktop' -%}
+          {%- endunless -%}
+          {%- unless section.settings.show_header_text_mobile -%}
+            {%- assign header_classes = header_classes | append: ' hide-mobile' -%}
+          {%- endunless -%}
+          <h2 class="{{ header_classes }}">{{ section.settings.header_text }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.show_collection_description -%}
+          <div class="collection-hero__description rte">{{ collection.description }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_collection_image -%}
+        <div class="collection-hero__image-container media gradient">
+          <div 
+            class="collection-hero__carousel" 
+            data-carousel
+            data-interval="{{ section.settings.slide_interval | times: 1000 }}"
+            data-autoplay="{{ section.settings.enable_autoplay }}"
+          >
+            <div class="collection-hero__carousel-track" data-carousel-track>
+            {%- liquid
+              assign carousel_images = ''
+              if section.settings.carousel_image_1
+                assign carousel_images = carousel_images | append: '1,'
+              endif
+              if section.settings.carousel_image_2
+                assign carousel_images = carousel_images | append: '2,'
+              endif
+              if section.settings.carousel_image_3
+                assign carousel_images = carousel_images | append: '3,'
+              endif
+              if section.settings.carousel_image_4
+                assign carousel_images = carousel_images | append: '4,'
+              endif
+              if section.settings.carousel_image_5
+                assign carousel_images = carousel_images | append: '5,'
+              endif
+              
+              if carousel_images == blank and collection.image
+                assign carousel_images = 'collection,'
+              endif
+              
+              assign images_array = carousel_images | split: ','
+            -%}
+            
+            {%- for img_num in images_array -%}
+              {%- if img_num != blank -%}
+                {%- liquid
+                  if img_num == 'collection'
+                    assign current_image = collection.image
+                  elsif img_num == '1'
+                    assign current_image = section.settings.carousel_image_1
+                  elsif img_num == '2'
+                    assign current_image = section.settings.carousel_image_2
+                  elsif img_num == '3'
+                    assign current_image = section.settings.carousel_image_3
+                  elsif img_num == '4'
+                    assign current_image = section.settings.carousel_image_4
+                  elsif img_num == '5'
+                    assign current_image = section.settings.carousel_image_5
+                  endif
+                -%}
+                
+                {%- if current_image -%}
+                  <div class="collection-hero__carousel-slide">
+                    <img
+                      srcset="
+                        {%- if current_image.width >= 360 -%}{{ current_image | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if current_image.width >= 535 -%}{{ current_image | image_url: width: 535 }} 535w,{%- endif -%}
+                        {%- if current_image.width >= 750 -%}{{ current_image | image_url: width: 750 }} 750w,{%- endif -%}
+                        {%- if current_image.width >= 1070 -%}{{ current_image | image_url: width: 1070 }} 1070w,{%- endif -%}
+                        {%- if current_image.width >= 1500 -%}{{ current_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                        {{ current_image | image_url }} {{ current_image.width }}w
+                      "
+                      src="{{ current_image | image_url: width: 1070 }}"
+                      sizes="(min-width: 990px) 60vw, (min-width: 750px) 50vw, 100vw"
+                      alt="{{ current_image.alt | escape }}"
+                      width="{{ current_image.width }}"
+                      height="{{ current_image.height }}"
+                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    >
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_features -%}
+      <ul class="collection-hero__features">
+        {%- if section.settings.feature_1 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_1 }}</li>
+        {%- endif -%}
+        {%- if section.settings.feature_2 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_2 }}</li>
+        {%- endif -%}
+        {%- if section.settings.feature_3 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_3 }}</li>
+        {%- endif -%}
+        {%- if section.settings.feature_4 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_4 }}</li>
+        {%- endif -%}
+        {%- if section.settings.feature_5 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_5 }}</li>
+        {%- endif -%}
+        {%- if section.settings.feature_6 != blank -%}
+          <li class="collection-hero__feature-item">{{ section.settings.feature_6 }}</li>
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% javascript %}
+  class CollectionCarousel {
+    constructor(element) {
+      this.carousel = element;
+      this.track = this.carousel.querySelector('[data-carousel-track]');
+      this.slides = Array.from(this.carousel.querySelectorAll('.collection-hero__carousel-slide'));
+      this.currentIndex = 0;
+      this.interval = parseInt(this.carousel.dataset.interval) || 4000;
+      this.isAutoplayEnabled = this.carousel.dataset.autoplay === 'true';
+      
+      if (this.slides.length > 1 && this.isAutoplayEnabled) {
+        this.startAutoplay();
+      }
+    }
+
+    showSlide(index) {
+      const slideWidth = this.slides[0].offsetWidth;
+      const translateX = -index * slideWidth;
+      this.track.style.transform = `translateX(${translateX}px)`;
+    }
+
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+      this.showSlide(this.currentIndex);
+    }
+
+    startAutoplay() {
+      this.autoplayInterval = setInterval(() => {
+        this.nextSlide();
+      }, this.interval);
+    }
+
+    stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('[data-carousel]');
+    carousels.forEach(carousel => {
+      new CollectionCarousel(carousel);
+    });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-banner.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-collection-banner.settings.paragraph.content"
+    },
+    {
+      "type": "header",
+      "content": "Header Text Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_text",
+      "default": true,
+      "label": "Show header text"
+    },
+    {
+      "type": "text",
+      "id": "header_text",
+      "default": "Only What's Essential.",
+      "label": "Header text",
+      "info": "Large heading displayed below the collection title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_text_desktop",
+      "default": true,
+      "label": "Show header text on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_text_mobile",
+      "default": true,
+      "label": "Show header text on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "t:sections.main-collection-banner.settings.show_collection_description.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": true,
+      "label": "t:sections.main-collection-banner.settings.show_collection_image.label"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "default": true,
+      "label": "Enable autoplay",
+      "info": "Automatically cycle through images"
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Slide interval",
+      "default": 4,
+      "info": "Time each image displays before transitioning"
+    },
+    {
+      "type": "range",
+      "id": "transition_duration",
+      "min": 300,
+      "max": 2000,
+      "step": 100,
+      "unit": "ms",
+      "label": "Transition duration",
+      "default": 800,
+      "info": "How long the fade transition takes"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add multiple images to create a carousel. If no images are selected, the collection's featured image will be used."
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_image_1",
+      "label": "Carousel image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_image_2",
+      "label": "Carousel image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_image_3",
+      "label": "Carousel image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_image_4",
+      "label": "Carousel image 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_image_5",
+      "label": "Carousel image 5"
+    },
+    {
+      "type": "header",
+      "content": "Feature Points"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "default": true,
+      "label": "Show feature points"
+    },
+    {
+      "type": "text",
+      "id": "feature_1",
+      "default": "5 Ply construction",
+      "label": "Feature 1"
+    },
+    {
+      "type": "text",
+      "id": "feature_2",
+      "default": "all heat sources",
+      "label": "Feature 2"
+    },
+    {
+      "type": "text",
+      "id": "feature_3",
+      "default": "Sealed Rims",
+      "label": "Feature 3"
+    },
+    {
+      "type": "text",
+      "id": "feature_4",
+      "default": "Comfortable Handles",
+      "label": "Feature 4"
+    },
+    {
+      "type": "text",
+      "id": "feature_5",
+      "default": "Dishwasher Safe",
+      "label": "Feature 5"
+    },
+    {
+      "type": "text",
+      "id": "feature_6",
+      "default": "18/10 stainless steel",
+      "label": "Feature 6"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,335 @@
+{% comment %}
+  Video Carousel Section
+  Hybrid Loading Strategy:
+  - 1st Video: Preloads immediately and plays before entering viewport (for instant playback).
+  - Other Videos: Lazy load (preload="none") and only play when swiped into view.
+{% endcomment %}
+
+<style>
+  /* SECTION CONTAINER */
+  .video-carousel-section {
+    padding: 40px 0;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  .carousel-header {
+  padding: 0 20px 20px 20px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  font-family: var(--font-heading-family); 
+  font-size: 24px;
+  color: #333;
+}
+
+.video-carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 0 20px 40px 20px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; 
+}
+
+  .video-carousel-track::-webkit-scrollbar {
+    display: none; 
+  }
+
+  /* SLIDE CARD */
+  .video-slide-card {
+    position: relative;
+    flex: 0 0 80%; 
+    scroll-snap-align: center;
+    aspect-ratio: 4 / 5; 
+    border-radius: 1px;
+    overflow: hidden;
+    background: #f4f4f4;
+  }
+
+  @media (min-width: 768px) {
+    .video-slide-card {
+      flex: 0 0 300px; 
+      scroll-snap-align: start;
+    }
+    .carousel-header {
+      padding-left: 40px;
+    }
+    .video-carousel-track {
+      padding: 0 40px 40px 40px;
+    }
+  }
+
+  /* VIDEO ELEMENT */
+  .video-slide-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* OVERLAYS */
+  .overlay-handle {
+    position: absolute;
+    top: 15px;
+    left: 15px !important;  /* Forces it to stay on the Left side */
+    right: auto !important; /* Prevents the theme from flipping it to the Right */
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    z-index: 2;
+    
+    /* Crucial for Arabic support: */
+    direction: ltr;        /* Forces text to read Left-to-Right (@handle) */
+    unicode-bidi: embed;   /* Ensures symbols like '@' stick to the correct side */
+  }
+
+  .overlay-cta {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: white;
+    color: black;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    z-index: 2;
+  }
+
+  .overlay-cta:hover {
+    transform: scale(1.05);
+  }
+
+  .play-pause-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    color: white;
+  }
+  
+  .play-pause-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: white;
+  }
+</style>
+
+<div class="video-carousel-section">
+  {% if section.settings.heading != blank %}
+    <h2 class="carousel-header">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="video-carousel-track" id="VideoTrack-{{ section.id }}">
+    {% for block in section.blocks %}
+      <div class="video-slide-card" {{ block.shopify_attributes }}>
+        
+        <div class="overlay-handle">{{ block.settings.social_handle }}</div>
+
+        {% assign poster_url = block.settings.cover_image | image_url: width: 600 %}
+        {% if poster_url == blank and block.settings.video_file != blank %}
+           {% assign poster_url = block.settings.video_file.preview_image | image_url: width: 600 %}
+        {% endif %}
+
+        {% if block.settings.video_file != blank %}
+          <video 
+            class="js-carousel-video"
+            playsinline 
+            loop 
+            muted 
+            poster="{{ poster_url }}"
+            {% comment %} 
+              LOGIC: 
+              - If it is the first video (forloop.first), set preload="auto" to load immediately.
+              - If it is 2nd, 3rd, etc., set preload="metadata" to save bandwidth until scrolled.
+            {% endcomment %}
+            {% if forloop.first %}
+              preload="auto"
+            {% else %}
+              preload="metadata"
+            {% endif %}
+          >
+            {% for source in block.settings.video_file.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        {% else %}
+           {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+
+        <button class="play-pause-btn js-play-toggle" aria-label="Pause Video">
+          <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <svg class="icon-play" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+
+        {% if block.settings.product_link != blank %}
+          <a href="{{ block.settings.product_link }}" class="overlay-cta">
+            {{ block.settings.cta_text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.getElementById('VideoTrack-{{ section.id }}');
+  if (!container) return; 
+  
+  const videos = container.querySelectorAll('.js-carousel-video');
+
+  // OPTION: Root Margin
+  // '600px' means the observer will trigger "isIntersecting" when the video 
+  // is still 600px AWAY from the viewport. 
+  // This starts the video playing BEFORE the user actually sees it, 
+  // satisfying the "find the video already playing" requirement.
+  let observerOptions = {
+    root: null, 
+    rootMargin: '600px 0px 600px 0px', 
+    threshold: 0 
+  };
+
+  let observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      let video = entry.target;
+      let btn = video.closest('.video-slide-card').querySelector('.js-play-toggle');
+      
+      if (entry.isIntersecting) {
+        // Video is near or on screen. 
+        // 1. If it was preload="none", it now starts buffering.
+        // 2. Play immediately.
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.then(_ => {
+            updateButtonState(btn, 'playing');
+          })
+          .catch(error => {
+            // Autoplay prevented or still loading
+            console.log("Autoplay waiting for interaction or load");
+          });
+        }
+      } else {
+        // Video is far off screen (more than 600px away). Pause it.
+        video.pause();
+        updateButtonState(btn, 'paused');
+      }
+    });
+  }, observerOptions);
+
+  videos.forEach(video => {
+    observer.observe(video);
+  });
+
+  // Manual Toggle Logic
+  container.querySelectorAll('.js-play-toggle').forEach(btn => {
+    btn.addEventListener('click', function() {
+      let video = this.closest('.video-slide-card').querySelector('video');
+      
+      if (video.paused) {
+        video.play();
+        updateButtonState(this, 'playing');
+      } else {
+        video.pause();
+        updateButtonState(this, 'paused');
+      }
+    });
+  });
+
+  function updateButtonState(btn, state) {
+    const pauseIcon = btn.querySelector('.icon-pause');
+    const playIcon = btn.querySelector('.icon-play');
+    
+    if (state === 'playing') {
+      pauseIcon.style.display = 'block';
+      playIcon.style.display = 'none';
+    } else {
+      pauseIcon.style.display = 'none';
+      playIcon.style.display = 'block';
+    }
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Video Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "The Cookware Lineup"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#eaddcf"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_slide",
+      "name": "Video Card",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video_file",
+          "label": "Shopify Video",
+          "info": "Select a video uploaded to your Shopify Files."
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Custom Cover Image",
+          "info": "Optional. Defaults to video thumbnail."
+        },
+        {
+          "type": "text",
+          "id": "social_handle",
+          "label": "Social Handle",
+          "default": "@onequince"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Button Text",
+          "default": "SHOP"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Carousel",
+      "blocks": [
+        { "type": "video_slide" },
+        { "type": "video_slide" },
+        { "type": "video_slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,848 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Force override all default footer styles */
+  .footer.tre-footer * {
+    box-sizing: border-box !important;
+    color: #ffffff;
+  }
+
+  .tre-footer {
+    background-color: #26231e !important;
+    color: #ffffff !important;
+    padding: 60px 0 40px !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .tre-footer-container {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Top section with 4 columns */
+  .tre-footer-top {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    margin-bottom: 60px !important;
+    width: 100% !important;
+  }
+
+  @media screen and (min-width: 750px) {
+    .tre-footer-top {
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 60px !important;
+    }
+  }
+
+  .tre-footer-column {
+    display: block !important;
+    min-height: 50px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .tre-footer-column h2 {
+    font-size: {{ section.settings.heading_size }}px !important;
+    font-weight: 500 !important;
+    margin: 0 0 20px 0 !important;
+    color: #ffffff !important;
+    display: block !important;
+  }
+
+  .tre-footer-column ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  .tre-footer-column li {
+    margin-bottom: 0px !important;
+    display: block !important;
+  }
+
+  .tre-footer-column a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: {{ section.settings.link_size }}px !important;
+    line-height: 1.6 !important;
+    transition: opacity 0.3s ease !important;
+    display: inline-block !important;
+  }
+
+  .tre-footer-column a:hover {
+    opacity: 0.7 !important;
+  }
+
+  /* Newsletter column */
+  .tre-footer-newsletter {
+    display: block !important;
+  }
+
+  .tre-footer-newsletter h2 {
+    font-size: {{ section.settings.heading_size }}px !important;
+    font-weight: 500 !important;
+    margin: 0 0 20px 0 !important;
+    color: #ffffff !important;
+  }
+
+  .tre-footer-newsletter-form {
+    display: flex !important;
+    gap: 10px !important;
+  }
+
+  .tre-footer-newsletter-input {
+    flex: 1 !important;
+    background: #ffffff !important;
+    border: none !important;
+    padding: 12px 16px !important;
+    color: #000000 !important;
+    font-size: 14px !important;
+  }
+
+  .tre-footer-newsletter-input::placeholder {
+    color: #999999 !important;
+  }
+
+  .tre-footer-newsletter-input:focus {
+    outline: none !important;
+  }
+
+  .tre-footer-newsletter-button {
+    background: transparent !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    padding: 12px 30px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+    white-space: nowrap !important;
+  }
+
+  .tre-footer-newsletter-button:hover {
+    background: #ffffff !important;
+    color: #26231e !important;
+  }
+
+  .tre-footer-newsletter-message {
+    margin-top: 10px !important;
+    font-size: 14px !important;
+  }
+
+  /* Bottom section */
+  .tre-footer-bottom {
+    border-top: none !important;
+    padding-top: 60px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 30px !important;
+  }
+
+  .tre-footer-logo {
+    max-width: 300px;
+  }
+
+  .tre-footer-logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .tre-footer-logo-fallback {
+    font-size: 80px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  .tre-footer-logo-fallback sup {
+    font-size: 24px;
+    vertical-align: super;
+  }
+
+  .tre-footer-tagline {
+    text-align: right;
+    font-size: 26px;
+    line-height: 1.3;
+    font-weight: 300;
+    color: #ffffff;
+  }
+
+  /* Social media icons */
+  .tre-footer-social {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .tre-footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: #ffffff;
+    transition: all 0.3s ease;
+  }
+
+  .tre-footer-social a:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .tre-footer-social a:hover svg {
+    fill: #26231e;
+  }
+
+  .tre-footer-social svg {
+    width: 20px;
+    height: 20px;
+    fill: #ffffff;
+    transition: fill 0.3s ease;
+  }
+
+  /* Legal/copyright section */
+  .tre-footer-legal {
+    margin-top: 40px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 13px;
+  }
+
+  .tre-footer-legal-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    opacity: 0.7;
+  }
+
+  .tre-footer-legal-links a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    margin-right: 20px;
+  }
+
+  .tre-footer-legal-links a:hover {
+    opacity: 0.7;
+  }
+
+  .tre-footer-payment-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tre-footer-payment-icons .icon {
+    height: 20px;
+    width: auto;
+    max-width: 35px;
+  }
+
+  .custom-payment-icon {
+    height: 20px !important;
+    width: auto !important;
+    max-width: 35px !important;
+    object-fit: contain !important;
+  }
+
+  /* Certification logos section */
+  .tre-footer-certifications {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .tre-footer-certification-logo {
+    height: 50px !important;
+    width: auto !important;
+    max-width: 80px !important;
+    object-fit: contain !important;
+  }
+
+  /* Mobile Styles */
+  @media screen and (max-width: 749px) {
+    .tre-footer-top {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    .tre-footer-column:last-child {
+      order: -1 !important;
+    }
+
+    .tre-footer-newsletter h2 {
+      font-size: 14px !important;
+      text-align: left !important;
+    }
+
+    [dir="rtl"] .tre-footer-newsletter h2 {
+      font-size: 14px !important;
+      text-align: right !important;
+    }
+
+    .tre-footer-container {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    .tre-footer-bottom {
+      align-items: flex-start !important;
+      padding-top: 40px !important;
+      flex-direction: column !important;
+      position: relative !important;
+      order: 4 !important;
+    }
+
+    .tre-footer-logo {
+      max-width: 100% !important;
+      width: 100% !important;
+      order: 3 !important;
+      align-self: flex-start !important;
+    }
+
+    .tre-footer-logo-fallback {
+      font-size: 180px !important;
+      text-align: left !important;
+      position: relative !important;
+      line-height: 0.85 !important;
+      letter-spacing: -0.05em !important;
+    }
+
+    .tre-footer-logo-fallback sup {
+      font-size: 32px !important;
+      position: absolute !important;
+      top: -20px !important;
+      right: -40px !important;
+      vertical-align: baseline !important;
+    }
+
+    .tre-footer-tagline {
+      text-align: left !important;
+      order: 2 !important;
+      font-size: 20px !important;
+      align-self: flex-start !important;
+      margin-bottom: 20px !important;
+    }
+
+    .tre-footer-newsletter-form {
+      flex-direction: column !important;
+    }
+
+    .tre-footer-social {
+      order: 2 !important;
+      margin-top: 30px !important;
+      margin-bottom: 30px !important;
+    }
+
+    .tre-footer-legal {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      order: 3 !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      margin-bottom: 40px !important;
+    }
+
+    .tre-footer-legal-links {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .tre-footer-legal-links a {
+      margin-right: 0;
+    }
+
+    .tre-footer-certifications {
+      margin-top: 15px;
+      gap: 12px;
+    }
+    
+    .tre-footer-certification-logo {
+      height: 40px !important;
+      max-width: 70px !important;
+    }
+  }
+</style>
+
+{%- style -%}
+  .footer {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer {
+      margin-top: {{ section.settings.margin_top }}px;
+    }
+  }
+{%- endstyle -%}
+
+<footer class="footer tre-footer">
+  {%- liquid
+    assign has_social_icons = false
+    if settings.social_facebook_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_tiktok_link != blank or settings.social_twitter_link != blank or settings.social_snapchat_link != blank
+      assign has_social_icons = true
+    endif
+  -%}
+
+  <div class="tre-footer-container">
+    <!-- Top section with menu columns and newsletter -->
+    <div class="tre-footer-top">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            <div class="tre-footer-column" {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+
+          {%- when 'link_list' -%}
+            {%- if block.settings.menu != blank -%}
+              <div class="tre-footer-column" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h2>{{ block.settings.heading }}</h2>
+                {%- endif -%}
+                <ul>
+                  {%- for link in block.settings.menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- if section.settings.newsletter_enable -%}
+        <div class="tre-footer-column">
+          <div class="tre-footer-newsletter">
+            {%- if section.settings.newsletter_heading != blank -%}
+              <h2>{{ section.settings.newsletter_heading }}</h2>
+            {%- endif -%}
+            
+            {%- form 'customer', id: 'ContactFooter', class: 'tre-footer-newsletter-form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <input
+                id="NewsletterForm--{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                class="tre-footer-newsletter-input"
+                value="{{ form.email }}"
+                aria-required="true"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                {% endif %}
+                placeholder="{{ 'newsletter.label' | t }}"
+                required
+              >
+              <button
+                type="submit"
+                class="tre-footer-newsletter-button"
+                name="commit"
+                aria-label="{{ 'newsletter.button_label' | t }}"
+              >
+                Send
+              </button>
+            {%- endform -%}
+
+            {%- if form.posted_successfully? -%}
+              <div class="tre-footer-newsletter-message" style="color: #4caf50;">
+                {{ 'newsletter.success' | t }}
+              </div>
+            {%- endif -%}
+            {%- if form.errors -%}
+              <div class="tre-footer-newsletter-message" style="color: #f44336;">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Social media icons -->
+    {%- if section.settings.show_social and has_social_icons -%}
+      <div class="tre-footer-social">
+        {%- if settings.social_instagram_link != blank -%}
+          <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if settings.social_tiktok_link != blank -%}
+          <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if settings.social_snapchat_link != blank -%}
+          <a href="{{ settings.social_snapchat_link }}" target="_blank" rel="noopener" aria-label="Snapchat">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.166 3c.796 0 3.495.223 4.769 3.073.426.959.324 2.589.24 3.898l-.002.047c-.011.146-.018.278-.024.41.6.235.942.348 1.195.436.299.103.495.17.739.233a.81.81 0 0 1 .655.814c0 .37-.217.7-.554.843-.036.015-.108.046-.197.088-.482.226-1.284.603-1.62 1.056-.087.118-.124.235-.112.353.123 1.108 1.421 2.313 2.488 3.297.213.196.399.368.542.506.213.206.361.4.428.546.127.273.089.549-.111.767-.205.225-.54.357-.918.357-.044 0-.089-.002-.133-.006-.173-.016-.371-.06-.604-.116-.451-.108-1.013-.243-1.624-.243-.44 0-.801.084-1.139.266-.541.29-1.044.925-1.906 2.046-.01.013-.019.025-.029.038-.543.707-1.289 1.555-2.205 1.869-.272.093-.566.14-.875.14-.317 0-.62-.05-.901-.149-.899-.316-1.644-1.169-2.192-1.883l-.034-.044c-.863-1.123-1.365-1.757-1.904-2.046-.338-.182-.699-.266-1.139-.266-.611 0-1.173.135-1.624.243-.233.056-.43.1-.603.116-.044.004-.089.006-.134.006-.378 0-.713-.132-.918-.357-.2-.218-.238-.494-.111-.767.067-.146.215-.34.428-.546.143-.138.329-.31.542-.506 1.067-.984 2.365-2.189 2.488-3.297.012-.118-.025-.235-.112-.353-.336-.453-1.138-.83-1.62-1.056-.089-.042-.161-.073-.197-.088-.337-.143-.554-.474-.554-.843a.81.81 0 0 1 .655-.814c.244-.063.44-.13.739-.233.253-.088.595-.201 1.195-.436-.006-.132-.013-.264-.024-.41l-.002-.047c-.084-1.309-.186-2.939.24-3.898C8.671 3.223 11.37 3 12.166 3z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if settings.social_youtube_link != blank -%}
+          <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if settings.social_facebook_link != blank -%}
+          <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if settings.social_twitter_link != blank -%}
+          <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="Twitter">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Legal/copyright section -->
+    <div class="tre-footer-legal">
+      <div class="tre-footer-legal-links">
+        {%- if section.settings.show_policy -%}
+          {%- if shop.terms_of_service.url != blank -%}
+            <a href="{{ shop.terms_of_service.url }}">{{ shop.terms_of_service.title }}</a>
+          {%- endif -%}
+          {%- if shop.privacy_policy.url != blank -%}
+            <a href="{{ shop.privacy_policy.url }}">{{ shop.privacy_policy.title }}</a>
+          {%- endif -%}
+          {%- if shop.refund_policy.url != blank -%}
+            <a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title }}</a>
+          {%- endif -%}
+        {%- endif -%}
+        <span>© {{ 'now' | date: '%Y' }}, {{ shop.name | upcase }}</span>
+      </div>
+
+      <div>
+        {%- if section.settings.payment_enable -%}
+          <div class="tre-footer-payment-icons">
+            {%- unless shop.enabled_payment_types == empty -%}
+              {%- for type in shop.enabled_payment_types -%}
+                {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+              {%- endfor -%}
+            {%- endunless -%}
+            
+            {%- comment -%} Custom Payment Method Logos {%- endcomment -%}
+            {%- if section.settings.mada_logo != blank -%}
+              <img 
+                src="{{ section.settings.mada_logo | image_url: width: 70 }}" 
+                alt="Mada" 
+                class="icon icon--full-color custom-payment-icon"
+                loading="lazy"
+                width="35"
+                height="20"
+              >
+            {%- endif -%}
+            
+            {%- if section.settings.tamara_logo != blank -%}
+              <img 
+                src="{{ section.settings.tamara_logo | image_url: width: 70 }}" 
+                alt="Tamara" 
+                class="icon icon--full-color custom-payment-icon"
+                loading="lazy"
+                width="35"
+                height="20"
+              >
+            {%- endif -%}
+            
+            {%- if section.settings.tabby_logo != blank -%}
+              <img 
+                src="{{ section.settings.tabby_logo | image_url: width: 70 }}" 
+                alt="Tabby" 
+                class="icon icon--full-color custom-payment-icon"
+                loading="lazy"
+                width="35"
+                height="20"
+              >
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Certification Logos Section {%- endcomment -%}
+        {%- if section.settings.saudi_business_logo != blank or section.settings.vat_certificate_logo != blank -%}
+          <div class="tre-footer-certifications">
+            {%- if section.settings.saudi_business_logo != blank -%}
+              {%- assign saudi_logo_width = section.settings.saudi_business_logo.width | at_most: 160 -%}
+              {%- assign saudi_logo_height = saudi_logo_width | divided_by: section.settings.saudi_business_logo.aspect_ratio | round -%}
+              <img 
+                src="{{ section.settings.saudi_business_logo | image_url: width: 160 }}" 
+                alt="Saudi Business Center" 
+                class="tre-footer-certification-logo"
+                loading="lazy"
+                width="{{ saudi_logo_width }}"
+                height="{{ saudi_logo_height }}"
+              >
+            {%- endif -%}
+            
+            {%- if section.settings.vat_certificate_logo != blank -%}
+              {%- assign vat_logo_width = section.settings.vat_certificate_logo.width | at_most: 160 -%}
+              {%- assign vat_logo_height = vat_logo_width | divided_by: section.settings.vat_certificate_logo.aspect_ratio | round -%}
+              <img 
+                src="{{ section.settings.vat_certificate_logo | image_url: width: 160 }}" 
+                alt="VAT Certificate" 
+                class="tre-footer-certification-logo"
+                loading="lazy"
+                width="{{ vat_logo_width }}"
+                height="{{ vat_logo_height }}"
+              >
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Bottom section with logo and tagline -->
+    <div class="tre-footer-bottom">
+      {%- if section.settings.footer_logo != blank -%}
+        {%- assign logo_width = section.settings.footer_logo.width | at_most: 600 -%}
+        {%- assign logo_height = logo_width | divided_by: section.settings.footer_logo.aspect_ratio | round -%}
+        <div class="tre-footer-logo">
+          <img
+            src="{{ section.settings.footer_logo | image_url: width: 600 }}"
+            alt="{{ shop.name }}"
+            loading="lazy"
+            width="{{ logo_width }}"
+            height="{{ logo_height }}"
+          >
+        </div>
+      {%- else -%}
+        <div class="tre-footer-logo">
+          <div class="tre-footer-logo-fallback">
+            tre<sup>TM</sup>
+          </div>
+        </div>
+      {%- endif -%}
+      
+      <div class="tre-footer-tagline">
+        {%- if section.settings.tagline != blank -%}
+          {{ section.settings.tagline }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "info": "Leave blank to hide heading"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu",
+          "info": "Create menus in Navigation"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer Logo & Tagline"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer Logo",
+      "info": "Upload your logo image. Recommended size: 500px wide"
+    },
+    {
+      "type": "richtext",
+      "id": "tagline",
+      "label": "Tagline",
+      "info": "Text that appears on the right side of the logo. Leave blank for default 'Timeless Raw Essentials'"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "Show email signup"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_heading",
+      "default": "Sign in Our Newsletter",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "Show social media icons",
+      "info": "Add your social media links in Theme settings > Social media"
+    },
+    {
+      "type": "header",
+      "content": "Footer Bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "Show payment icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "default": true,
+      "label": "Show policy links"
+    },
+    {
+      "type": "header",
+      "content": "Custom Payment Icons"
+    },
+    {
+      "type": "image_picker",
+      "id": "mada_logo",
+      "label": "Mada Logo",
+      "info": "Upload Mada payment logo (recommended: 70x50px PNG)"
+    },
+    {
+      "type": "image_picker",
+      "id": "tamara_logo",
+      "label": "Tamara Logo",
+      "info": "Upload Tamara payment logo (recommended: 70x50px PNG)"
+    },
+    {
+      "type": "image_picker",
+      "id": "tabby_logo",
+      "label": "Tabby Logo",
+      "info": "Upload Tabby payment logo (recommended: 70x50px PNG)"
+    },
+    {
+      "type": "header",
+      "content": "Certification Logos"
+    },
+    {
+      "type": "image_picker",
+      "id": "saudi_business_logo",
+      "label": "Saudi Business Center Logo",
+      "info": "Upload Saudi Business Center certification logo (recommended: 160x100px PNG)"
+    },
+    {
+      "type": "image_picker",
+      "id": "vat_certificate_logo",
+      "label": "VAT Certificate Logo",
+      "info": "Upload VAT certification logo (recommended: 160x100px PNG)"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 18,
+      "info": "Size of menu headings and newsletter heading"
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Link size",
+      "default": 14,
+      "info": "Size of menu links"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "link_list"
+      }
+    ]
+  }
+}
+{% endschema %}

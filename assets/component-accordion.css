@@ -1,0 +1,79 @@
+/* Container Borders */
+.accordion {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  margin-top: 0 !important;
+}
+
+.product__accordion + .product__accordion {
+  border-top: none; /* Prevents double borders between items */
+}
+
+/* Summary Layout */
+.accordion summary {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0;
+  padding-bottom: 0px;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The Plus/Minus Icon Structure */
+.icon-plus {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 1.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-plus-horizontal,
+.icon-plus-vertical {
+  position: absolute;
+  background-color: currentColor;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+/* The horizontal bar (Minus sign) */
+.icon-plus-horizontal {
+  width: 100%;
+  height: 1.5px; /* Thin line to match screenshot */
+}
+
+/* The vertical bar (The Plus part) */
+.icon-plus-vertical {
+  width: 1.5px;
+  height: 100%;
+}
+
+/* Snap to Minus when open */
+details[open] .icon-plus-vertical {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+
+/* Title Styling */
+.accordion__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 2rem; /* Matches the clean serif look */
+}
+
+/* Ensure content is indented to match text, not icon */
+.accordion__content {
+  padding: 0 0 2rem 2.9rem;
+}
+
+/* Hide any remaining default carets just in case */
+.accordion .icon-caret, 
+.accordion summary > svg {
+  display: none !important;
+}

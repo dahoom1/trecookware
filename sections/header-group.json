@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "84b99569-54af-4dbc-83a0-63ba33e534fa": {
+          "type": "announcement",
+          "settings": {
+            "text": "FREE shipping to 🇸🇦 for orders 100 SAR or above.",
+            "link": ""
+          }
+        },
+        "announcement_kBBhRH": {
+          "type": "announcement",
+          "settings": {
+            "text": "No Matter the Trend, Timeless Cooking Starts Here",
+            "link": "shopify://collections/all"
+          }
+        },
+        "announcement_gxjNFn": {
+          "type": "announcement",
+          "settings": {
+            "text": "🇸🇦 1-2 Days KSA Delivery | ⚡ Same-Day in Riyadh (Orders before 12 AM)",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "84b99569-54af-4dbc-83a0-63ba33e534fa",
+        "announcement_kBBhRH",
+        "announcement_gxjNFn"
+      ],
+      "custom_css": [],
+      "settings": {
+        "auto_rotate": true,
+        "change_slides_speed": 6,
+        "color_scheme": "scheme-5",
+        "show_line_separator": false,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "headercustom_G7Uw8C": {
+      "type": "headercustom",
+      "name": "Custom Header v3.4",
+      "settings": {
+        "logo": "shopify://shop_images/Asset_6logo.png",
+        "logo_text": "",
+        "mobile_logo_size": 50,
+        "desktop_logo_size": 36,
+        "logo_font_weight": "300",
+        "menu": "main-menu",
+        "sticky_header_type": "always",
+        "container_width": 1900,
+        "mobile_padding": 12,
+        "mobile_horizontal_padding": 16,
+        "desktop_padding": 16,
+        "desktop_horizontal_padding": 32,
+        "nav_font_size": 16,
+        "nav_font_weight": "400",
+        "nav_spacing": 48,
+        "show_mega_images": true,
+        "mega_title_size": 16,
+        "mega_title_weight": "400",
+        "mobile_parent_nav_size": 42,
+        "mobile_parent_nav_weight": "400",
+        "mobile_accordion_size": 18,
+        "mobile_accordion_weight": "400",
+        "mobile_link_size": 19,
+        "mobile_link_weight": "400",
+        "mobile_footer_size": 16,
+        "mobile_footer_weight": "400",
+        "dropdown_animation": "fade",
+        "dropdown_speed": 300,
+        "enable_hover_animation": false,
+        "hover_animation_style": "underline-grow",
+        "hover_animation_duration": 300,
+        "header_bg_color": "#ffffff",
+        "mega_menu_bg": "#ffffff",
+        "drawer_bg_color": "#ffffff",
+        "text_color": "#000000",
+        "border_color": "#00000014",
+        "cart_badge_bg": "#c04000",
+        "cart_badge_text": "#ffffff",
+        "mobile_nav_spacing": 16,
+        "show_cart": true,
+        "show_account": false,
+        "show_login_link": true,
+        "show_language_selector": true,
+        "show_track_order": true,
+        "track_order_url": ""
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "headercustom_G7Uw8C"
+  ]
+}

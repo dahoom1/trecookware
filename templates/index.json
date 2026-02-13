@@ -1,0 +1,487 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "video_hero_banner_yifDgW": {
+      "type": "Video-hero-banner",
+      "name": "Hero Video Banner",
+      "settings": {
+        "video_shopify": "shopify://files/videos/VIDEO-2025-11-23-15-22-08.mp4",
+        "video_autoplay": true,
+        "video_loop": true,
+        "video_muted": true,
+        "video_lazy_load": true,
+        "enable_overlay": false,
+        "overlay_color": "#334fb4",
+        "overlay_opacity": 55,
+        "min_height_desktop": 550,
+        "min_height_mobile": 450,
+        "content_alignment_vertical_desktop": "flex-end",
+        "content_alignment_horizontal_desktop": "flex-start",
+        "text_alignment_desktop": "left",
+        "content_alignment_vertical_mobile": "center",
+        "content_alignment_horizontal_mobile": "flex-start",
+        "text_alignment_mobile": "center",
+        "content_max_width": 400,
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 30,
+        "padding_horizontal_desktop": 40,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 60,
+        "padding_horizontal_mobile": 20,
+        "heading": "Premium Cookware for Every Kitchen.",
+        "heading_color": "#ffffff",
+        "heading_font_weight": "300",
+        "heading_size_desktop": 38,
+        "heading_size_mobile": 28,
+        "heading_margin_bottom_desktop": 40,
+        "heading_margin_bottom_mobile": 16,
+        "subheading": "",
+        "subheading_color": "#ffffff",
+        "subheading_font_weight": "700",
+        "subheading_size_desktop": 20,
+        "subheading_size_mobile": 16,
+        "subheading_margin_bottom_desktop": 32,
+        "subheading_margin_bottom_mobile": 24,
+        "button_alignment_desktop": "flex-start",
+        "button_alignment_mobile": "center",
+        "button_text": "Shop All",
+        "button_link": "shopify://collections/essential-collection",
+        "button_font_weight": "600",
+        "button_bg_color": "rgba(0,0,0,0)",
+        "button_text_color": "#ffffff",
+        "button_border_color": "#ffffff",
+        "button_border_width": 1,
+        "button_border_radius": 0,
+        "button_bg_color_hover": "#c0ddea",
+        "button_text_color_hover": "#000000",
+        "button_border_color_hover": "#c0ddea",
+        "button_text_size_desktop": 13,
+        "button_text_size_mobile": 13,
+        "button_padding_vertical_desktop": 8,
+        "button_padding_horizontal_desktop": 80,
+        "button_padding_vertical_mobile": 14,
+        "button_padding_horizontal_mobile": 24,
+        "button_secondary_text": "",
+        "button_secondary_link": "",
+        "button_secondary_bg_color": "rgba(0,0,0,0)",
+        "button_secondary_text_color": "#ffffff",
+        "button_secondary_border_color": "#ffffff",
+        "button_secondary_border_width": 1,
+        "button_secondary_bg_color_hover": "#ffffff",
+        "button_secondary_text_color_hover": "#000000",
+        "button_secondary_border_color_hover": "#ffffff",
+        "mobile_heading": "Premium Cookware for Every Kitchen.",
+        "mobile_subheading": "Discover our collection designed for modern kitchens",
+        "mobile_content_bg_color": "#27231e",
+        "mobile_content_padding_vertical": 45,
+        "mobile_content_padding_horizontal": 20,
+        "mobile_text_alignment": "left",
+        "mobile_heading_color": "#ffffff",
+        "mobile_heading_size": 32,
+        "mobile_heading_margin_bottom": 16,
+        "mobile_subheading_color": "#ffffff",
+        "mobile_subheading_size": 16,
+        "mobile_subheading_margin_bottom": 24,
+        "mobile_button_text": "Shop Cookware Collection",
+        "mobile_button_link": "shopify://collections/all",
+        "mobile_button_secondary_text": "",
+        "mobile_button_secondary_link": "shopify://collections/tre™-essential-collection-01",
+        "mobile_button_alignment": "flex-start",
+        "mobile_button_bg_color": "#27231e",
+        "mobile_button_text_color": "#ffffff",
+        "mobile_button_border_color": "#ffffff",
+        "mobile_button_bg_color_hover": "#c0ddea",
+        "mobile_button_text_color_hover": "#121212",
+        "mobile_button_border_color_hover": "#333333",
+        "mobile_button_text_size": 13,
+        "mobile_button_padding_vertical": 10,
+        "mobile_button_padding_horizontal": 24
+      }
+    },
+    "product_set_selector_8iF49y": {
+      "type": "product-set-selector",
+      "blocks": {
+        "product_set_zWTcPm": {
+          "type": "product_set",
+          "settings": {
+            "product": "stainless-clad-saute-pan-3-5qt",
+            "custom_title": "",
+            "description": "One size. Three essentials. Infinite versatility. This streamlined 26cm set is designed to handle every kitchen task while eliminating cabinet clutter"
+          }
+        },
+        "product_set_hXAHVE": {
+          "type": "product_set",
+          "settings": {
+            "product": "large-family",
+            "custom_title": "",
+            "description": "This set comes with two stockpots: a 20cm daily pot and a large 26cm batch cooker."
+          }
+        },
+        "product_set_mYDzEQ": {
+          "type": "product_set",
+          "settings": {
+            "product": "full-collection",
+            "custom_title": "Full Essential Collection",
+            "description": "The perfect pair for daily tasks and small batch cooking. This high performance bundle combines a 20cm Frypan and a 16cm Saucepan, providing the two most-used tools for quick meals, sides, and sauces."
+          }
+        }
+      },
+      "block_order": [
+        "product_set_zWTcPm",
+        "product_set_hXAHVE",
+        "product_set_mYDzEQ"
+      ],
+      "name": "Product Set Selector",
+      "settings": {
+        "section_bg_color": "#ffffff",
+        "padding_top": 36,
+        "padding_bottom": 24,
+        "heading": "Pick your set",
+        "heading_size": "h0",
+        "heading_font": "serif",
+        "show_savings_badge": true,
+        "savings_text": "And Save 20%",
+        "savings_bg_color": "#b8e4f0",
+        "savings_text_color": "#000000",
+        "savings_font": "assistant_n4",
+        "savings_border_radius": 0,
+        "show_view_all": true,
+        "view_all_text": "Shop All Essential Collection",
+        "collection_url": "shopify://collections/tre™-essential-collection-01",
+        "view_all_color": "#121212",
+        "view_all_font": "serif",
+        "card_bg_color": "#ffffff",
+        "image_bg_color": "#f8f8f8",
+        "title_font": "serif",
+        "title_color": "#121212",
+        "text_font": "assistant_n4",
+        "description_color": "#acacac",
+        "show_price": true,
+        "price_color": "#333333",
+        "sale_price_color": "#333333",
+        "compare_price_color": "#999999",
+        "button_1_text": "Add to Cart",
+        "button_bg_color": "#333333",
+        "button_text_color": "#ffffff",
+        "button_border_color": "#ffffff",
+        "show_button_2": false,
+        "button_2_text": "Checkout",
+        "button_2_bg_color": "rgba(0,0,0,0)",
+        "button_2_text_color": "#ffffff",
+        "button_2_border_color": "#ffffff"
+      }
+    },
+    "video_carosle_3iKgF7": {
+      "type": "video-carosle",
+      "blocks": {
+        "video_slide_NJ99QP": {
+          "type": "video_slide",
+          "settings": {
+            "video_file": "shopify://files/videos/20251214_C1860.mov",
+            "social_handle": "@trecookware",
+            "cta_text": "SHOP",
+            "product_link": ""
+          }
+        },
+        "video_slide_4mA9q9": {
+          "type": "video_slide",
+          "settings": {
+            "video_file": "shopify://files/videos/20251214_C1891.MOV",
+            "social_handle": "@trecookware",
+            "cta_text": "SHOP",
+            "product_link": ""
+          }
+        },
+        "video_slide_wf6FHr": {
+          "type": "video_slide",
+          "settings": {
+            "video_file": "shopify://files/videos/20251214_C1898.MP4",
+            "social_handle": "@trecookware",
+            "cta_text": "SHOP",
+            "product_link": ""
+          }
+        },
+        "video_slide_qRdg7t": {
+          "type": "video_slide",
+          "settings": {
+            "video_file": "shopify://files/videos/VIDEO-2025-11-23-15-22-08.mp4",
+            "social_handle": "@trecookware",
+            "cta_text": "SHOP",
+            "product_link": ""
+          }
+        },
+        "video_slide_gaHc4M": {
+          "type": "video_slide",
+          "settings": {
+            "video_file": "shopify://files/videos/MVI_1766.MP4",
+            "social_handle": "@trecookware",
+            "cta_text": "SHOP",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_slide_NJ99QP",
+        "video_slide_4mA9q9",
+        "video_slide_wf6FHr",
+        "video_slide_qRdg7t",
+        "video_slide_gaHc4M"
+      ],
+      "disabled": true,
+      "name": "Video Carousel",
+      "settings": {
+        "heading": "",
+        "bg_color": "#ffffff"
+      }
+    },
+    "why_stainlesssteel_dwM38L": {
+      "type": "Why-Stainlesssteel",
+      "blocks": {
+        "feature_AqY6RR": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "No Hotspots",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Perfect Every Time",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "5 ply design eliminates cold spots for flawless cooking",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_JLJKiL": {
+          "type": "feature",
+          "settings": {
+            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Heats Up Quickly",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Save Time Daily",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "Superior heat conductivity gets you cooking faster",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_NiGqKQ": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Lifetime Durability",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Investment Quality",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "Premium 18/10 stainless steel resists warping and wear.",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        }
+      },
+      "block_order": [
+        "feature_AqY6RR",
+        "feature_JLJKiL",
+        "feature_NiGqKQ"
+      ],
+      "name": "Why Stainless Steel",
+      "settings": {
+        "background_color": "#f8f8f8",
+        "padding_top": 20,
+        "padding_bottom": 24,
+        "title": "Why Stainless Steel",
+        "title_font_weight": "300",
+        "title_font_style": "normal",
+        "title_color": "#121212",
+        "title_size_desktop": 20,
+        "title_size_mobile": 32,
+        "description": "<p>We believe cookware should outlast trends and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.</p>",
+        "description_font_weight": "400",
+        "description_font_style": "normal",
+        "description_color": "#000000",
+        "description_size_desktop": 15,
+        "description_size_mobile": 16,
+        "cta_text": "Discover More",
+        "cta_link": "#",
+        "cta_font_weight": "400",
+        "cta_font_style": "normal",
+        "cta_color": "#000000",
+        "cta_size_desktop": 14,
+        "cta_size_mobile": 14
+      }
+    },
+    "featured_collection_n4BUU4": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 12,
+        "title": "The Essential Collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "subtitle",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 12,
+        "padding_bottom": 20
+      }
+    },
+    "176253019774d27060": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_3DR9Pj": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": false,
+            "reviews_selection": "all",
+            "products": [],
+            "star_rating": "all",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "product_image",
+            "max_reviews": 20,
+            "review_length": "large",
+            "text_size": "medium",
+            "image_ratio": "1.33",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "bottom",
+            "max_width": 1100,
+            "corner_styling": "square",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#F9F9F9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 7,
+            "header_text": "Customers are saying",
+            "show_average_rating": true
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_3DR9Pj"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "faq_custom_wyTcTx": {
+      "type": "FAQ-custom",
+      "blocks": {
+        "collapsible_row_UakJ7C": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can stainless steel pans be nonstick?",
+            "row_content": "<p>Yes! When properly preheated and used correctly, stainless steel creates a natural nonstick surface—without any chemicals.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_bLfiCV": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What's the real benefit of 5-ply?",
+            "row_content": "<p>the main advantage is perfectly even heating. Standard pans often have hot spots that burn food. Our 5-ply construction layers stainless steel around a core of aluminum, spreading heat evenly across the entire cooking surface. This means no more scorched sauces and perfectly seared meats every time.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_B3XwFW": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Why is it more expensive?",
+            "row_content": "<p>You're paying for long-term performance and durability. The 5-ply build is engineered to resist warping and will last a lifetime, unlike cheaper pans that need frequent replacing. It's an investment that actually saves you money over the years while making cooking easier</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Mwhc6d": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is the stainless steel surface really safe?",
+            "row_content": "<p>Completely. The stainless steel cooking surface is non-toxic and won't react with acidic foods. Unlike some non-stick pans, there's no risk of harmful chemicals flaking into your food, even at high heat. It's a safe, reliable choice for healthy cooking.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_UakJ7C",
+        "collapsible_row_bLfiCV",
+        "collapsible_row_B3XwFW",
+        "collapsible_row_Mwhc6d"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "color_scheme": "",
+        "open_first_collapsible_row": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "video_hero_banner_yifDgW",
+    "product_set_selector_8iF49y",
+    "video_carosle_3iKgF7",
+    "why_stainlesssteel_dwM38L",
+    "featured_collection_n4BUU4",
+    "176253019774d27060",
+    "faq_custom_wyTcTx"
+  ]
+}

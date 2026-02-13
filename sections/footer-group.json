@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "link_list_jemXid": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick Links",
+            "menu": "footer"
+          }
+        },
+        "link_list_XMtjkc": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Customer Service",
+            "menu": "customer-service"
+          }
+        }
+      },
+      "block_order": [
+        "link_list_jemXid",
+        "link_list_XMtjkc"
+      ],
+      "settings": {
+        "footer_logo": "shopify://shop_images/546d1e0e7a89339a0da053bad406a44363d72bfe.png",
+        "tagline": "",
+        "newsletter_enable": true,
+        "newsletter_heading": "<strong>Have A Seat at Our Table. Join TRE weekly dose of recipes!</strong>",
+        "show_social": false,
+        "payment_enable": true,
+        "show_policy": true,
+        "mada_logo": "shopify://shop_images/23f9b80307b69.jpg",
+        "saudi_business_logo": "shopify://shop_images/saudi_business_center_logo.jpg",
+        "heading_size": 18,
+        "link_size": 12,
+        "margin_top": 4
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

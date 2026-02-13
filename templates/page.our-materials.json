@@ -1,0 +1,183 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_with_text_9LKbnN": {
+      "type": "image-with-text",
+      "blocks": {
+        "caption_z4aRPi": {
+          "type": "caption",
+          "settings": {
+            "caption": "Our",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "large"
+          }
+        },
+        "heading_QJqiGC": {
+          "type": "heading",
+          "settings": {
+            "heading": "Materials",
+            "heading_size": "h0"
+          }
+        },
+        "text_ETkVmx": {
+          "type": "text",
+          "settings": {
+            "text": "<h5>Cooking with uncoated stainless steel offers a level of purity and peace of mind that coated alternatives, even those labeled “non-toxic”, simply can’t match. With no synthetic layers or chemical treatments, uncoated steel is naturally inert, meaning it won’t break down, leach, or react with your food, even at high temperatures. Unlike coated pans, which can degrade over time and may contain binders or stabilizers with unknown long-term effects, stainless steel remains stable and reliable for life. It’s a healthier choice, no coatings to chip, no hidden risks, just clean, safe cooking, every single time.</h5>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "caption_z4aRPi",
+        "heading_QJqiGC",
+        "text_ETkVmx"
+      ],
+      "custom_css": [
+        ".image-with-text__text.rte {line-height: 1.7rem;}",
+        ".image-with-text__text.rte p {line-height: 2rem; margin-bottom: 0.5rem;}"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Gemini_Generated_Image_g45wdwg45wdwg45w.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-5",
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    },
+    "multicolumn_QynFC4": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_ar4R9e": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-01-27_at_11.06.07_PM.png",
+            "title": "The Architecture of Heat: Our 5-Ply Construction",
+            "text": "<p>Most pans are \"impact-bonded,\" meaning they only have a heavy disk at the bottom. <strong>TRE uses full-body, 5-ply construction</strong></p><p></p><p>This means the premium layers of metal wrap all the way from the base up to the rim.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_EAPY9h": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1489.webp",
+            "title": "Dishwasher-Safe Sealed Rims for Effortless Cleanup",
+            "text": "<p>Unlike standard clad cookware that leaves raw aluminum exposed at the edges, <strong>TRE</strong> features meticulously <strong>sealed rims</strong>. By encasing the aluminum core entirely within our premium stainless steel, we prevent \"rim erosion\" and oxidation during wash cycles. </p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_wynKFV": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/26cm_collection.webp",
+            "title": "The TRE Difference: Built for the Forever Kitchen",
+            "text": "<p>We didn't name ourselves <strong>Timeless</strong> by accident. By combining the induction-readiness of 430 steel with the heat-conducting power of a triple-aluminum core, we’ve created a tool that outlasts trends and traditional non-stick pans.</p><p></p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_ar4R9e",
+        "column_EAPY9h",
+        "column_wynKFV"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "What exactly Makes Up Your Cookware?",
+        "heading_size": "h2",
+        "image_width": "full",
+        "image_ratio": "square",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "color_scheme": "scheme-5",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 32,
+        "padding_bottom": 0
+      }
+    },
+    "multirow_b4ix6r": {
+      "type": "multirow",
+      "blocks": {
+        "row_mN6xWE": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/26cmFryingpan_A1_copy_ee60a49f-2f31-4230-9202-8f42c917116b.webp",
+            "caption": "Flavor You Can’t Get Anywhere Else IT'S THE:",
+            "heading": "ART OF FOND",
+            "text": "<p>That golden-brown glaze left in the pan after searing? That’s not a mess it’s <strong>fond</strong>. Unlike non-stick pans that let juices slide away, our 18/10 stainless steel surface is designed to catch those tiny, caramelized bits of protein and sugars. This is the foundation of professional cooking. By adding a splash stock, water or small slice of butter (a process called deglazing), you lift that \"leftover goodness\" to create a rich, complex sauce that tastes like it came out of a five-star kitchen. With TRE, you aren't just frying food; you’re building layers of flavor.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "row_nJck47": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1084_1.webp",
+            "caption": "Scratch-Free",
+            "heading": "Forget about being delicate",
+            "text": "<p> Because TRE pots and pans uses high-grade solid stainless steel, you don’t have to worry about which spatula you grab. Metal whisks, steel tongs, or iron ladles—use whatever tool you like. There are no flimsy coatings to scratch or flake off, giving you a worry-free cooking experience that stays looking new for years.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "row_mN6xWE",
+        "row_nJck47"
+      ],
+      "name": "t:sections.multirow.presets.name",
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "small",
+        "image_layout": "alternate-left",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-5",
+        "row_color_scheme": "scheme-2",
+        "padding_top": 8,
+        "padding_bottom": 16
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "image_with_text_9LKbnN",
+    "multicolumn_QynFC4",
+    "multirow_b4ix6r",
+    "main"
+  ]
+}

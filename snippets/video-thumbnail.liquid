@@ -1,0 +1,41 @@
+{% comment %}
+  Video Thumbnail Snippet
+  
+  Renders a clickable video thumbnail with play button overlay.
+  Used by the video-modal-block to display video previews.
+  
+  Parameters:
+  - video: The video object from metafield
+  - index: The video index number
+  - block_id: The block ID for unique identification
+  - thumbnail_size: Size variant (small, medium, large)
+{% endcomment %}
+
+<div 
+  class="video-thumbnail-wrapper video-thumbnail-wrapper--{{ thumbnail_size }}" 
+  data-video-trigger="{{ block_id }}"
+  data-video-src="{{ video.sources[0].url }}"
+  role="button"
+  tabindex="0"
+  aria-label="Play video {{ index }}"
+>
+  {% if video.preview_image %}
+    <img 
+      src="{{ video.preview_image | image_url: width: 600 }}" 
+      alt="{{ video.alt | default: 'Product video' | escape }}"
+      width= "600px" height="600" loading="lazy"
+    >
+  {% else %}
+    <video preload="metadata" muted playsinline>
+      <source src="{{ video.sources[0].url }}#t=0.1" type="video/mp4">
+    </video>
+  {% endif %}
+  
+  <div class="video-play-overlay">
+    <div class="video-play-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+    </div>
+  </div>
+</div>

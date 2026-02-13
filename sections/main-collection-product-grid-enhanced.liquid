@@ -1,0 +1,791 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.image_shape == 'blob' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* ------------------------------------------- */
+  /* ENHANCED PRODUCT BADGES (Limited & Sale)   */
+  /* ------------------------------------------- */
+  
+  .product-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+  }
+
+  .product-badge--limited {
+    background-color: #B8D4D1;
+    color: #1a1a1a;
+  }
+
+  .product-badge--sale {
+    background-color: #B8D4D1;
+    color: #1a1a1a;
+  }
+
+  /* ------------------------------------------- */
+  /* FIXED PLUS BUTTON STYLES (From Featured)   */
+  /* ------------------------------------------- */
+  
+  /* 1. Reset the card wrapper to allow absolute positioning */
+  #product-grid .card-wrapper {
+    position: relative !important;
+    display: block !important;
+    z-index: 1;
+  }
+
+  /* 2. Place container Top-Right */
+  #product-grid .quick-add {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+    width: auto !important;
+  }
+
+  /* 3. The Black Box Button */
+  #product-grid .quick-add__submit {
+    /* Dimensions & Color */
+    background-color: #27231e !important;
+    color: #ffffff !important;
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    
+    /* Layout Reset */
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition: background-color 0.2s ease;
+  }
+
+  /* Hover State */
+  #product-grid .quick-add__submit:hover {
+    background-color: #333333 !important;
+  }
+
+  /* 4. HIDE NATIVE TEXT & ICONS */
+  #product-grid .quick-add__submit > span:not(.visually-hidden), 
+  #product-grid .quick-add__submit > svg {
+    display: none !important;
+  }
+
+  /* 5. The Plus Sign - ABSOLUTELY CENTERED */
+  #product-grid .quick-add__submit::before {
+    content: "+" !important;
+    
+    /* Absolute Centering */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    
+    /* Appearance */
+    font-size: 28px !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
+    color: #ccc !important;
+    
+    pointer-events: none; 
+    z-index: 20; 
+  }
+
+  /* 6. Loading Spinner */
+  #product-grid .quick-add__submit .loading-overlay__spinner {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  #product-grid .quick-add__submit[aria-disabled="true"]::before {
+    opacity: 0;
+  }
+
+  /* ------------------------------------------- */
+  /* EMBEDDED COLLECTION CARDS                  */
+  /* ------------------------------------------- */
+  
+  .collection-embed-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .collection-embed-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .collection-embed-card__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .collection-embed-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .collection-embed-card__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 32px;
+    color: inherit;
+  }
+
+  .collection-embed-card__title {
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0 0 12px 0;
+    font-family: var(--font-heading-family);
+  }
+
+  .collection-embed-card__description {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-embed-card {
+      min-height: 300px;
+    }
+    
+    .collection-embed-card__title {
+      font-size: 24px;
+    }
+    
+    .collection-embed-card__description {
+      font-size: 14px;
+    }
+  }
+
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
+    {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
+      <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
+        <form class="facets-vertical-form" id="FacetSortForm">
+          <div class="facet-filters sorting caption">
+            <div class="facet-filters__field">
+              <h2 class="facet-filters__label caption-large text-body">
+                <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
+              </h2>
+              <div class="select">
+                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                <select
+                  name="sort_by"
+                  class="facet-filters__sort select__select caption-large"
+                  id="SortBy"
+                  aria-describedby="a11y-refresh-page-message"
+                >
+                  {%- for option in collection.sort_options -%}
+                    <option
+                      value="{{ option.value | escape }}"
+                      {% if option.value == sort_by %}
+                        selected="selected"
+                      {% endif %}
+                    >
+                      {{ option.name | escape }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-count-vertical light" role="status">
+            <h2 class="product-count__text text-body">
+              <span id="ProductCountDesktop">
+                {%- if collection.results_count -%}
+                  {{
+                    'templates.search.results_with_count'
+                    | t: terms: collection.terms, count: collection.results_count
+                  }}
+                {%- elsif collection.products_count == collection.all_products_count -%}
+                  {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+                {%- else -%}
+                  {{
+                    'products.facets.product_count'
+                    | t: product_count: collection.products_count, count: collection.all_products_count
+                  }}
+                {%- endif -%}
+              </span>
+            </h2>
+            {%- render 'loading-spinner' -%}
+          </div>
+        </form>
+      </facet-filters-form>
+    {%- endif -%}
+
+    <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
+      {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+      {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+        <aside
+          aria-labelledby="verticalTitle"
+          class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          id="main-collection-filters"
+          data-id="{{ section.id }}"
+        >
+          {% render 'facets',
+            results: collection,
+            enable_filtering: section.settings.enable_filtering,
+            enable_sorting: section.settings.enable_sorting,
+            filter_type: section.settings.filter_type,
+            paginate: paginate
+          %}
+        </aside>
+      {%- endif -%}
+
+      <div
+        class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        id="ProductGridContainer"
+        {% if settings.animations_reveal_on_scroll %}
+          data-cascade
+        {% endif %}
+      >
+        {%- if collection.products.size == 0 -%}
+          <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
+            <div class="loading-overlay gradient"></div>
+            <div class="title-wrapper center">
+              <h2 class="title title--primary">
+                {{ 'sections.collection_template.empty' | t -}}
+                <br>
+                {{
+                  'sections.collection_template.use_fewer_filters_html'
+                  | t: link: collection.url, class: 'underlined-link link'
+                }}
+              </h2>
+            </div>
+          </div>
+        {%- else -%}
+          <div
+            class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          >
+            <div class="loading-overlay gradient"></div>
+            <ul
+              id="product-grid"
+              data-id="{{ section.id }}"
+              class="
+                grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
+                grid--{{ section.settings.columns_desktop }}-col-desktop
+                {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
+              "
+            >
+              {% assign skip_card_product_styles = false %}
+              {%- assign product_index = 0 -%}
+              
+              {%- for product in collection.products -%}
+                {%- assign product_index = product_index | plus: 1 -%}
+                
+                {% comment %} Check if we should insert a collection card {% endcomment %}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'collection_embed' -%}
+                    {%- if product_index == block.settings.position -%}
+                      <li
+                        class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                        {{ block.shopify_attributes }}
+                        {% if settings.animations_reveal_on_scroll %}
+                          data-cascade
+                          style="--animation-order: {{ forloop.index }};"
+                        {% endif %}
+                      >
+                        <a 
+                          href="{{ block.settings.collection.url | default: '#' }}" 
+                          class="collection-embed-card card"
+                          {% if block.settings.collection == blank %}onclick="return false;"{% endif %}
+                        >
+                          {%- if block.settings.image != blank -%}
+                            <img 
+                              src="{{ block.settings.image | image_url: width: 800 }}"
+                              alt="{{ block.settings.image.alt | escape }}"
+                              class="collection-embed-card__background"
+                              loading="lazy"
+                              width="800"
+                              height="800"
+                            >
+                          {%- elsif block.settings.collection.image != blank -%}
+                            <img 
+                              src="{{ block.settings.collection.image | image_url: width: 800 }}"
+                              alt="{{ block.settings.collection.image.alt | escape }}"
+                              class="collection-embed-card__background"
+                              loading="lazy"
+                              width="800"
+                              height="800"
+                            >
+                          {%- endif -%}
+                          
+                          {%- if block.settings.overlay_color != blank and block.settings.overlay_opacity > 0 -%}
+                            <div 
+                              class="collection-embed-card__overlay" 
+                              style="background-color: {{ block.settings.overlay_color }}; opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"
+                            ></div>
+                          {%- endif -%}
+                          
+                          <div class="collection-embed-card__content">
+                            <h3 class="collection-embed-card__title">
+                              {{ block.settings.title | default: block.settings.collection.title | default: 'Collection Title' }}
+                            </h3>
+                            {%- if block.settings.description != blank -%}
+                              <p class="collection-embed-card__description">
+                                {{ block.settings.description }}
+                              </p>
+                            {%- elsif block.settings.show_collection_description and block.settings.collection.description != blank -%}
+                              <p class="collection-embed-card__description">
+                                {{ block.settings.collection.description | strip_html | truncate: 120 }}
+                              </p>
+                            {%- endif -%}
+                          </div>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                {% assign lazy_load = false %}
+                {%- if forloop.index > 2 -%}
+                  {%- assign lazy_load = true -%}
+                {%- endif -%}
+                
+                <li
+                  class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  {% if settings.animations_reveal_on_scroll %}
+                    data-cascade
+                    style="--animation-order: {{ forloop.index }};"
+                  {% endif %}
+                >
+                  {% comment %} Product card with badges {% endcomment %}
+                  <div class="card-wrapper product-card-wrapper underline-links-hover" style="position: relative;">
+                    
+                    {% comment %} Limited Badge Logic {% endcomment %}
+                    {%- if section.settings.show_limited_badge -%}
+                      {%- if product.tags contains section.settings.limited_tag -%}
+                        <span class="product-badge product-badge--limited">
+                          {{ section.settings.limited_text }}
+                        </span>
+                      {%- endif -%}
+                    {%- endif -%}
+                    
+                    {% comment %} Sale Badge Logic {% endcomment %}
+                    {%- if section.settings.show_sale_badge -%}
+                      {%- if product.compare_at_price > product.price -%}
+                        {%- assign savings_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+                        <span class="product-badge product-badge--sale">
+                          {{ section.settings.sale_text | replace: '[percent]', savings_percent }}
+                        </span>
+                      {%- endif -%}
+                    {%- endif -%}
+                    
+                    {% render 'card-product',
+                      card_product: product,
+                      media_aspect_ratio: section.settings.image_ratio,
+                      image_shape: section.settings.image_shape,
+                      show_secondary_image: section.settings.show_secondary_image,
+                      show_vendor: section.settings.show_vendor,
+                      show_rating: section.settings.show_rating,
+                      lazy_load: lazy_load,
+                      skip_styles: skip_card_product_styles,
+                      quick_add: section.settings.quick_add,
+                      section_id: section.id
+                    %}
+                  </div>
+                </li>
+                {%- assign skip_card_product_styles = true -%}
+              {%- endfor -%}
+            </ul>
+
+            {%- if paginate.pages > 1 -%}
+              {% render 'pagination', paginate: paginate, anchor: '' %}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endpaginate -%}
+  {% if section.settings.image_shape == 'arch' %}
+    {{ 'mask-arch.svg' | inline_asset_content }}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Enhanced Collection Grid",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "Number of columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ]
+    },    
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Product Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_limited_badge",
+      "label": "Show 'Limited' badge",
+      "default": true,
+      "info": "Badge appears on products with the specified tag"
+    },
+    {
+      "type": "text",
+      "id": "limited_tag",
+      "label": "Limited edition tag",
+      "default": "limited",
+      "info": "Products with this tag will show the Limited badge"
+    },
+    {
+      "type": "text",
+      "id": "limited_text",
+      "label": "Limited badge text",
+      "default": "Limited"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Show 'Sale' badge",
+      "default": true,
+      "info": "Badge appears on products with compare at price"
+    },
+    {
+      "type": "text",
+      "id": "sale_text",
+      "label": "Sale badge text",
+      "default": "Save [percent]%",
+      "info": "Use [percent] to show discount percentage"
+    },
+    {
+      "type": "header",
+      "content": "Product card settings"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (4:3)"
+        },
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "arch",
+          "label": "Arch"
+        },
+        {
+          "value": "blob",
+          "label": "Blob"
+        },
+        {
+          "value": "chevronleft",
+          "label": "Chevron left"
+        },
+        {
+          "value": "chevronright",
+          "label": "Chevron right"
+        },
+        {
+          "value": "diamond",
+          "label": "Diamond"
+        },
+        {
+          "value": "parallelogram",
+          "label": "Parallelogram"
+        },
+        {
+          "value": "round",
+          "label": "Round"
+        }
+      ],
+      "default": "default",
+      "label": "Image shape"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "standard",
+      "label": "Quick add button",
+      "info": "Adds plus button to product cards",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "bulk",
+          "label": "Bulk"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Filtering and sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering"
+    },
+    {
+      "type": "select",
+      "id": "filter_type",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "drawer",
+          "label": "Drawer"
+        }
+      ],
+      "default": "horizontal",
+      "label": "Desktop filter layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_embed",
+      "name": "Embedded Collection",
+      "settings": [
+        {
+          "type": "range",
+          "id": "position",
+          "min": 1,
+          "max": 36,
+          "step": 1,
+          "default": 5,
+          "label": "Position in grid",
+          "info": "Insert collection card after this product number"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title",
+          "info": "Leave blank to use collection title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Custom description"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_collection_description",
+          "label": "Show collection description",
+          "default": false,
+          "info": "Only used if custom description is empty"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image",
+          "info": "Overrides collection image"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Overlay opacity",
+          "default": 30
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

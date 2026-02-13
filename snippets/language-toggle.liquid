@@ -1,0 +1,176 @@
+
+{%- liquid
+  assign current_lang = localization.language.iso_code
+  assign is_arabic = false
+  if current_lang == 'ar'
+    assign is_arabic = true
+  endif
+  
+  assign target_lang = 'en'
+  if current_lang == 'en'
+    assign target_lang = 'ar'
+  endif
+  
+  assign current_lang_name = 'English'
+  assign other_lang_name = 'العربية'
+  if is_arabic
+    assign current_lang_name = 'العربية'
+    assign other_lang_name = 'English'
+  endif
+-%}
+
+<button 
+  class="language-toggle language-toggle--{{ location }}" 
+  type="button"
+  role="button"
+  aria-label="Switch language to {{ other_lang_name }}"
+  aria-live="polite"
+  aria-atomic="true"
+  data-language-toggle
+  data-current-lang="{{ current_lang }}"
+  data-target-lang="{{ target_lang }}"
+  {% if text_color %}style="color: {{ text_color }};{% if font_size %} font-size: {{ font_size }}px;{% endif %}"{% endif %}>
+  
+  <span class="language-toggle__current">{{ current_lang_name }}</span>
+  <span class="language-toggle__separator">/</span>
+  <span class="language-toggle__other">{{ other_lang_name }}</span>
+  
+  <svg class="language-toggle__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+  </svg>
+</button>
+
+<script>
+(function initLanguageToggle() {
+  'use strict';
+  
+  const toggleButtons = document.querySelectorAll('[data-language-toggle]');
+  
+  if (!toggleButtons.length) return;
+  
+  /**
+   * Build target URL by swapping language prefix
+   */
+  function buildTargetUrl(targetLang) {
+    const availableLanguages = {
+      {% for language in localization.available_languages %}
+        '{{ language.iso_code }}': '{{ language.root_url }}'{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    };
+    
+    const targetUrl = availableLanguages[targetLang];
+    if (!targetUrl) {
+      console.error('Target language not available:', targetLang);
+      return null;
+    }
+    
+    let currentPath = window.location.pathname;
+    
+    // Remove any existing language prefix
+    Object.keys(availableLanguages).forEach(lang => {
+      const prefix = availableLanguages[lang].replace(window.location.origin, '');
+      if (prefix !== '/' && currentPath.startsWith(prefix)) {
+        currentPath = currentPath.substring(prefix.length);
+      }
+    });
+    
+    // Ensure path starts with /
+    if (!currentPath.startsWith('/')) {
+      currentPath = '/' + currentPath;
+    }
+    
+    // Build final URL
+    let finalUrl = targetUrl;
+    if (targetUrl.endsWith('/') && currentPath.startsWith('/')) {
+      finalUrl = targetUrl + currentPath.substring(1);
+    } else if (!targetUrl.endsWith('/') && !currentPath.startsWith('/')) {
+      finalUrl = targetUrl + '/' + currentPath;
+    } else {
+      finalUrl = targetUrl + currentPath;
+    }
+    
+    // Preserve query parameters and hash
+    finalUrl += window.location.search + window.location.hash;
+    
+    return finalUrl;
+  }
+  
+  /**
+   * Switch language with loading state
+   */
+  function switchLanguage(button) {
+    const targetLang = button.dataset.targetLang;
+    
+    if (!targetLang) {
+      console.error('No target language specified');
+      return;
+    }
+    
+    const targetUrl = buildTargetUrl(targetLang);
+    if (!targetUrl) return;
+    
+    // Add loading state
+    button.classList.add('is-switching');
+    button.setAttribute('aria-busy', 'true');
+    button.disabled = true;
+    
+    // Store preference
+    try {
+      localStorage.setItem('preferredLanguage', targetLang);
+    } catch (e) {
+      console.warn('Could not save language preference:', e);
+    }
+    
+    // Navigate with timeout fallback
+    const timeout = setTimeout(() => {
+      console.warn('Language switch timeout, forcing navigation');
+      window.location.href = targetUrl;
+    }, 5000);
+    
+    window.location.href = targetUrl;
+    
+    // Cleanup if navigation fails
+    window.addEventListener('pagehide', () => clearTimeout(timeout), { once: true });
+  }
+  
+  /**
+   * Handle keyboard navigation
+   */
+  function handleKeyboard(e, button) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      switchLanguage(button);
+    }
+  }
+  
+  // Attach event listeners to all toggle buttons
+  toggleButtons.forEach(button => {
+    // Skip if already initialized
+    if (button.dataset.initialized === 'true') return;
+    button.dataset.initialized = 'true';
+    
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchLanguage(button);
+    });
+    
+    button.addEventListener('keydown', (e) => handleKeyboard(e, button));
+  });
+  
+  // Apply saved preference on page load (optional progressive enhancement)
+  const savedLang = localStorage.getItem('preferredLanguage');
+  const currentLang = '{{ localization.language.iso_code }}';
+  
+  if (savedLang && savedLang !== currentLang && document.readyState === 'loading') {
+    console.log('Detected language preference mismatch, will redirect after load...');
+    window.addEventListener('DOMContentLoaded', () => {
+      const targetUrl = buildTargetUrl(savedLang);
+      if (targetUrl && window.location.pathname !== targetUrl) {
+        window.location.replace(targetUrl);
+      }
+    }, { once: true });
+  }
+})();
+</script>

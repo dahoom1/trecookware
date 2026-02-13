@@ -1,0 +1,1110 @@
+{% comment %}
+  Section: Why Stainless Steel
+  Description: Feature section with title, description, CTA and feature cards with images/videos
+  Note: Uses global fonts from base.css (supports both English and Arabic)
+  Updated: Fixed 1:1 aspect ratio for all media and more compact layout
+{% endcomment %}
+
+<style>
+
+/* Why Stainless Steel Section Styles */
+.why-stainless-steel {
+  width: 100%;
+}
+
+.why-stainless-steel .page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Animation Keyframes */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Header Layout */
+.wss-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.wss-title-wrapper {
+  width: 100%;
+  opacity: 0;
+  animation: slideUpFade 0.8s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
+.wss-title {
+  margin: 0;
+  line-height: 1.2;
+  font-family: var(--font-heading-family);
+}
+
+.wss-content-wrapper {
+  width: 100%;
+  opacity: 0;
+  animation: slideUpFade 0.8s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+.wss-description {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.wss-description p {
+  margin: 0;
+}
+
+.wss-cta-wrapper {
+  width: 100%;
+  opacity: 0;
+  animation: slideUpFade 0.8s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.wss-cta {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.wss-cta:hover {
+  opacity: 0.7;
+}
+
+/* Features Grid/Carousel Container */
+.wss-features-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.wss-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Mobile Carousel Styles */
+@media screen and (max-width: 749px) {
+  .wss-features {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+
+  .wss-features::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wss-feature-card {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    max-width: 400px;
+  }
+
+  .wss-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+    animation-delay: 1.3s;
+  }
+
+  .wss-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .wss-carousel-dot.active {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 24px;
+    border-radius: 4px;
+  }
+}
+
+/* Feature Card Styles */
+.wss-feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+  opacity: 0;
+  animation: slideUpFade 0.8s ease-out forwards;
+}
+
+/* Staggered animation delays for cards */
+.wss-feature-card:nth-child(1) {
+  animation-delay: 0.6s;
+}
+.wss-feature-card:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.wss-feature-card:nth-child(3) {
+  animation-delay: 1s;
+}
+.wss-feature-card:nth-child(4) {
+  animation-delay: 1.2s;
+}
+.wss-feature-card:nth-child(5) {
+  animation-delay: 1.4s;
+}
+.wss-feature-card:nth-child(6) {
+  animation-delay: 1.6s;
+}
+
+/* Feature Image/Video Banner - FIXED 1:1 ASPECT RATIO */
+.wss-feature-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.wss-feature-media img,
+.wss-feature-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Video specific styles */
+.wss-feature-media video {
+  background-color: #000;
+}
+
+/* Icon positioned on media */
+.wss-feature-icon {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: 1.4s;
+}
+
+.wss-feature-card:nth-child(1) .wss-feature-icon {
+  animation-delay: 1.4s;
+}
+.wss-feature-card:nth-child(2) .wss-feature-icon {
+  animation-delay: 1.6s;
+}
+.wss-feature-card:nth-child(3) .wss-feature-icon {
+  animation-delay: 1.8s;
+}
+
+.wss-feature-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Feature Content Banner - More Compact */
+.wss-feature-content-banner {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.wss-feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wss-feature-title {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.wss-feature-subtitle {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.wss-feature-description {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Smooth font rendering */
+.wss-title,
+.wss-description,
+.wss-cta,
+.wss-feature-title,
+.wss-feature-subtitle,
+.wss-feature-description {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus states for accessibility */
+.wss-cta:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Tablet Styles */
+@media screen and (min-width: 750px) {
+  .why-stainless-steel .page-width {
+    max-width: var(--page-width);
+    padding: 0 40px;
+  }
+
+  .wss-header {
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 32px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .wss-cta-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+
+  .wss-features {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .wss-feature-icon {
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .wss-feature-content-banner {
+    padding: 20px;
+  }
+
+  .wss-carousel-dots {
+    display: none;
+  }
+}
+
+/* Desktop Styles */
+@media screen and (min-width: 990px) {
+  .why-stainless-steel .page-width {
+    max-width: var(--page-width);
+    padding: 0 60px;
+  }
+
+  .wss-features {
+    gap: 20px;
+  }
+
+  .wss-feature-content-banner {
+    padding: 20px;
+  }
+}
+
+/* Large Desktop */
+@media screen and (min-width: 1440px) {
+  .why-stainless-steel .page-width {
+    max-width: var(--page-width);
+    padding: 0 80px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .wss-title-wrapper,
+  .wss-content-wrapper,
+  .wss-cta-wrapper,
+  .wss-feature-card,
+  .wss-feature-icon,
+  .wss-carousel-dots {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Responsive Typography */
+.wss-title {
+  font-size: {{ section.settings.title_size_mobile }}px;
+}
+.wss-description {
+  font-size: {{ section.settings.description_size_mobile }}px;
+}
+.wss-cta {
+  font-size: {{ section.settings.cta_size_mobile }}px;
+}
+
+@media screen and (min-width: 750px) {
+  .wss-title {
+    font-size: {{ section.settings.title_size_desktop }}px;
+  }
+  .wss-description {
+    font-size: {{ section.settings.description_size_desktop }}px;
+  }
+  .wss-cta {
+    font-size: {{ section.settings.cta_size_desktop }}px;
+  }
+}
+
+/* Block-specific responsive typography */
+{% for block in section.blocks %}
+  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-title {
+    font-size: {{ block.settings.feature_title_size_mobile }}px;
+  }
+  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-subtitle {
+    font-size: {{ block.settings.feature_subtitle_size_mobile }}px;
+  }
+  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-description {
+    font-size: {{ block.settings.feature_description_size_mobile }}px;
+  }
+
+  /* Block-specific content banner background */
+  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-content-banner {
+    background-color: {{ block.settings.banner_background_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-title {
+      font-size: {{ block.settings.feature_title_size_desktop }}px;
+    }
+    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-subtitle {
+      font-size: {{ block.settings.feature_subtitle_size_desktop }}px;
+    }
+    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-description {
+      font-size: {{ block.settings.feature_description_size_desktop }}px;
+    }
+  }
+{% endfor %}
+</style>
+
+<div class="why-stainless-steel" style="background-color: {{ section.settings.background_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="wss-header">
+      <div class="wss-title-wrapper">
+        {% if section.settings.title != blank %}
+          <h2 class="wss-title" style="
+            color: {{ section.settings.title_color }};
+            font-weight: {{ section.settings.title_font_weight }};
+            font-style: {{ section.settings.title_font_style }};
+          ">
+            {{ section.settings.title }}
+          </h2>
+        {% endif %}
+      </div>
+
+      <div class="wss-content-wrapper">
+        {% if section.settings.description != blank %}
+          <div class="wss-description" style="
+            color: {{ section.settings.description_color }};
+            font-weight: {{ section.settings.description_font_weight }};
+            font-style: {{ section.settings.description_font_style }};
+          ">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="wss-cta-wrapper">
+        {% if section.settings.cta_text != blank %}
+          <a href="{{ section.settings.cta_link }}" class="wss-cta" style="
+            color: {{ section.settings.cta_color }};
+            font-weight: {{ section.settings.cta_font_weight }};
+            font-style: {{ section.settings.cta_font_style }};
+          ">
+            {{ section.settings.cta_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="wss-features-wrapper">
+      <div class="wss-features" id="wss-features-{{ section.id }}">
+        {% for block in section.blocks %}
+          <div class="wss-feature-card" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+            {% comment %} Check if video exists, otherwise use image {% endcomment %}
+            {% if block.settings.feature_video != blank %}
+              <div class="wss-feature-media">
+                <video
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                >
+                  {% for source in block.settings.feature_video.sources %}
+                    <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                  {% endfor %}
+                </video>
+                {% if block.settings.icon != blank %}
+                  <div class="wss-feature-icon">
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 120 }}"
+                      srcset="{{ block.settings.icon | image_url: width: 60 }} 60w,
+                              {{ block.settings.icon | image_url: width: 120 }} 120w"
+                      alt="{{ block.settings.feature_title | escape }}"
+                      width="60"
+                      height="60"
+                      loading="lazy"
+                    >
+                  </div>
+                {% endif %}
+              </div>
+            {% elsif block.settings.feature_image != blank %}
+              <div class="wss-feature-media">
+                <img
+                  src="{{ block.settings.feature_image | image_url: width: 800 }}"
+                  srcset="{{ block.settings.feature_image | image_url: width: 400 }} 400w,
+                          {{ block.settings.feature_image | image_url: width: 600 }} 600w,
+                          {{ block.settings.feature_image | image_url: width: 800 }} 800w,
+                          {{ block.settings.feature_image | image_url: width: 1000 }} 1000w"
+                  sizes="(max-width: 749px) 85vw, (max-width: 989px) 30vw, 25vw"
+                  alt="{{ block.settings.feature_title | escape }}"
+                  width="800"
+                  height="800"
+                  loading="lazy"
+                >
+                {% if block.settings.icon != blank %}
+                  <div class="wss-feature-icon">
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 120 }}"
+                      srcset="{{ block.settings.icon | image_url: width: 60 }} 60w,
+                              {{ block.settings.icon | image_url: width: 120 }} 120w"
+                      alt="{{ block.settings.feature_title | escape }}"
+                      width="60"
+                      height="60"
+                      loading="lazy"
+                    >
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="wss-feature-content-banner">
+              <div class="wss-feature-content">
+                {% if block.settings.feature_title != blank %}
+                  <h3 class="wss-feature-title" style="
+                    color: {{ block.settings.feature_title_color }};
+                    font-weight: {{ block.settings.feature_title_font_weight }};
+                    font-style: {{ block.settings.feature_title_font_style }};
+                  ">
+                    {{ block.settings.feature_title }}
+                  </h3>
+                {% endif %}
+
+                {% if block.settings.feature_subtitle != blank %}
+                  <p class="wss-feature-subtitle" style="
+                    color: {{ block.settings.feature_subtitle_color }};
+                    font-weight: {{ block.settings.feature_subtitle_font_weight }};
+                    font-style: {{ block.settings.feature_subtitle_font_style }};
+                  ">
+                    {{ block.settings.feature_subtitle }}
+                  </p>
+                {% endif %}
+
+                {% if block.settings.feature_description != blank %}
+                  <p class="wss-feature-description" style="
+                    color: {{ block.settings.feature_description_color }};
+                    font-weight: {{ block.settings.feature_desc_font_weight }};
+                    font-style: {{ block.settings.feature_desc_font_style }};
+                  ">
+                    {{ block.settings.feature_description }}
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="wss-carousel-dots" id="wss-dots-{{ section.id }}">
+        {% for block in section.blocks %}
+          <button 
+            class="wss-carousel-dot {% if forloop.first %}active{% endif %}" 
+            data-index="{{ forloop.index0 }}"
+            aria-label="Go to slide {{ forloop.index }}"
+          ></button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const sectionId = '{{ section.id }}';
+  const carousel = document.getElementById('wss-features-' + sectionId);
+  const dotsContainer = document.getElementById('wss-dots-' + sectionId);
+  
+  // Guard clause if elements don't exist
+  if (!carousel || !dotsContainer) return;
+
+  const dots = dotsContainer.querySelectorAll('.wss-carousel-dot');
+  const cards = carousel.querySelectorAll('.wss-feature-card');
+
+  // Logic only runs if we are on mobile (where carousel exists)
+  if (window.innerWidth < 750 && dots.length > 0) {
+    
+    // 1. CLICK EVENT: Scroll to card using browser-native API (RTL safe)
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        const targetCard = cards[index];
+        if (targetCard) {
+          // scrollIntoView handles RTL/LTR direction automatically
+          targetCard.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      });
+    });
+
+    // 2. SCROLL DETECTION: Use IntersectionObserver instead of math
+    // This watches for which card is actually visible on screen
+    const observerOptions = {
+      root: carousel,
+      threshold: 0.6 // Card is considered "active" when 60% visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Find which card this is
+          const index = Array.from(cards).indexOf(entry.target);
+          
+          // Update active dot class
+          dots.forEach(d => d.classList.remove('active'));
+          if(dots[index]) {
+            dots[index].classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Start watching all cards
+    cards.forEach(card => observer.observe(card));
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Why Stainless Steel",
+  "tag": "section",
+  "class": "section-why-stainless-steel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Main Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Why Stainless Steel"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "title_font_style",
+      "label": "Font Style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Size (Desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Size (Mobile)",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>We believe cookware should outlast trends — and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.</p>"
+    },
+    {
+      "type": "select",
+      "id": "description_font_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "description_font_style",
+      "label": "Font Style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "description_size_desktop",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Size (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "description_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Size (Mobile)",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "Discover More"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "select",
+      "id": "cta_font_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "cta_font_style",
+      "label": "Font Style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "cta_color",
+      "label": "CTA Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "cta_size_desktop",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "CTA Size (Desktop)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "cta_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "CTA Size (Mobile)",
+      "default": 14
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Feature Media (Image or Video)"
+        },
+        {
+          "type": "video",
+          "id": "feature_video",
+          "label": "Feature Video",
+          "info": "If video is added, it will be used instead of the image. Video will autoplay, loop, and be muted. Will be cropped to 1:1 square."
+        },
+        {
+          "type": "image_picker",
+          "id": "feature_image",
+          "label": "Feature Image",
+          "info": "Used when no video is added. Will be cropped to 1:1 square."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon/Logo",
+          "info": "Small icon displayed over the image or video"
+        },
+        {
+          "type": "header",
+          "content": "Content Banner Settings"
+        },
+        {
+          "type": "color",
+          "id": "banner_background_color",
+          "label": "Banner Background Color",
+          "default": "#C8D5B9"
+        },
+        {
+          "type": "header",
+          "content": "Feature Title"
+        },
+        {
+          "type": "text",
+          "id": "feature_title",
+          "label": "Title",
+          "default": "Even Heat"
+        },
+        {
+          "type": "color",
+          "id": "feature_title_color",
+          "label": "Title Color",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "feature_title_font_weight",
+          "label": "Font Weight",
+          "options": [
+            { "value": "300", "label": "Light (300)" },
+            { "value": "400", "label": "Normal (400)" },
+            { "value": "500", "label": "Medium (500)" },
+            { "value": "600", "label": "Semi Bold (600)" },
+            { "value": "700", "label": "Bold (700)" },
+            { "value": "800", "label": "Extra Bold (800)" }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "select",
+          "id": "feature_title_font_style",
+          "label": "Font Style",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "italic", "label": "Italic" }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "range",
+          "id": "feature_title_size_desktop",
+          "min": 14,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Title Size (Desktop)",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "feature_title_size_mobile",
+          "min": 14,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Title Size (Mobile)",
+          "default": 18
+        },
+        {
+          "type": "header",
+          "content": "Feature Subtitle"
+        },
+        {
+          "type": "text",
+          "id": "feature_subtitle",
+          "label": "Subtitle",
+          "default": "Distribution"
+        },
+        {
+          "type": "color",
+          "id": "feature_subtitle_color",
+          "label": "Subtitle Color",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "feature_subtitle_font_weight",
+          "label": "Font Weight",
+          "options": [
+            { "value": "300", "label": "Light (300)" },
+            { "value": "400", "label": "Normal (400)" },
+            { "value": "500", "label": "Medium (500)" },
+            { "value": "600", "label": "Semi Bold (600)" },
+            { "value": "700", "label": "Bold (700)" },
+            { "value": "800", "label": "Extra Bold (800)" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "select",
+          "id": "feature_subtitle_font_style",
+          "label": "Font Style",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "italic", "label": "Italic" }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "range",
+          "id": "feature_subtitle_size_desktop",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Subtitle Size (Desktop)",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "feature_subtitle_size_mobile",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Subtitle Size (Mobile)",
+          "default": 13
+        },
+        {
+          "type": "header",
+          "content": "Feature Description"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_description",
+          "label": "Description",
+          "default": "5-ply construction ensures perfect control — no hotspots, no guesswork."
+        },
+        {
+          "type": "color",
+          "id": "feature_description_color",
+          "label": "Description Color",
+          "default": "#333333"
+        },
+        {
+          "type": "select",
+          "id": "feature_desc_font_weight",
+          "label": "Font Weight",
+          "options": [
+            { "value": "300", "label": "Light (300)" },
+            { "value": "400", "label": "Normal (400)" },
+            { "value": "500", "label": "Medium (500)" },
+            { "value": "600", "label": "Semi Bold (600)" },
+            { "value": "700", "label": "Bold (700)" },
+            { "value": "800", "label": "Extra Bold (800)" }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "feature_desc_font_style",
+          "label": "Font Style",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "italic", "label": "Italic" }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "range",
+          "id": "feature_description_size_desktop",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Description Size (Desktop)",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "feature_description_size_mobile",
+          "min": 12,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Description Size (Mobile)",
+          "default": 13
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Stainless Steel",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "feature_title": "Even Heat",
+            "feature_subtitle": "Distribution",
+            "feature_description": "5-ply construction ensures perfect control — no hotspots, no guesswork.",
+            "banner_background_color": "#C8D5B9"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_title": "Long-Lasting",
+            "feature_subtitle": "Performance",
+            "feature_description": "Built to withstand decades of daily use without compromising quality.",
+            "banner_background_color": "#C8D5B9"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_title": "Healthy &",
+            "feature_subtitle": "Non-Reactive",
+            "feature_description": "Pure stainless steel won't leach chemicals or react with acidic foods.",
+            "banner_background_color": "#C8D5B9"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
