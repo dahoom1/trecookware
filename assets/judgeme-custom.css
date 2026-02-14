@@ -1,0 +1,89 @@
+/* ========================================
+   JUDGE.ME CUSTOM FONT OVERRIDES
+   Purpose: Force Judge.me widgets to use theme fonts
+   ======================================== */
+
+/* Override all Judge.me text elements with your global font - EXCEPT stars! */
+/* Stars need Times font to display the ★ symbol correctly */
+.jdgm-widget *:not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not(.jdgm__stars):not(.jdgm-rev__rating):not(.jdgm-prev-badge__stars),
+.jdgm-rev-widg *:not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not(.jdgm__stars):not(.jdgm-rev__rating):not(.jdgm-prev-badge__stars),
+.jdgm-carousel-wrapper *:not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not(.jdgm__stars):not(.jdgm-rev__rating):not(.jdgm-prev-badge__stars),
+.jdgm-rev__title,
+.jdgm-rev__body,
+.jdgm-rev__buyer-name,
+.jdgm-rev__timestamp,
+.jdgm-author-all-initials,
+.jdgm-verified-badge,
+.jdgm-medal-text,
+.jdgm-see-more-btn,
+.jdgm-all-reviews-text,
+.jdgm-paginate__page,
+.jdgm-histogram__row-title,
+#judgeme_product_reviews {
+  font-family: var(--font-heading-family) !important;
+}
+
+/* REMOVED: Do not override font-family for stars at all!
+   Let Judge.me use its custom icon font completely untouched */
+
+/* Fix letter-spacing for Arabic in Judge.me widgets - BUT NOT for stars! */
+html[lang="ar"] .jdgm-widget *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+html[lang="ar"] .jdgm-rev-widg *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+html[lang="ar"] .jdgm-carousel-wrapper *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+html[lang^="ar-"] .jdgm-widget *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+html[lang^="ar-"] .jdgm-rev-widg *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+html[lang^="ar-"] .jdgm-carousel-wrapper *:not(.jdgm-star):not([class*="star"]):not(.jdgm__stars):not(.jdgm-rev__rating) {
+  letter-spacing: normal !important;
+}
+
+/* REMOVED: Do not override letter-spacing for stars in Arabic
+   Let Judge.me handle star spacing completely */
+
+/* Ensure headings in Judge.me use your heading font */
+.jdgm-widget h1,
+.jdgm-widget h2,
+.jdgm-widget h3,
+.jdgm-widget h4,
+.jdgm-widget h5,
+.jdgm-widget h6,
+.jdgm-rev-widg h1,
+.jdgm-rev-widg h2,
+.jdgm-rev-widg h3 {
+  font-family: var(--font-heading-family) !important;
+}
+
+/* Optional: Adjust font sizes if needed */
+.jdgm-rev__body {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.jdgm-rev__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.jdgm-rev__buyer-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Fix any embedded review forms */
+.jdgm-write-rev-form,
+.jdgm-write-rev-form *,
+.jdgm-form__input,
+.jdgm-form__label {
+  font-family: var(--font-heading-family) !important;
+}
+
+/* Fix the "Customers are saying" carousel/widget - EXCEPT stars */
+.jdgm-carousel-item *:not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not(.jdgm__stars):not(.jdgm-rev__rating),
+.jdgm-carousel__reviewer-name,
+.jdgm-carousel__review-title,
+.jdgm-carousel__review-body {
+  font-family: var(--font-heading-family) !important;
+}
+
+/* ==================================================================
+   REMOVED: Do NOT override stars - let Judge.me handle them completely
+   ================================================================== */

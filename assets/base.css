@@ -38,6 +38,13 @@ html[lang^="ar-"] {
   direction: rtl;
 }
 
+/* Fix letter-spacing for Arabic text - prevents unwanted gaps between characters */
+/* Exclude star ratings which need letter-spacing to display properly */
+html[lang="ar"] *:not(.rating-star):not(.jdgm-star):not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not([class*="Rating"]):not(.jdgm__stars):not(.jdgm-rev__rating):not(.jdgm-prev-badge__stars):not([data-score]):not([role="img"]),
+html[lang^="ar-"] *:not(.rating-star):not(.jdgm-star):not([class*="star"]):not([class*="Star"]):not([class*="rating"]):not([class*="Rating"]):not(.jdgm__stars):not(.jdgm-rev__rating):not(.jdgm-prev-badge__stars):not([data-score]):not([role="img"]) {
+  letter-spacing: normal !important;
+}
+
 
 .announcement-bar.color-background-1.gradient {
     background-color: #E9CED9 !important;

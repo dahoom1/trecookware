@@ -1,0 +1,410 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .examples-section {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  /* Override page-width padding to match other sections */
+  .examples-section .page-width {
+    max-width: var(--page-width);
+    padding: 0 20px;
+  }
+
+  .examples-section__heading {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: left;
+    color: #1a1a1a;
+  }
+
+  .examples-section__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 30px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  .examples-section__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .examples-section__grid:active {
+    cursor: grabbing;
+  }
+
+  .example-card {
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
+    aspect-ratio: 1;
+    flex: 0 0 calc(33.333% - 20px);
+    min-width: calc(33.333% - 20px);
+    scroll-snap-align: start;
+    cursor: pointer;
+  }
+
+  .example-card__image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .example-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .example-card__label {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    z-index: 2;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .example-card__plus-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    font-size: 24px;
+    color: #1a1a1a;
+    transition: all 0.3s ease;
+  }
+
+  .example-card__plus-btn.active {
+    transform: rotate(45deg);
+  }
+
+  .example-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(232, 230, 227, 0.97);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 2;
+  }
+
+  .example-card__text {
+    color: #1a1a1a;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  .example-card__close-btn {
+    display: none;
+  }
+
+  /* Desktop styles */
+  @media (min-width: 990px) {
+    .example-card:hover .example-card__overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .examples-section .page-width {
+      padding: 0 60px;
+    }
+
+    .examples-section__grid {
+      gap: 20px;
+    }
+
+    .example-card {
+      flex: 0 0 31%;
+      min-width: 31%;
+      scroll-snap-align: center;
+    }
+  }
+
+  /* Tablet styles */
+  @media (min-width: 750px) and (max-width: 989px) {
+    .examples-section .page-width {
+      padding: 0 40px;
+    }
+
+    .examples-section__grid {
+      gap: 20px;
+    }
+
+    .example-card {
+      flex: 0 0 48%;
+      min-width: 48%;
+      scroll-snap-align: center;
+    }
+  }
+
+  /* Large desktop */
+  @media (min-width: 1440px) {
+    .examples-section .page-width {
+      padding: 0 80px;
+    }
+  }
+
+  /* Mobile styles */
+  @media (max-width: 749px) {
+    .examples-section {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+
+    .examples-section__heading {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
+
+    .examples-section__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      gap: 16px;
+      padding-bottom: 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .examples-section__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .example-card {
+      flex: 0 0 85%;
+      min-width: 85%;
+      max-width: 400px;
+      scroll-snap-align: start;
+      aspect-ratio: 0.9;
+    }
+
+    .example-card__plus-btn {
+      display: flex;
+    }
+
+    .example-card__overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .example-card__label {
+      font-size: 1.3rem;
+      bottom: 25px;
+      left: 25px;
+    }
+
+    .example-card__text {
+      font-size: 1rem;
+      padding: 40px;
+    }
+  }
+
+</style>
+
+<div class="examples-section">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="examples-section__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="examples-section__grid">
+    {%- for block in section.blocks -%}
+      <div class="example-card" {{ block.shopify_attributes }}>
+        <div class="example-card__image-wrapper">
+          {%- if block.settings.image != blank -%}
+            <img
+              srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 800 }} 800w"
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              sizes="(min-width: 990px) 33vw, 85vw"
+              alt="{{ block.settings.image.alt | default: block.settings.label }}"
+              class="example-card__image"
+              loading="lazy"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'example-card__image' }}
+          {%- endif -%}
+
+          {%- if block.settings.label != blank -%}
+            <div class="example-card__label">{{ block.settings.label }}</div>
+          {%- endif -%}
+
+          <button class="example-card__plus-btn" aria-label="Show details">+</button>
+        </div>
+
+        <div class="example-card__overlay">
+          {%- if block.settings.description != blank -%}
+            <div class="example-card__text">{{ block.settings.description }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.example-card');
+    const grid = document.querySelector('.examples-section__grid');
+
+    // Plus button functionality
+    cards.forEach(card => {
+      const plusBtn = card.querySelector('.example-card__plus-btn');
+      const overlay = card.querySelector('.example-card__overlay');
+
+      if (plusBtn) {
+        plusBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+
+          // Close other cards
+          cards.forEach(otherCard => {
+            if (otherCard !== card) {
+              const otherOverlay = otherCard.querySelector('.example-card__overlay');
+              const otherPlusBtn = otherCard.querySelector('.example-card__plus-btn');
+              if (otherOverlay) otherOverlay.classList.remove('active');
+              if (otherPlusBtn) otherPlusBtn.classList.remove('active');
+            }
+          });
+
+          // Toggle current card
+          overlay.classList.toggle('active');
+          plusBtn.classList.toggle('active');
+        });
+      }
+    });
+
+    // Drag to scroll functionality
+    if (grid) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      grid.addEventListener('mousedown', (e) => {
+        // Don't interfere with button clicks
+        if (e.target.closest('.example-card__plus-btn')) return;
+
+        isDown = true;
+        grid.style.cursor = 'grabbing';
+        startX = e.pageX - grid.offsetLeft;
+        scrollLeft = grid.scrollLeft;
+      });
+
+      grid.addEventListener('mouseleave', () => {
+        isDown = false;
+        grid.style.cursor = 'grab';
+      });
+
+      grid.addEventListener('mouseup', () => {
+        isDown = false;
+        grid.style.cursor = 'grab';
+      });
+
+      grid.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - grid.offsetLeft;
+        const walk = (x - startX) * 2;
+        grid.scrollLeft = scrollLeft - walk;
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Examples with Text",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why traditional pans are the past:"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "example",
+      "name": "Example Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Example Label"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Add your description text here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Examples with Text",
+      "blocks": [
+        {
+          "type": "example",
+          "settings": {
+            "label": "Pfas/Teflon Coated",
+            "description": "Most non-stick pans contain PFAS or Teflon coatings. Over time, these coatings flake off, end up in your food, and, according to numerous studies, may increase the risk of health risk"
+          }
+        },
+        {
+          "type": "example",
+          "settings": {
+            "label": "Stainless steel pans",
+            "description": "Stainless steel pans don't have a coating, but food sticks easily, especially without perfect heat and oil control. They're durable but require skill to use and clean, and never offer a truly effortless non-stick experience."
+          }
+        },
+        {
+          "type": "example",
+          "settings": {
+            "label": "Ceramic Pans",
+            "description": "Ceramic pans offer a safer non-stick alternative initially, but the coating degrades quickly with use and high heat, leading to food sticking and requiring frequent replacement."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
