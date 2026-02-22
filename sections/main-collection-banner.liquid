@@ -59,9 +59,9 @@
   }
 
   .collection-hero__title {
-    
-    font-size: 14px;
-    font-weight: 300;
+    font-size: var(--t-small);
+    font-family: var(--font-body-family);
+    font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
     margin-bottom: 40px;
@@ -70,7 +70,7 @@
   }
 
   .collection-header-text {
-    font-size: 56px;
+    font-size: var(--t-display);
     font-weight: 300;
     letter-spacing: -1px;
     margin-top: 10px;
@@ -81,7 +81,8 @@
   }
 
   .collection-hero__description {
-    font-size: 16px;
+    font-size: var(--t-body);
+    font-family: var(--font-body-family);
     line-height: 1.65;
     margin-bottom: 0;
     color: #000000;
@@ -101,9 +102,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: var(--t-small);
+    font-family: var(--font-body-family);
     line-height: 1.5;
-    font-family: var(--font-heading-family);
   }
 
   .collection-hero__feature-item::before {
@@ -148,30 +149,22 @@
     }
 
     .collection-header-text {
-      font-size: 45px;
       letter-spacing: -0.5px;
       margin-bottom: 10px;
     }
 
     .collection-hero__title {
       display: none;
-      font-size: 13px;
-      margin-bottom: 1px;
     }
 
     .collection-hero__description {
-      font-size: 15px;
-      line-height: 1.2;
+      line-height: 1.3;
     }
 
     .collection-hero__features {
       grid-template-columns: repeat(2, 1fr);
       gap: 8px 8px;
       margin-top: 0px;
-    }
-
-    .collection-hero__feature-item {
-      font-size: 14px;
     }
 
     .collection-hero__feature-item::before {

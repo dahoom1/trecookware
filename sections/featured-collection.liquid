@@ -137,6 +137,40 @@
   /* END CUSTOM STYLES                          */
   /* ------------------------------------------- */
 
+  /* ------------------------------------------- */
+  /* RTL SUPPORT FOR ARABIC                     */
+  /* ------------------------------------------- */
+
+  {% if request.locale.iso_code == 'ar' %}
+    /* Product Title RTL Alignment */
+    #collection-{{ section.id }} .card__information .card__heading,
+    #collection-{{ section.id }} .card__heading a,
+    #collection-{{ section.id }} .card-information .card__heading,
+    #collection-{{ section.id }} .full-unstyled-link {
+      direction: rtl !important;
+      text-align: right !important;
+      unicode-bidi: embed !important;
+    }
+
+    /* Card Content RTL */
+    #collection-{{ section.id }} .card__content,
+    #collection-{{ section.id }} .card__information {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+
+    /* Price RTL Alignment */
+    #collection-{{ section.id }} .price,
+    #collection-{{ section.id }} .card__badge {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+  {% endif %}
+
+  /* ------------------------------------------- */
+  /* END RTL SUPPORT                            */
+  /* ------------------------------------------- */
+
 {%- endstyle -%}
 
 
