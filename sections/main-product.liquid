@@ -148,7 +148,23 @@
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
-        {% render 'product-media-gallery', variant_images: variant_images %}
+        {% comment %} Original Shopify gallery for desktop, custom gallery for mobile {% endcomment %}
+        <div class="desktop-gallery-wrapper">
+          {% render 'product-media-gallery', variant_images: variant_images %}
+        </div>
+        <div class="mobile-gallery-wrapper">
+          {% render 'product-media-gallery-custom', variant_images: variant_images %}
+        </div>
+
+        <style>
+          /* Critical inline CSS — applied before external stylesheet loads */
+          .desktop-gallery-wrapper { display: none; }
+          .mobile-gallery-wrapper { display: block; }
+          @media screen and (min-width: 750px) {
+            .desktop-gallery-wrapper { display: block; }
+            .mobile-gallery-wrapper { display: none; }
+          }
+        </style>
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -687,15 +703,16 @@
       }
 
       .product-videos-heading {
-        font-size: 2rem;
+        font-size: var(--t-h2);
         font-weight: 400;
         margin: 0;
         line-height: 1.2;
-        font-family: inherit;
+        font-family: var(--font-heading-family);
       }
 
       .product-videos-link {
-        font-size: 1rem;
+        font-size: var(--t-small);
+        font-family: var(--font-body-family);
         color: inherit;
         text-decoration: underline;
         text-underline-offset: 4px;
@@ -850,7 +867,8 @@
         background: #000;
         color: #fff;
         border: none;
-        font-size: 15px;
+        font-size: var(--t-small);
+        font-family: var(--font-body-family);
         font-weight: 500;
         cursor: pointer;
         transition: opacity 0.2s;
@@ -967,7 +985,7 @@
         }
 
         .product-videos-heading {
-          font-size: 1.5rem;
+          font-size: var(--t-h3);
         }
 
         .product-videos-grid {
@@ -1433,6 +1451,7 @@
       </div>
     </div>
 
+    {% comment %} Modal for desktop gallery {% endcomment %}
     {% render 'product-media-modal', variant_images: variant_images %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}

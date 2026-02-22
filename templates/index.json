@@ -112,9 +112,9 @@
         "product_set_zWTcPm": {
           "type": "product_set",
           "settings": {
-            "product": "stainless-clad-saute-pan-3-5qt",
+            "product": "26cm-set",
             "custom_title": "",
-            "description": "One size. Three essentials. Infinite versatility. This streamlined 26cm set is designed to handle every kitchen task while eliminating cabinet clutter"
+            "description": "Includes: 5 pieces of universal 26cm size collection."
           }
         },
         "product_set_hXAHVE": {
@@ -122,7 +122,7 @@
           "settings": {
             "product": "large-family",
             "custom_title": "",
-            "description": "This set comes with two stockpots: a 20cm daily pot and a large 26cm batch cooker."
+            "description": "Includes: 7 pieces, different sizes for all large families needs"
           }
         },
         "product_set_mYDzEQ": {
@@ -130,7 +130,7 @@
           "settings": {
             "product": "full-collection",
             "custom_title": "Full Essential Collection",
-            "description": "The perfect pair for daily tasks and small batch cooking. This high performance bundle combines a 20cm Frypan and a 16cm Saucepan, providing the two most-used tools for quick meals, sides, and sauces."
+            "description": "Includes: 10 pieces of all the essential collections"
           }
         }
       },
@@ -407,7 +407,7 @@
             "corner_styling": "square",
             "header_text_color": "#000000",
             "text_color": "#000000",
-            "card_color": "#F9F9F9",
+            "card_color": "#f9f9f9",
             "stars_color": "",
             "arrows_color": "#000000",
             "transition_speed": 7,

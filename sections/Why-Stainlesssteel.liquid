@@ -58,6 +58,7 @@
   margin: 0;
   line-height: 1.2;
   font-family: var(--font-heading-family);
+  font-size: var(--t-h1);
 }
 
 .wss-content-wrapper {
@@ -70,6 +71,8 @@
 .wss-description {
   margin: 0;
   line-height: 1.6;
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
 }
 
 .wss-description p {
@@ -88,6 +91,8 @@
   text-decoration: underline;
   text-underline-offset: 4px;
   transition: opacity 0.2s ease;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
 }
 
 .wss-cta:hover {
@@ -240,13 +245,17 @@
   object-fit: contain;
 }
 
-/* Feature Content Banner - More Compact */
+/* Feature Content Banner - Fixed height so all cards stay uniform */
 .wss-feature-content-banner {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   box-sizing: border-box;
+  height: 120px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.25) transparent;
 }
 
 .wss-feature-content {
@@ -258,16 +267,22 @@
 .wss-feature-title {
   margin: 0;
   line-height: 1.2;
+  font-family: var(--font-heading-family);
+  font-size: var(--t-h3);
 }
 
 .wss-feature-subtitle {
   margin: 0;
   line-height: 1.3;
+  font-family: var(--font-body-family);
+  font-size: var(--t-subtitle);
 }
 
 .wss-feature-description {
   margin: 0;
   line-height: 1.5;
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
 }
 
 /* Smooth font rendering */
@@ -322,6 +337,7 @@
 
   .wss-feature-content-banner {
     padding: 20px;
+    height: 130px;
   }
 
   .wss-carousel-dots {
@@ -366,56 +382,11 @@
   }
 }
 
-/* Responsive Typography */
-.wss-title {
-  font-size: {{ section.settings.title_size_mobile }}px;
-}
-.wss-description {
-  font-size: {{ section.settings.description_size_mobile }}px;
-}
-.wss-cta {
-  font-size: {{ section.settings.cta_size_mobile }}px;
-}
-
-@media screen and (min-width: 750px) {
-  .wss-title {
-    font-size: {{ section.settings.title_size_desktop }}px;
-  }
-  .wss-description {
-    font-size: {{ section.settings.description_size_desktop }}px;
-  }
-  .wss-cta {
-    font-size: {{ section.settings.cta_size_desktop }}px;
-  }
-}
-
-/* Block-specific responsive typography */
+/* Typography — sizes set via CSS type scale variables in class definitions above */
+/* Block-specific content banner background */
 {% for block in section.blocks %}
-  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-title {
-    font-size: {{ block.settings.feature_title_size_mobile }}px;
-  }
-  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-subtitle {
-    font-size: {{ block.settings.feature_subtitle_size_mobile }}px;
-  }
-  .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-description {
-    font-size: {{ block.settings.feature_description_size_mobile }}px;
-  }
-
-  /* Block-specific content banner background */
   .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-content-banner {
     background-color: {{ block.settings.banner_background_color }};
-  }
-
-  @media screen and (min-width: 750px) {
-    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-title {
-      font-size: {{ block.settings.feature_title_size_desktop }}px;
-    }
-    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-subtitle {
-      font-size: {{ block.settings.feature_subtitle_size_desktop }}px;
-    }
-    .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-description {
-      font-size: {{ block.settings.feature_description_size_desktop }}px;
-    }
   }
 {% endfor %}
 </style>

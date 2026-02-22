@@ -1,0 +1,124 @@
+{% comment %}
+  Custom Product Media Gallery with Full-Width Images and Zoom
+  - Full-width images
+  - Navigation dots at the bottom
+  - Clickable images with zoom modal
+  - Swipe support for mobile
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'custom-product-gallery.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ 'custom-product-gallery.css' | asset_url }}"></noscript>
+
+{%- liquid
+  if section.settings.hide_variants and variant_images.size == product.media.size
+    assign single_media_visible = true
+  endif
+
+  assign media_count = product.media.size
+  if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
+    assign media_count = media_count | minus: variant_images.size | plus: 1
+  endif
+-%}
+
+<div class="custom-product-gallery" id="CustomGallery-{{ section.id }}">
+  <!-- Main Gallery Container -->
+  <div class="custom-gallery__viewport">
+    <div class="custom-gallery__slider" id="GallerySlider-{{ section.id }}">
+      {%- if product.selected_or_first_available_variant.featured_media != null -%}
+        {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+        <div
+          class="custom-gallery__slide active"
+          data-media-id="{{ featured_media.id }}"
+          data-slide-index="0"
+        >
+          <div class="custom-gallery__image-wrapper">
+            {{
+              featured_media.preview_image
+              | image_url: width: 1500
+              | image_tag:
+                loading: 'lazy',
+                sizes: '100vw',
+                class: 'custom-gallery__image',
+                alt: featured_media.alt,
+                widths: '375, 550, 750, 1100, 1500'
+            }}
+            <div class="custom-gallery__magnifier"></div>
+          </div>
+        </div>
+        {%- assign media_position = 1 -%}
+      {%- endif -%}
+
+      {%- for media in product.media -%}
+        {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
+          {%- liquid
+            assign media_position = media_position | default: 0 | plus: 1
+            assign lazy_load = true
+            if media_position == 1
+              assign lazy_load = false
+            endif
+          -%}
+          <div
+            class="custom-gallery__slide{% if product.selected_or_first_available_variant.featured_media == nil and forloop.first %} active{% endif %}"
+            data-media-id="{{ media.id }}"
+            data-slide-index="{{ media_position }}"
+          >
+            <div class="custom-gallery__image-wrapper">
+              {%- if media.media_type == 'image' -%}
+                {{
+                  media.preview_image
+                  | image_url: width: 1500
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '100vw',
+                    class: 'custom-gallery__image',
+                    alt: media.alt,
+                    widths: '375, 550, 750, 1100, 1500'
+                }}
+                <div class="custom-gallery__magnifier"></div>
+              {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                <div class="custom-gallery__video-wrapper">
+                  {{
+                    media.preview_image
+                    | image_url: width: 1500
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '100vw',
+                      class: 'custom-gallery__image',
+                      alt: media.alt
+                  }}
+                  <span class="custom-gallery__video-badge">
+                    <span class="svg-wrapper">
+                      {{- 'icon-play.svg' | inline_asset_content -}}
+                    </span>
+                  </span>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+
+    <!-- Navigation Dots - positioned over images -->
+    {%- if media_count > 1 -%}
+      <div class="custom-gallery__dots" id="GalleryDots-{{ section.id }}">
+      {%- for i in (0..media_count) -%}
+        {%- if forloop.index <= media_count -%}
+          <button
+            type="button"
+            class="custom-gallery__dot{% if forloop.first %} active{% endif %}"
+            data-slide-to="{{ forloop.index0 }}"
+            aria-label="{{ 'products.product.media.load_image' | t: index: forloop.index }}"
+          >
+            <span class="visually-hidden">{{ 'products.product.media.go_to_item' | t: index: forloop.index | default: 'Go to item' }} {{ forloop.index }}</span>
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+</div>
+
+<!-- Link JS -->
+<script src="{{ 'custom-product-gallery.js' | asset_url }}" defer></script>

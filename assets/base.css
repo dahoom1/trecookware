@@ -2,12 +2,40 @@
 :root {
   --font-heading-family: 'Gestura Headline', Arial, sans-serif;
   --font-arabic-heading-family: 'HTBaybarsDisplay-bold', 'Noto Sans Arabic', Arial, sans-serif;
+  --font-body-family: 'AktivGrotesk_Rg-_2', Arial, sans-serif;
+  --font-body-style: normal;
+  --font-body-weight: 400;
+
+  /* ─── Unified Type Scale ───────────────────────────────────────────────────
+     All sizes use clamp(min, fluid, max) — no media queries needed.
+     Headings → Gestura Headline  |  Subtitles & body → AktivGrotesk
+     Scale assumes 10px root (Dawn default). Values: min → max in px.
+     ────────────────────────────────────────────────────────────────────────── */
+
+  /* Headings — Gestura Headline */
+  --t-display: clamp(3.4rem, calc(2.5vw + 2.4rem), 6rem);    /* 34px → 60px  hero banners          */
+  --t-h1:      clamp(2.8rem, calc(1.5vw + 2.2rem), 4.4rem);  /* 28px → 44px  page / section titles  */
+  --t-h2:      clamp(2.2rem, calc(1.1vw + 1.7rem), 3.4rem);  /* 22px → 34px  sub-section titles     */
+  --t-h3:      clamp(1.8rem, calc(0.8vw + 1.5rem), 2.6rem);  /* 18px → 26px  card / component heads */
+
+  /* Body & subtitles — AktivGrotesk */
+  --t-subtitle: clamp(1.5rem, calc(0.3vw + 1.4rem), 1.8rem); /* 15px → 18px  subtitles              */
+  --t-body:     clamp(1.4rem, calc(0.2vw + 1.3rem), 1.6rem); /* 14px → 16px  descriptions / body    */
+  --t-small:    clamp(1.2rem, calc(0.2vw + 1.1rem), 1.4rem); /* 12px → 14px  prices / captions      */
 }
 
 /* Default font - Gestura Headline */
 @font-face {
   font-family: 'Gestura Headline';
   src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/GesturaHeadlineTRIAL-Regular.otf?v=1759760958') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AktivGrotesk_Rg-_2';
+  src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/AktivGrotesk_Rg-_2.otf?v=1771361321') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -291,10 +319,30 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   background-color: rgba(var(--color-foreground), 0.2);
 }
 
+/* Global body font — AktivGrotesk on all non-heading elements */
+body {
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
+  line-height: 1.6;
+}
+
+p,
+li,
+span,
+a,
+button,
+input,
+textarea,
+label,
+td,
+th {
+  font-family: var(--font-body-family);
+}
+
 .text-body {
-  font-size: 1.5rem;
-  letter-spacing: 0.06rem;
-  line-height: calc(1 + 0.8 / var(--font-body-scale));
+  font-size: var(--t-body);
+  letter-spacing: 0.04rem;
+  line-height: 1.6;
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
@@ -348,57 +396,29 @@ h5,
 
 h1,
 .h1 {
-  font-size: calc(var(--font-heading-scale) * 3rem);
-}
-
-@media only screen and (min-width: 750px) {
-  h1,
-  .h1 {
-    font-size: calc(var(--font-heading-scale) * 4rem);
-  }
+  font-size: var(--t-h1);
 }
 
 h2,
 .h2 {
-  font-size: calc(var(--font-heading-scale) * 2rem);
-}
-
-@media only screen and (min-width: 750px) {
-  h2,
-  .h2 {
-    font-size: calc(var(--font-heading-scale) * 2.4rem);
-  }
+  font-size: var(--t-h2);
 }
 
 h3,
 .h3 {
-  font-size: calc(var(--font-heading-scale) * 1.7rem);
-}
-
-@media only screen and (min-width: 750px) {
-  h3,
-  .h3 {
-    font-size: calc(var(--font-heading-scale) * 1.8rem);
-  }
+  font-size: var(--t-h3);
 }
 
 h4,
 .h4 {
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
-  font-size: calc(var(--font-heading-scale) * 1.5rem);
+  font-size: clamp(1.5rem, calc(0.5vw + 1.3rem), 2rem); /* 15px → 20px */
 }
 
 h5,
 .h5 {
-  font-size: calc(var(--font-heading-scale) * 1.2rem);
-}
-
-@media only screen and (min-width: 750px) {
-  h5,
-  .h5 {
-    font-size: calc(var(--font-heading-scale) * 1.3rem);
-  }
+  font-size: clamp(1.3rem, calc(0.2vw + 1.2rem), 1.5rem); /* 13px → 15px */
 }
 
 h6,
@@ -922,20 +942,23 @@ summary::-webkit-details-marker {
 }
 
 .subtitle {
-  font-size: 1.8rem;
-  line-height: calc(1 + 0.8 / var(--font-body-scale));
-  letter-spacing: 0.06rem;
+  font-size: var(--t-subtitle);
+  font-family: var(--font-body-family);
+  line-height: 1.5;
+  letter-spacing: 0.04rem;
   color: rgba(var(--color-foreground), 0.7);
 }
 
 .subtitle--small {
-  font-size: 1.4rem;
-  letter-spacing: 0.1rem;
+  font-size: var(--t-small);
+  font-family: var(--font-body-family);
+  letter-spacing: 0.06rem;
 }
 
 .subtitle--medium {
-  font-size: 1.6rem;
-  letter-spacing: 0.08rem;
+  font-size: var(--t-body);
+  font-family: var(--font-body-family);
+  letter-spacing: 0.04rem;
 }
 
 /* component-grid */

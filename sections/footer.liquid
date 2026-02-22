@@ -51,7 +51,8 @@
   }
 
   .tre-footer-column h2 {
-    font-size: {{ section.settings.heading_size }}px !important;
+    font-size: var(--t-h3) !important;
+    font-family: var(--font-heading-family) !important;
     font-weight: 500 !important;
     margin: 0 0 20px 0 !important;
     color: #ffffff !important;
@@ -73,7 +74,8 @@
   .tre-footer-column a {
     color: #ffffff !important;
     text-decoration: none !important;
-    font-size: {{ section.settings.link_size }}px !important;
+    font-size: var(--t-small) !important;
+    font-family: var(--font-body-family) !important;
     line-height: 1.6 !important;
     transition: opacity 0.3s ease !important;
     display: inline-block !important;
@@ -89,7 +91,8 @@
   }
 
   .tre-footer-newsletter h2 {
-    font-size: {{ section.settings.heading_size }}px !important;
+    font-size: var(--t-h3) !important;
+    font-family: var(--font-heading-family) !important;
     font-weight: 500 !important;
     margin: 0 0 20px 0 !important;
     color: #ffffff !important;
@@ -106,7 +109,8 @@
     border: none !important;
     padding: 12px 16px !important;
     color: #000000 !important;
-    font-size: 14px !important;
+    font-size: var(--t-small) !important;
+    font-family: var(--font-body-family) !important;
   }
 
   .tre-footer-newsletter-input::placeholder {
@@ -123,7 +127,8 @@
     color: #ffffff !important;
     padding: 12px 30px !important;
     cursor: pointer !important;
-    font-size: 14px !important;
+    font-size: var(--t-small) !important;
+    font-family: var(--font-body-family) !important;
     transition: all 0.3s ease !important;
     white-space: nowrap !important;
   }
@@ -135,7 +140,8 @@
 
   .tre-footer-newsletter-message {
     margin-top: 10px !important;
-    font-size: 14px !important;
+    font-size: var(--t-small) !important;
+    font-family: var(--font-body-family) !important;
   }
 
   /* Bottom section */
@@ -174,7 +180,8 @@
 
   .tre-footer-tagline {
     text-align: right;
-    font-size: 26px;
+    font-size: var(--t-h2);
+    font-family: var(--font-heading-family);
     line-height: 1.3;
     font-weight: 300;
     color: #ffffff;
@@ -225,8 +232,8 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
-    font-size: 13px;
-    font-family: var(--font-heading-family);
+    font-size: var(--t-small);
+    font-family: var(--font-body-family);
   }
 
   .tre-footer-legal-links {
@@ -258,14 +265,16 @@
   .tre-footer-payment-icons .icon {
     height: 20px;
     width: auto;
-    max-width: 35px;
+    max-width: 38px;
   }
 
-  .custom-payment-icon {
+  .native-payment-icon {
     height: 20px !important;
     width: auto !important;
-    max-width: 35px !important;
-    object-fit: contain !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+    border-radius: 3px !important;
   }
 
   /* Certification logos section */
@@ -296,12 +305,10 @@
     }
 
     .tre-footer-newsletter h2 {
-      font-size: 14px !important;
       text-align: left !important;
     }
 
     [dir="rtl"] .tre-footer-newsletter h2 {
-      font-size: 14px !important;
       text-align: right !important;
     }
 
@@ -344,7 +351,6 @@
     .tre-footer-tagline {
       text-align: left !important;
       order: 2 !important;
-      font-size: 20px !important;
       align-self: flex-start !important;
       margin-bottom: 20px !important;
     }
@@ -567,39 +573,53 @@
               {%- endfor -%}
             {%- endunless -%}
             
-            {%- comment -%} Custom Payment Method Logos {%- endcomment -%}
-            {%- if section.settings.mada_logo != blank -%}
-              <img 
-                src="{{ section.settings.mada_logo | image_url: width: 70 }}" 
-                alt="Mada" 
-                class="icon icon--full-color custom-payment-icon"
-                loading="lazy"
-                width="35"
-                height="20"
-              >
-            {%- endif -%}
-            
-            {%- if section.settings.tamara_logo != blank -%}
-              <img 
-                src="{{ section.settings.tamara_logo | image_url: width: 70 }}" 
-                alt="Tamara" 
-                class="icon icon--full-color custom-payment-icon"
-                loading="lazy"
-                width="35"
-                height="20"
-              >
-            {%- endif -%}
-            
-            {%- if section.settings.tabby_logo != blank -%}
-              <img 
-                src="{{ section.settings.tabby_logo | image_url: width: 70 }}" 
-                alt="Tabby" 
-                class="icon icon--full-color custom-payment-icon"
-                loading="lazy"
-                width="35"
-                height="20"
-              >
-            {%- endif -%}
+            {%- comment -%} Native Payment Method Logos: Mada, Tabby, Tamara {%- endcomment -%}
+
+            {%- comment -%}
+            TESTING: Mada hardcoded image commented out to check if it renders natively
+            <!-- Mada — official logo from assets -->
+            <img
+              src="https://cdn.shopify.com/s/files/1/0736/2048/8482/files/8c922f18-0c65-4e56-8b3e-3dbbc736ca47_1768844791566_salogos.org-Mada-01.svg?v=1771590237"
+              alt="Mada"
+              class="icon icon--full-color native-payment-icon"
+              style="background: #ffffff; padding: 2px 4px; border-radius: 3px;"
+              loading="lazy"
+            >
+            {%- endcomment -%}
+
+            <!-- Tabby — green badge + geometric cat face + wordmark -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 36" role="img" aria-label="Tabby" class="icon icon--full-color native-payment-icon" width="72" height="36">
+              <rect width="72" height="36" rx="3" fill="#3EB58A"/>
+              <!-- Cat left ear -->
+              <path d="M11 19 L7 8 L17 15 Z" fill="#2A9D74"/>
+              <!-- Cat right ear -->
+              <path d="M25 19 L29 8 L19 15 Z" fill="#2A9D74"/>
+              <!-- Cat face -->
+              <circle cx="18" cy="23" r="9" fill="#ffffff"/>
+              <!-- Eyes -->
+              <ellipse cx="14.5" cy="21.5" rx="2" ry="2.5" fill="#3EB58A"/>
+              <ellipse cx="21.5" cy="21.5" rx="2" ry="2.5" fill="#3EB58A"/>
+              <!-- Eye highlights -->
+              <circle cx="15.3" cy="20.5" r="0.8" fill="#ffffff"/>
+              <circle cx="22.3" cy="20.5" r="0.8" fill="#ffffff"/>
+              <!-- Nose -->
+              <path d="M17 24.5 L18 26 L19 24.5 Z" fill="#3EB58A"/>
+              <!-- tabby wordmark -->
+              <text x="52" y="24.5" text-anchor="middle" fill="#ffffff" font-size="12" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-weight="900">tabby</text>
+            </svg>
+
+            <!-- Tamara — dark navy + three-arc split-payment icon + wordmark -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 36" role="img" aria-label="Tamara" class="icon icon--full-color native-payment-icon" width="76" height="36">
+              <rect width="76" height="36" rx="3" fill="#1D2146"/>
+              <!-- Outer arc — pink -->
+              <path d="M5 29 A14 14 0 0 1 33 29" fill="none" stroke="#E53D76" stroke-width="3" stroke-linecap="round"/>
+              <!-- Middle arc — purple -->
+              <path d="M10 29 A9 9 0 0 1 28 29" fill="none" stroke="#8B5FCC" stroke-width="3" stroke-linecap="round"/>
+              <!-- Inner arc — blue -->
+              <path d="M15 29 A4 4 0 0 1 23 29" fill="none" stroke="#4DAEDE" stroke-width="3" stroke-linecap="round"/>
+              <!-- tamara wordmark -->
+              <text x="56" y="23" text-anchor="middle" fill="#ffffff" font-size="10" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="0.5">tamara</text>
+            </svg>
           </div>
         {%- endif -%}
 
@@ -753,28 +773,6 @@
       "id": "show_policy",
       "default": true,
       "label": "Show policy links"
-    },
-    {
-      "type": "header",
-      "content": "Custom Payment Icons"
-    },
-    {
-      "type": "image_picker",
-      "id": "mada_logo",
-      "label": "Mada Logo",
-      "info": "Upload Mada payment logo (recommended: 70x50px PNG)"
-    },
-    {
-      "type": "image_picker",
-      "id": "tamara_logo",
-      "label": "Tamara Logo",
-      "info": "Upload Tamara payment logo (recommended: 70x50px PNG)"
-    },
-    {
-      "type": "image_picker",
-      "id": "tabby_logo",
-      "label": "Tabby Logo",
-      "info": "Upload Tabby payment logo (recommended: 70x50px PNG)"
     },
     {
       "type": "header",

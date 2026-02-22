@@ -34,16 +34,11 @@
   }
 
   .faq-heading-wrapper h2 {
-    font-size: 2.5rem;
+    font-size: var(--t-h1);
+    font-family: var(--font-heading-family);
     line-height: 1.2;
     margin: 0;
     font-weight: 400;
-  }
-
-  @media screen and (min-width: 750px) {
-    .faq-heading-wrapper h2 {
-      font-size: 3.5rem;
-    }
   }
 
   .faq-questions {
@@ -66,7 +61,8 @@
     gap: 1rem;
     cursor: pointer;
     list-style: none;
-    font-size: 1.5rem;
+    font-size: var(--t-subtitle);
+    font-family: var(--font-body-family);
     font-weight: 400;
     transition: all 0.3s ease;
     padding: 0.5rem 0;
@@ -121,7 +117,8 @@
 
   .faq-answer {
     padding: 1rem 0 1rem 2.5rem;
-    font-size: 1rem;
+    font-size: var(--t-body);
+    font-family: var(--font-body-family);
     line-height: 1.6;
     color: rgba(0, 0, 0, 0.7);
   }
