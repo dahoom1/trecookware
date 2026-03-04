@@ -281,9 +281,17 @@
   .tre-footer-certifications {
     display: flex;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     margin-top: 20px;
+  }
+
+  .tre-footer-cert-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none !important;
   }
 
   .tre-footer-certification-logo {
@@ -291,6 +299,16 @@
     width: auto !important;
     max-width: 80px !important;
     object-fit: contain !important;
+  }
+
+  .tre-footer-cert-caption {
+    display: block;
+    font-size: 11px !important;
+    font-family: var(--font-body-family) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-align: center;
+    line-height: 1.4;
+    white-space: pre-line;
   }
 
   /* Mobile Styles */
@@ -629,27 +647,53 @@
             {%- if section.settings.saudi_business_logo != blank -%}
               {%- assign saudi_logo_width = section.settings.saudi_business_logo.width | at_most: 160 -%}
               {%- assign saudi_logo_height = saudi_logo_width | divided_by: section.settings.saudi_business_logo.aspect_ratio | round -%}
-              <img 
-                src="{{ section.settings.saudi_business_logo | image_url: width: 160 }}" 
-                alt="Saudi Business Center" 
-                class="tre-footer-certification-logo"
-                loading="lazy"
-                width="{{ saudi_logo_width }}"
-                height="{{ saudi_logo_height }}"
-              >
+              {%- if section.settings.saudi_business_url != blank -%}
+                <a href="{{ section.settings.saudi_business_url }}" target="_blank" rel="noopener noreferrer" aria-label="Saudi Business Center" class="tre-footer-cert-badge">
+              {%- else -%}
+                <div class="tre-footer-cert-badge">
+              {%- endif -%}
+                <img
+                  src="{{ section.settings.saudi_business_logo | image_url: width: 160 }}"
+                  alt="Saudi Business Center"
+                  class="tre-footer-certification-logo"
+                  loading="lazy"
+                  width="{{ saudi_logo_width }}"
+                  height="{{ saudi_logo_height }}"
+                >
+                {%- if section.settings.saudi_business_caption != blank -%}
+                  <span class="tre-footer-cert-caption">{{ section.settings.saudi_business_caption }}</span>
+                {%- endif -%}
+              {%- if section.settings.saudi_business_url != blank -%}
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
             {%- endif -%}
-            
+
             {%- if section.settings.vat_certificate_logo != blank -%}
               {%- assign vat_logo_width = section.settings.vat_certificate_logo.width | at_most: 160 -%}
               {%- assign vat_logo_height = vat_logo_width | divided_by: section.settings.vat_certificate_logo.aspect_ratio | round -%}
-              <img 
-                src="{{ section.settings.vat_certificate_logo | image_url: width: 160 }}" 
-                alt="VAT Certificate" 
-                class="tre-footer-certification-logo"
-                loading="lazy"
-                width="{{ vat_logo_width }}"
-                height="{{ vat_logo_height }}"
-              >
+              {%- if section.settings.vat_certificate_url != blank -%}
+                <a href="{{ section.settings.vat_certificate_url }}" target="_blank" rel="noopener noreferrer" aria-label="VAT Certificate" class="tre-footer-cert-badge">
+              {%- else -%}
+                <div class="tre-footer-cert-badge">
+              {%- endif -%}
+                <img
+                  src="{{ section.settings.vat_certificate_logo | image_url: width: 160 }}"
+                  alt="VAT Certificate"
+                  class="tre-footer-certification-logo"
+                  loading="lazy"
+                  width="{{ vat_logo_width }}"
+                  height="{{ vat_logo_height }}"
+                >
+                {%- if section.settings.vat_certificate_caption != blank -%}
+                  <span class="tre-footer-cert-caption">{{ section.settings.vat_certificate_caption }}</span>
+                {%- endif -%}
+              {%- if section.settings.vat_certificate_url != blank -%}
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
             {%- endif -%}
           </div>
         {%- endif -%}
@@ -785,10 +829,34 @@
       "info": "Upload Saudi Business Center certification logo (recommended: 160x100px PNG)"
     },
     {
+      "type": "url",
+      "id": "saudi_business_url",
+      "label": "Saudi Business Center Link",
+      "info": "URL for the Saudi Business Center certificate verification page (e.g. https://eauthenticate.saudibusiness.gov.sa/...)"
+    },
+    {
+      "type": "text",
+      "id": "saudi_business_caption",
+      "label": "Saudi Business Center Caption",
+      "info": "Text shown below the logo (e.g. موثق لدى منصة الأعمال)"
+    },
+    {
       "type": "image_picker",
       "id": "vat_certificate_logo",
       "label": "VAT Certificate Logo",
       "info": "Upload VAT certification logo (recommended: 160x100px PNG)"
+    },
+    {
+      "type": "url",
+      "id": "vat_certificate_url",
+      "label": "VAT Certificate Link",
+      "info": "URL for the VAT certificate verification page (optional)"
+    },
+    {
+      "type": "text",
+      "id": "vat_certificate_caption",
+      "label": "VAT Certificate Caption",
+      "info": "Text shown below the VAT logo (e.g. الرقم الضريبي: 312090612800003)"
     },
     {
       "type": "header",

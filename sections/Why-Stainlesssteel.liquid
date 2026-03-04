@@ -137,28 +137,40 @@
   .wss-carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
     margin-top: 20px;
+    background-color: transparent;
     opacity: 0;
     animation: fadeIn 0.6s ease-out forwards;
     animation-delay: 1.3s;
   }
 
   .wss-carousel-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.2);
+    width: 20px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: rgba(200, 200, 200, 0.6);
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
+  }
+
+  .wss-carousel-dot:hover {
+    background-color: rgba(150, 150, 150, 0.8);
   }
 
   .wss-carousel-dot.active {
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 24px;
-    border-radius: 4px;
+    background-color: rgba(80, 80, 80, 0.9);
+    width: 20px;
+    height: 2px;
+  }
+
+  .wss-carousel-dot:focus {
+    outline: 2px solid rgba(0, 0, 0, 0.3);
+    outline-offset: 2px;
   }
 }
 
@@ -245,17 +257,14 @@
   object-fit: contain;
 }
 
-/* Feature Content Banner - Fixed height so all cards stay uniform */
+/* Feature Content Banner */
 .wss-feature-content-banner {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   box-sizing: border-box;
-  height: 120px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.25) transparent;
+  min-height: 110px;
 }
 
 .wss-feature-content {
@@ -283,6 +292,79 @@
   line-height: 1.5;
   font-family: var(--font-body-family);
   font-size: var(--t-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Clickable content banner */
+.wss-feature-content-banner[data-wss-expand] {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.wss-feature-content-banner[data-wss-expand]:hover {
+  opacity: 0.85;
+}
+
+/* When overlay opens: stretch image to fill full card, hide banner */
+.wss-feature-card.wss-overlay-open .wss-feature-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  z-index: 1;
+}
+
+.wss-feature-card.wss-overlay-open .wss-feature-content-banner {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Full-card overlay */
+.wss-feature-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.wss-feature-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wss-overlay-close {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  padding: 4px 8px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.wss-overlay-close:hover {
+  opacity: 1;
+}
+
+.wss-overlay-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 /* Smooth font rendering */
@@ -337,7 +419,6 @@
 
   .wss-feature-content-banner {
     padding: 20px;
-    height: 130px;
   }
 
   .wss-carousel-dots {
@@ -385,6 +466,9 @@
 /* Typography — sizes set via CSS type scale variables in class definitions above */
 /* Block-specific content banner background */
 {% for block in section.blocks %}
+  .wss-feature-card[data-block-id="{{ block.id }}"] {
+    background-color: {{ block.settings.banner_background_color }};
+  }
   .wss-feature-card[data-block-id="{{ block.id }}"] .wss-feature-content-banner {
     background-color: {{ block.settings.banner_background_color }};
   }
@@ -493,7 +577,7 @@
               </div>
             {% endif %}
 
-            <div class="wss-feature-content-banner">
+            <div class="wss-feature-content-banner" {% if block.settings.feature_description != blank %}data-wss-expand aria-label="Read more about {{ block.settings.feature_title | escape }}" role="button" tabindex="0"{% endif %}>
               <div class="wss-feature-content">
                 {% if block.settings.feature_title != blank %}
                   <h3 class="wss-feature-title" style="
@@ -525,7 +609,43 @@
                   </p>
                 {% endif %}
               </div>
+
             </div>
+
+            {% if block.settings.feature_description != blank %}
+              <div
+                class="wss-feature-overlay"
+                style="background-color: {{ block.settings.banner_background_color | color_modify: 'alpha', 0.93 }};"
+                role="dialog"
+                aria-modal="true"
+                aria-hidden="true"
+              >
+                <button class="wss-overlay-close" aria-label="Close" style="color: {{ block.settings.feature_title_color }};">×</button>
+                <div class="wss-overlay-body">
+                  {% if block.settings.feature_title != blank %}
+                    <h3 class="wss-feature-title" style="
+                      color: {{ block.settings.feature_title_color }};
+                      font-weight: {{ block.settings.feature_title_font_weight }};
+                      font-style: {{ block.settings.feature_title_font_style }};
+                    ">{{ block.settings.feature_title }}</h3>
+                  {% endif %}
+                  {% if block.settings.feature_subtitle != blank %}
+                    <p class="wss-feature-subtitle" style="
+                      color: {{ block.settings.feature_subtitle_color }};
+                      font-weight: {{ block.settings.feature_subtitle_font_weight }};
+                    ">{{ block.settings.feature_subtitle }}</p>
+                  {% endif %}
+                  <p class="wss-feature-description" style="
+                    color: {{ block.settings.feature_description_color }};
+                    font-weight: {{ block.settings.feature_desc_font_weight }};
+                    font-style: {{ block.settings.feature_desc_font_style }};
+                    display: block;
+                    -webkit-line-clamp: unset;
+                    overflow: visible;
+                  ">{{ block.settings.feature_description }}</p>
+                </div>
+              </div>
+            {% endif %}
           </div>
         {% endfor %}
       </div>
@@ -548,56 +668,90 @@
   const sectionId = '{{ section.id }}';
   const carousel = document.getElementById('wss-features-' + sectionId);
   const dotsContainer = document.getElementById('wss-dots-' + sectionId);
-  
-  // Guard clause if elements don't exist
+
   if (!carousel || !dotsContainer) return;
 
   const dots = dotsContainer.querySelectorAll('.wss-carousel-dot');
   const cards = carousel.querySelectorAll('.wss-feature-card');
 
-  // Logic only runs if we are on mobile (where carousel exists)
-  if (window.innerWidth < 750 && dots.length > 0) {
-    
-    // 1. CLICK EVENT: Scroll to card using browser-native API (RTL safe)
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        const targetCard = cards[index];
-        if (targetCard) {
-          // scrollIntoView handles RTL/LTR direction automatically
-          targetCard.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-          });
-        }
-      });
+  if (window.innerWidth >= 750 || dots.length === 0) return;
+
+  // Find which card has the most visible area inside the carousel viewport
+  const getMostVisibleIndex = () => {
+    const containerRect = carousel.getBoundingClientRect();
+    let maxVisible = -1;
+    let activeIndex = 0;
+
+    cards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      const visibleWidth = Math.max(
+        0,
+        Math.min(rect.right, containerRect.right) - Math.max(rect.left, containerRect.left)
+      );
+      if (visibleWidth > maxVisible) {
+        maxVisible = visibleWidth;
+        activeIndex = index;
+      }
     });
 
-    // 2. SCROLL DETECTION: Use IntersectionObserver instead of math
-    // This watches for which card is actually visible on screen
-    const observerOptions = {
-      root: carousel,
-      threshold: 0.6 // Card is considered "active" when 60% visible
+    return activeIndex;
+  };
+
+  const setActiveDot = (index) => {
+    dots.forEach(d => d.classList.remove('active'));
+    if (dots[index]) dots[index].classList.add('active');
+  };
+
+  // Live scroll listener — updates dot as user swipes
+  carousel.addEventListener('scroll', () => {
+    setActiveDot(getMostVisibleIndex());
+  }, { passive: true });
+
+  // Dot click — scrollIntoView handles RTL/LTR automatically
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      const target = cards[index];
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    });
+  });
+})();
+
+// Feature card overlay toggle (runs on all screen sizes)
+(function() {
+  document.querySelectorAll('.wss-feature-card').forEach(card => {
+    const banner = card.querySelector('[data-wss-expand]');
+    const overlay = card.querySelector('.wss-feature-overlay');
+    const closeBtn = card.querySelector('.wss-overlay-close');
+
+    if (!banner || !overlay) return;
+
+    const openOverlay = () => {
+      // Lock card height before media leaves the flow
+      card.style.minHeight = card.offsetHeight + 'px';
+      card.classList.add('wss-overlay-open');
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Find which card this is
-          const index = Array.from(cards).indexOf(entry.target);
-          
-          // Update active dot class
-          dots.forEach(d => d.classList.remove('active'));
-          if(dots[index]) {
-            dots[index].classList.add('active');
-          }
-        }
-      });
-    }, observerOptions);
+    const closeOverlay = () => {
+      card.classList.remove('wss-overlay-open');
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      card.style.minHeight = '';
+    };
 
-    // Start watching all cards
-    cards.forEach(card => observer.observe(card));
-  }
+    banner.addEventListener('click', openOverlay);
+    // Keyboard support for the banner acting as a button
+    banner.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverlay(); }
+    });
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeOverlay();
+    });
+  });
 })();
 </script>
 

@@ -842,7 +842,7 @@
   .custom-header__drawer-nav-parent {
     text-decoration: none;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-h2);
+    font-size: clamp(4rem, 8vw, 5.5rem);
     font-weight: {{ section.settings.mobile_parent_nav_weight }};
     display: block;
     padding: 0rem 0;
@@ -894,7 +894,7 @@
   }
 
   .custom-header__drawer-accordion-item {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.1rem;
     opacity: 0;
     transform: translateX(-20px);
     transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -939,7 +939,7 @@
   .custom-header__drawer-simple-link {
     text-decoration: none;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-subtitle);
+    font-size: var(--t-h2);
     font-weight: {{ section.settings.mobile_accordion_weight }};
     font-family: var(--font-body-family);
     line-height: 1.3;
@@ -963,13 +963,14 @@
       text-align: left;
     {% endif %}
     color: {{ section.settings.text_color }};
-    font-size: var(--t-subtitle);
+    font-size: var(--t-h2);
     font-weight: {{ section.settings.mobile_accordion_weight }};
     font-family: var(--font-body-family);
     line-height: 1.3;
   }
 
   .custom-header__drawer-accordion-title {
+    font-size: var(--t-h2);
     display: flex;
     flex: 1;
     {% if localization.language.iso_code == 'ar' %}
@@ -1063,7 +1064,7 @@
   .custom-header__drawer-accordion-links a {
     text-decoration: none;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-body);
+    font-size: var(--t-h3);
     font-weight: {{ section.settings.mobile_link_weight }};
     display: block;
     padding: 0.5rem 0;
