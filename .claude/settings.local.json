@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(shopify theme dev --help:*)",
+      "Bash(shopify theme dev:*)",
+      "Bash(ipconfig getifaddr:*)",
+      "Bash(ipconfig:*)",
+      "Bash(git add:*)",
+      "Bash(git checkout -b footer-moded)"
     ]
   }
 }
