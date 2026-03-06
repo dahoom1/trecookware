@@ -97,18 +97,13 @@
               <div class="product-set-card__price" style="margin-bottom: 0.75rem; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
                 {% if card_product.compare_at_price > card_product.price %}
                   <span class="price price--on-sale">
-                    <span class="price-item price-item--current" style="color: {{ section.settings.sale_price_color }};">
-                      {{ card_product.price | money }}
-                    </span>
                     <span class="price-item price-item--compare" style="color: {{ section.settings.compare_price_color }};">
                       {{ card_product.compare_at_price | money }}
                     </span>
+                    <span class="price-item price-item--current" style="color: {{ section.settings.sale_price_color }};">
+                      {{ card_product.price | money }}
+                    </span>
                   </span>
-                  {%- assign pss_savings = card_product.compare_at_price | minus: card_product.price -%}
-                  {%- assign pss_savings_formatted = pss_savings | money_without_trailing_zeros -%}
-                  <div class="product-set-card__savings">
-                    <span class="product-set-card__savings-amount">{{ 'products.product.save_badge' | t: amount: pss_savings_formatted }}</span>
-                  </div>
                 {% else %}
                   <span class="price">
                     <span class="price-item price-item--current" style="color: {{ section.settings.price_color }};">
@@ -134,7 +129,7 @@
                  class="button button--primary product-set-add-to-cart" 
                  data-variant-id="{{ variant_id }}"
                  {% unless variant_id %}disabled{% endunless %}
-                 style="background: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }}; border-color: {{ section.settings.button_bg_color }}; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
+                 style="background: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }}; border-color: {{ section.settings.button_border_color }}; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
                 {{ section.settings.button_1_text }}
               </button>
 
@@ -144,7 +139,7 @@
                    class="button button--secondary product-set-buy-now" 
                    data-variant-id="{{ variant_id }}"
                    {% unless variant_id %}disabled{% endunless %}
-                   style="background: {{ section.settings.button_2_bg_color }}; color: {{ section.settings.button_2_text_color }}; border-color: {{ section.settings.button_2_bg_color }}; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
+                   style="background: {{ section.settings.button_2_bg_color }}; color: {{ section.settings.button_2_text_color }}; border-color: {{ section.settings.button_2_border_color }}; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
                   {{ section.settings.button_2_text }}
                 </button>
               {% endif %}
@@ -313,30 +308,6 @@
   font-size: var(--t-body);
 }
 
-.product-set-card__savings {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.product-set-card__savings-amount {
-  display: inline-block;
-  background-color: #c43401;
-  color: #ffffff !important;
-  font-weight: 600;
-  font-size: 1.2rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 2px;
-  line-height: 1.4;
-}
-
-.product-set-card__savings-percent {
-  font-size: 1.3rem;
-  opacity: 0.85;
-}
-
 .product-set-card__description {
   line-height: 1.5;
   margin-bottom: 1.5rem;
@@ -410,8 +381,7 @@
 }
 
 @keyframes spinner {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Tablet */
@@ -490,10 +460,6 @@
     color: #666666 !important;
   }
 
-  .product-set-card__savings-percent {
-    color: #333333 !important;
-  }
-
   .product-set-card__buttons {
     flex-direction: column;
   }
@@ -506,7 +472,7 @@
 /* Arabic / RTL overrides */
 html[lang="ar"] .product-set-card__buttons .button,
 html[lang^="ar-"] .product-set-card__buttons .button {
-  font-family: var(--font-body-family) !important;
+  font-family: var(--font-arabic-heading-family) !important;
 }
 </style>
 
@@ -915,12 +881,6 @@ html[lang^="ar-"] .product-set-card__buttons .button {
       "id": "compare_price_color",
       "label": "Compare at price color",
       "default": "#999999"
-    },
-    {
-      "type": "color",
-      "id": "savings_row_color",
-      "label": "Savings row color",
-      "default": "#c43401"
     },
     {
       "type": "header",

@@ -63,20 +63,6 @@
     }
 
     /* Flare effect - works in both LTR and RTL */
-    @keyframes main-glare-ltr {
-      from { left: -100%; opacity: 1; }
-      to   { left:  100%; opacity: 1; }
-    }
-    @keyframes main-glare-rtl {
-      from { right: -100%; opacity: 1; }
-      to   { right:  100%; opacity: 1; }
-    }
-
-    /* Clip at button boundary */
-    #MainProduct-{{ section.id }} .product-form__submit.button {
-      overflow: hidden;
-    }
-
     #MainProduct-{{ section.id }} .product-form__submit.button span {
       position: relative;
       z-index: 3;
@@ -84,28 +70,27 @@
       width: 100%;
     }
 
-    /* Parked off-screen and invisible by default */
+    /* LTR (Left-to-Right) - Default */
     #MainProduct-{{ section.id }} .product-form__submit.button span::before {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 100%;
-      height: 300%;
-      opacity: 0;
       background: linear-gradient(
         120deg,
         transparent,
         rgba(255, 255, 255, 0.3),
         transparent
       );
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 100%;
+      height: 300%;
+      transition: left 0.6s ease, right 0.6s ease;
       z-index: 2;
       pointer-events: none;
     }
 
-    /* No forwards — opacity snaps back to 0 the instant animation finishes */
     #MainProduct-{{ section.id }} .product-form__submit.button:not([disabled]):hover span::before {
-      animation: main-glare-ltr 0.6s linear;
+      left: 100%;
     }
 
     /* RTL (Right-to-Left) - Arabic */
@@ -121,179 +106,8 @@
     }
 
     [dir="rtl"] #MainProduct-{{ section.id }} .product-form__submit.button:not([disabled]):hover span::before {
-      animation: main-glare-rtl 0.6s linear;
-    }
-
-    /* ── Sticky Add-to-Cart Bar ── */
-    .sticky-atc {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-      background: rgb(var(--color-background));
-      border-top: 1px solid rgba(var(--color-foreground), 0.12);
-      transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                  box-shadow 0.3s ease;
-      will-change: transform;
-      box-shadow: none;
-    }
-
-    .sticky-atc.is-visible {
-      transform: translateY(0);
-      box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.1);
-    }
-
-
-    .sticky-atc__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.6rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-    }
-
-    .sticky-atc__info {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .sticky-atc__title {
-      font-family: var(--font-heading-family);
-      font-size: var(--font-heading-scale, 1) * 1.4rem;
-      font-size: clamp(1.2rem, 1.5vw, 1.6rem);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 0;
-      line-height: 1.2;
-    }
-
-    .sticky-atc__price .price {
-      margin: 0;
-    }
-
-    .sticky-atc__price .price__container {
-      display: flex;
-      gap: 0.8rem;
-      align-items: center;
-    }
-
-    .sticky-atc__price .price-item {
-      font-size: 1.4rem;
-    }
-
-    .sticky-atc__button {
-      flex-shrink: 0;
-      min-width: 16rem;
-      --color-button: 38, 35, 30;
-      --color-button-text: 255, 255, 255;
-      --shadow-opacity: 0;
-      background-color: rgb(var(--color-button));
-      color: rgb(var(--color-button-text));
-      border: 1px solid #26231e !important;
-      padding: 1rem 2.4rem;
-      font-family: var(--font-body-family);
-      font-size: 1.4rem;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-
-    .sticky-atc__button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .sticky-atc__button::before,
-    .sticky-atc__button::after {
-      box-shadow: none !important;
-    }
-
-    /* ── Glare effect on sticky button (mirrors original ATC flare) ── */
-    /* opacity included so snap-back is invisible when animation ends */
-    @keyframes sticky-glare-ltr {
-      from { left: -100%; opacity: 1; }
-      to   { left:  100%; opacity: 1; }
-    }
-    @keyframes sticky-glare-rtl {
-      from { right: -100%; opacity: 1; }
-      to   { right:  100%; opacity: 1; }
-    }
-
-    /* Clip glare at button boundary, not span boundary */
-    .sticky-atc__button {
-      overflow: hidden;
-    }
-
-    .sticky-atc__button span {
-      position: relative;
-      z-index: 3;
-      display: block;
-      width: 100%;
-    }
-
-    /* Parked off-screen and invisible by default */
-    .sticky-atc__button span::before {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 100%;
-      height: 300%;
-      opacity: 0;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-      );
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    /* No forwards — element returns to opacity:0 the instant animation finishes */
-    .sticky-atc__button.is-glaring span::before {
-      animation: sticky-glare-ltr 0.6s linear;
-    }
-
-    [dir="rtl"] .sticky-atc__button span::before {
-      background: linear-gradient(
-        -120deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-      );
       left: auto;
-      right: -100%;
-    }
-
-    [dir="rtl"] .sticky-atc__button.is-glaring span::before {
-      animation: sticky-glare-rtl 0.6s linear;
-    }
-
-    [dir="rtl"] .sticky-atc__inner {
-      flex-direction: row-reverse;
-    }
-
-    html[lang="ar"] .sticky-atc__button,
-    html[lang^="ar-"] .sticky-atc__button {
-      font-family: var(--font-body-family) !important;
-    }
-
-    @media screen and (max-width: 749px) {
-      .sticky-atc__title {
-        font-size: 1.3rem;
-      }
-      .sticky-atc__button {
-        min-width: 12rem;
-        padding: 1rem 1.6rem;
-        font-size: 1.3rem;
-      }
+      right: 100%;
     }
   {%- endstyle -%}
 
@@ -757,15 +571,13 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-                <div id="ProductBuyButtons-{{ section.id }}">
-                  {%- render 'buy-buttons',
-                    block: block,
-                    product: product,
-                    product_form_id: product_form_id,
-                    section_id: section.id,
-                    show_pickup_availability: true
-                  -%}
-                </div>
+                {%- render 'buy-buttons',
+                  block: block,
+                  product: product,
+                  product_form_id: product_form_id,
+                  section_id: section.id,
+                  show_pickup_availability: true
+                -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -813,8 +625,8 @@
     assign heading_text = block.settings.heading_text
     assign link_text = block.settings.link_text
     assign link_url = block.settings.link_url
-    assign thumbnail_width = block.settings.thumbnail_width | divided_by: 1.5
-    assign thumbnail_width_mobile = block.settings.thumbnail_width_mobile | divided_by: 1.5
+    assign thumbnail_width = block.settings.thumbnail_width
+    assign thumbnail_width_mobile = block.settings.thumbnail_width_mobile
     assign thumbnail_radius = block.settings.thumbnail_radius
     assign modal_width_desktop = block.settings.modal_width_desktop
     assign modal_width_mobile = block.settings.modal_width_mobile
@@ -861,6 +673,13 @@
                 <video class="thumbnail-video" muted playsinline loop preload="auto">
                   <source src="{{ video.sources[0].url }}" type="video/mp4">
                 </video>
+                <!-- CHANGE: Play button now hidden by default via CSS, will be removed via JS after autoplay starts -->
+                <div class="product-video-play">
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="32" fill="white" fill-opacity="0.95"/>
+                    <path d="M26 20L42 32L26 44V20Z" fill="black"/>
+                  </svg>
+                </div>
               </div>
             </div>
           {% endif %}
@@ -908,7 +727,6 @@
 
       .product-videos-grid {
         display: flex;
-        flex-direction: row;
         gap: 1.5rem;
         overflow-x: auto;
         overflow-y: hidden;
@@ -945,7 +763,7 @@
       .product-video-thumbnail {
         position: relative;
         width: 100%;
-        aspect-ratio: 9 / 16;
+        aspect-ratio: 16 / 9;
         overflow: hidden;
         background: #000;
         border-radius: var(--thumbnail-radius, 8px);
@@ -1175,7 +993,7 @@
         }
 
         .product-video-item {
-          width: 100%;
+          width: var(--thumbnail-width-mobile, 280px);
         }
 
         .product-videos-modal-content {
@@ -1204,7 +1022,7 @@
 
       @media (max-width: 480px) {
         .product-video-item {
-          width: var(--thumbnail-width-mobile, 160px);
+          width: var(--thumbnail-width-mobile, 240px);
         }
 
         .product-videos-modal-content {
@@ -1437,24 +1255,33 @@
           }
         });
 
-        // Start thumbnail autoplay immediately without blocking the main thread
+        // CHANGE: Auto-play thumbnail videos after 3-5 second delay
         function startAutoplay() {
-          thumbnailVideos.forEach(function(video, index) {
-            const playButton = videoItems[index].querySelector('.product-video-play');
-            video.play().then(function() {
-              if (playButton) playButton.style.display = 'none';
-            }).catch(function() {
-              // Autoplay blocked by browser policy; play button stays visible
+          const delay = 3000 + Math.random() * 2000; // Random delay between 3-5 seconds
+          
+          setTimeout(function() {
+            thumbnailVideos.forEach(function(video, index) {
+              const playButton = videoItems[index].querySelector('.product-video-play');
+              
+              // Attempt autoplay
+              video.play().then(function() {
+                // Successfully autoplaying - hide play button
+                if (playButton) {
+                  playButton.style.display = 'none';
+                }
+              }).catch(function(error) {
+                console.log('Autoplay prevented for video ' + index + ':', error);
+                // Keep play button visible if autoplay fails
+              });
             });
-          });
+          }, delay);
         }
 
-        // Use requestIdleCallback so autoplay runs during browser idle time
-        // without delaying any rendering or interaction
-        if (typeof requestIdleCallback === 'function') {
-          requestIdleCallback(startAutoplay, { timeout: 1000 });
+        // CHANGE: Initialize autoplay when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', startAutoplay);
         } else {
-          setTimeout(startAutoplay, 0);
+          startAutoplay();
         }
       })();
     </script>
@@ -1677,131 +1504,6 @@
       {{ product | structured_data }}
     </script>
   </div>
-
-  <!-- ── Sticky Add-to-Cart Bar ── -->
-  {%- assign sticky_btn_label = 'products.product.add_to_cart' | t -%}
-  <div
-    id="StickyATC-{{ section.id }}"
-    class="sticky-atc"
-    aria-hidden="true"
-    role="region"
-    aria-label="{{ sticky_btn_label }}"
-  >
-    <div class="sticky-atc__inner page-width">
-      <div class="sticky-atc__info">
-        <p class="sticky-atc__title">{{ product.title | escape }}</p>
-        <div class="sticky-atc__price" id="StickyATCPrice-{{ section.id }}">
-          {%- render 'price', product: product, use_variant: true -%}
-        </div>
-      </div>
-      <button
-        id="StickyATCButton-{{ section.id }}"
-        type="button"
-        class="sticky-atc__button button button--primary"
-        {% if product.selected_or_first_available_variant.available == false
-          or product.selected_or_first_available_variant == null
-        %}
-          disabled
-        {% endif %}
-      >
-        <span>
-          {%- if product.selected_or_first_available_variant == null -%}
-            {{ 'products.product.unavailable' | t }}
-          {%- elsif product.selected_or_first_available_variant.available == false -%}
-            {{ 'products.product.sold_out' | t }}
-          {%- else -%}
-            {{ sticky_btn_label }}
-          {%- endif -%}
-        </span>
-      </button>
-    </div>
-  </div>
-
-  <script>
-  (function() {
-    'use strict';
-
-    const sectionId = '{{ section.id }}';
-    const sentinel  = document.getElementById('ProductBuyButtons-' + sectionId);
-    const stickyBar = document.getElementById('StickyATC-' + sectionId);
-    const stickyBtn = document.getElementById('StickyATCButton-' + sectionId);
-    const origBtn   = document.getElementById('ProductSubmitButton-' + sectionId);
-
-    if (!sentinel || !stickyBar || !stickyBtn || !origBtn) return;
-
-    /* ── Glare helper ── */
-    var lastGlareTime = 0;
-    var GLARE_COOLDOWN = 2400; // ms between glares while scrolling
-
-    function triggerGlare() {
-      if (stickyBtn.disabled) return;
-      if (stickyBtn.classList.contains('is-glaring')) return;
-      var now = Date.now();
-      if (now - lastGlareTime < GLARE_COOLDOWN) return;
-      lastGlareTime = now;
-      stickyBtn.classList.add('is-glaring');
-      setTimeout(function() {
-        stickyBtn.classList.remove('is-glaring');
-      }, 700);
-    }
-
-    /* ── Show / hide via IntersectionObserver ── */
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          // Original ATC is visible — hide sticky bar
-          stickyBar.classList.remove('is-visible');
-          stickyBar.setAttribute('aria-hidden', 'true');
-        } else {
-          // Show sticky only when user has scrolled PAST the button (above viewport)
-          if (entry.boundingClientRect.bottom < 0) {
-            var wasHidden = !stickyBar.classList.contains('is-visible');
-            stickyBar.classList.add('is-visible');
-            stickyBar.setAttribute('aria-hidden', 'false');
-            // Glare once when bar first appears
-            if (wasHidden) {
-              setTimeout(triggerGlare, 350);
-            }
-          } else {
-            // Element is below the viewport — user hasn't reached it yet
-            stickyBar.classList.remove('is-visible');
-            stickyBar.setAttribute('aria-hidden', 'true');
-          }
-        }
-      });
-    }, { threshold: 0 });
-
-    observer.observe(sentinel);
-
-    /* ── Glare on scroll while sticky bar is visible ── */
-    var glareScrollTimer = null;
-    window.addEventListener('scroll', function() {
-      if (!stickyBar.classList.contains('is-visible')) return;
-      clearTimeout(glareScrollTimer);
-      glareScrollTimer = setTimeout(triggerGlare, 200);
-    }, { passive: true });
-
-    /* ── Sync button state with original button ── */
-    function syncButtonState() {
-      stickyBtn.disabled = origBtn.disabled;
-      const origSpan = origBtn.querySelector('span');
-      const stickySpan = stickyBtn.querySelector('span');
-      if (origSpan && stickySpan) {
-        stickySpan.textContent = origSpan.textContent.trim();
-      }
-    }
-
-    // Observe mutations on the original button (variant changes update its state)
-    const mutationObserver = new MutationObserver(syncButtonState);
-    mutationObserver.observe(origBtn, { attributes: true, childList: true, subtree: true });
-
-    /* ── Sticky button click — delegate to original button ── */
-    stickyBtn.addEventListener('click', function() {
-      origBtn.click();
-    });
-
-  })();
-  </script>
 </product-info>
 
 {% schema %}

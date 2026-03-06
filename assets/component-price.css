@@ -90,31 +90,6 @@
   font-size: 1.3rem;
 }
 
-.price__savings {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-  flex-basis: 100%;
-  flex-wrap: wrap;
-}
-
-.price__savings-amount {
-  display: inline-block;
-  background-color: #c43401;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1.2rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 2px;
-  line-height: 1.4;
-}
-
-.price__savings-percent {
-  font-size: 1.3rem;
-  color: rgba(var(--color-foreground), 0.75);
-}
-
 .unit-price {
   display: block;
   font-size: 1.1rem;

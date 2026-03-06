@@ -4107,7 +4107,6 @@
       "choose_product_options": "Choose product options",
       "description": "وصف",
       "on_sale": "خصم",
-      "save_badge": "خصم {{ amount }}",
       "product_variants": "متغيرات المنتج",
       "media": {
         "gallery_viewer": "Gallery viewer",
