@@ -155,7 +155,7 @@
         "savings_border_radius": 0,
         "show_view_all": true,
         "view_all_text": "Shop All Essential Collection",
-        "collection_url": "shopify://collections/tre™-essential-collection-01",
+        "collection_url": "shopify://collections/all",
         "view_all_color": "#121212",
         "view_all_font": "serif",
         "card_bg_color": "#ffffff",

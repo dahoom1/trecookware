@@ -211,21 +211,21 @@
         "include_margins": true
       }
     },
-    "1770538754d88aee3c": {
+    "1772670324cdb7360c": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_review_widget_tdQ7rB": {
+        "judge_me_reviews_review_widget_rKRMTP": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "review_data": "sample_data",
+            "review_data": "real_data",
             "max_width": 1200,
-            "show_shop_reviews": false,
+            "show_shop_reviews": true,
             "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_tdQ7rB"
+        "judge_me_reviews_review_widget_rKRMTP"
       ],
       "settings": {
         "include_margins": true
@@ -459,7 +459,7 @@
     "main",
     "rich_text_4mDnzT",
     "1764534482e36841d4",
-    "1770538754d88aee3c",
+    "1772670324cdb7360c",
     "why_stainlesssteel_rV6rbQ",
     "related-products",
     "multicolumn_VHYkyj",
