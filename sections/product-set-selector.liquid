@@ -94,27 +94,27 @@
 
             {% comment %} Price Display {% endcomment %}
             {% if block.settings.product != blank and section.settings.show_price %}
-              <div class="product-set-card__price" style="margin-bottom: 0.75rem; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
+              <div class="product-set-card__price" style="font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
                 {% if card_product.compare_at_price > card_product.price %}
-                  <span class="price price--on-sale">
-                    <span class="price-item price-item--current" style="color: {{ section.settings.sale_price_color }};">
-                      {{ card_product.price | money }}
-                    </span>
+                  {%- assign pss_savings = card_product.compare_at_price | minus: card_product.price -%}
+                  {%- assign pss_savings_formatted = pss_savings | money_without_trailing_zeros -%}
+                  <div class="product-set-card__price-row">
                     <span class="price-item price-item--compare" style="color: {{ section.settings.compare_price_color }};">
                       {{ card_product.compare_at_price | money }}
                     </span>
-                  </span>
-                  {%- assign pss_savings = card_product.compare_at_price | minus: card_product.price -%}
-                  {%- assign pss_savings_formatted = pss_savings | money_without_trailing_zeros -%}
-                  <div class="product-set-card__savings">
-                    <span class="product-set-card__savings-amount">{{ 'products.product.save_badge' | t: amount: pss_savings_formatted }}</span>
+                    <span class="price-item price-item--current" style="color: {{ section.settings.sale_price_color }};">
+                      {{ card_product.price | money }}
+                    </span>
                   </div>
+                  <span class="badge pss-sale-badge color-{{ settings.sale_badge_color_scheme }}">
+                    {{- 'products.product.save_badge' | t: amount: pss_savings_formatted -}}
+                  </span>
                 {% else %}
-                  <span class="price">
+                  <div class="product-set-card__price-row">
                     <span class="price-item price-item--current" style="color: {{ section.settings.price_color }};">
                       {{ card_product.price | money }}
                     </span>
-                  </span>
+                  </div>
                 {% endif %}
               </div>
             {% endif %}
@@ -136,6 +136,7 @@
                  {% unless variant_id %}disabled{% endunless %}
                  style="background: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }}; border-color: {{ section.settings.button_bg_color }}; font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};">
                 {{ section.settings.button_1_text }}
+                <span class="pss-glare" aria-hidden="true"></span>
               </button>
 
               {% if section.settings.show_button_2 %}
@@ -157,6 +158,16 @@
 </div>
 
 <style>
+/* Section-scoped font size tokens — driven by theme customizer settings */
+#shopify-section-{{ section.id }} {
+  --pss-title-size: {{ section.settings.title_font_size }}px;
+  --pss-price-size: {{ section.settings.price_font_size }}px;
+  --pss-desc-size: {{ section.settings.desc_font_size }}px;
+  --pss-button-size: {{ section.settings.button_font_size }}px;
+  --pss-badge-size: {{ section.settings.badge_font_size }}px;
+  --pss-view-all-size: {{ section.settings.view_all_font_size }}px;
+}
+
 /* Base Section */
 .product-set-section {
   position: relative;
@@ -202,7 +213,7 @@
 .product-set-savings-badge {
   display: inline-block;
   padding: 0.5rem 1.25rem;
-  font-size: var(--t-small);
+  font-size: var(--pss-badge-size);
   font-family: var(--font-body-family);
   font-weight: 500;
   white-space: nowrap;
@@ -211,7 +222,7 @@
 
 .product-set-view-all {
   text-decoration: underline;
-  font-size: var(--t-small);
+  font-size: var(--pss-view-all-size);
   font-family: var(--font-body-family);
   white-space: nowrap;
 }
@@ -278,7 +289,7 @@
 
 .product-set-card__title {
   margin: 0 0 0.75rem 0;
-  font-size: 1.125rem;
+  font-size: var(--pss-title-size);
   font-family: var(--font-heading-family);
   line-height: 1.3;
   height: 2.9rem;
@@ -290,57 +301,50 @@
 }
 
 .product-set-card__price {
-  display: block;
-  font-size: var(--t-body);
+  display: flex;
+  flex-direction: column;
+  font-size: var(--pss-price-size);
   font-family: var(--font-body-family);
   margin-bottom: 0.75rem;
   line-height: 1.4;
 }
 
-.product-set-card__price .price {
-  display: inline;
+.pss-sale-badge {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  padding: 0.2rem 0.5rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.product-set-card__price-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .price-item--compare {
   text-decoration: line-through;
-  font-size: var(--t-body);
+  font-size: var(--pss-price-size);
   font-family: var(--font-body-family);
-  margin-right: 0.5rem;
+  opacity: 0.7;
 }
 
 .price-item--current {
   font-weight: 500;
-  font-size: var(--t-body);
+  font-size: var(--pss-price-size);
 }
 
-.product-set-card__savings {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.product-set-card__savings-amount {
-  display: inline-block;
-  background-color: #c43401;
-  color: #ffffff !important;
-  font-weight: 600;
-  font-size: 1.2rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 2px;
-  line-height: 1.4;
-}
-
-.product-set-card__savings-percent {
-  font-size: 1.3rem;
-  opacity: 0.85;
-}
 
 .product-set-card__description {
   line-height: 1.5;
   margin-bottom: 1.5rem;
-  font-size: var(--t-body);
+  font-size: var(--pss-desc-size);
   font-family: var(--font-body-family);
   height: 4.5rem;
   display: -webkit-box;
@@ -367,12 +371,55 @@
   cursor: pointer;
   transition: opacity 0.3s ease;
   text-decoration: none;
-  font-size: var(--t-small);
+  font-size: var(--pss-button-size);
   font-family: var(--font-body-family);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+/* Remove Dawn's ::before/:after box-shadow rim from section buttons.
+   ID prefix gives specificity 1-2-1, beating Dawn's 0-1-1 — no !important needed. */
+#shopify-section-{{ section.id }} .product-set-card__buttons .button::before,
+#shopify-section-{{ section.id }} .product-set-card__buttons .button::after {
+  box-shadow: none;
+}
+
+/* Glare sweep on Add to Cart */
+.product-set-add-to-cart {
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.pss-glare {
+  position: absolute;
+  top: 0;
+  left: -110%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 80%
+  );
+  transform: skewX(-18deg) translateX(0);
+  pointer-events: none;
+  will-change: transform;
+  animation: none;
+}
+
+.pss-glare--active {
+  animation: pss-btn-glare 10s ease-in-out infinite;
+}
+
+@keyframes pss-btn-glare {
+  0%    { transform: skewX(-18deg) translateX(0); }
+  14%   { transform: skewX(-18deg) translateX(500%); }
+  14.1% { transform: skewX(-18deg) translateX(0); }
+  100%  { transform: skewX(-18deg) translateX(0); }
 }
 
 .product-set-card__buttons .button:hover:not(:disabled) {
@@ -490,9 +537,6 @@
     color: #666666 !important;
   }
 
-  .product-set-card__savings-percent {
-    color: #333333 !important;
-  }
 
   .product-set-card__buttons {
     flex-direction: column;
@@ -518,6 +562,24 @@ html[lang^="ar-"] .product-set-card__buttons .button {
   window.productSetSelectorInitialized = true;
   
   document.addEventListener('DOMContentLoaded', function() {
+    // Start glare animation 2s after section scrolls into view
+    const glareSection = document.querySelector('.product-set-section');
+    if (glareSection && 'IntersectionObserver' in window) {
+      const glareObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            setTimeout(function() {
+              glareSection.querySelectorAll('.pss-glare').forEach(function(el) {
+                el.classList.add('pss-glare--active');
+              });
+            }, 2000);
+            glareObserver.unobserve(glareSection);
+          }
+        });
+      }, { threshold: 0.2 });
+      glareObserver.observe(glareSection);
+    }
+
     const productGrid = document.querySelector('.product-set-grid');
     
     // Mobile scroll enhancement
@@ -802,6 +864,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
     },
     {
       "type": "range",
+      "id": "badge_font_size",
+      "min": 11,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge font size",
+      "default": 14
+    },
+    {
+      "type": "range",
       "id": "savings_border_radius",
       "min": 0,
       "max": 50,
@@ -845,6 +917,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
       "default": "assistant_n4"
     },
     {
+      "type": "range",
+      "id": "view_all_font_size",
+      "min": 11,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "View all font size",
+      "default": 14
+    },
+    {
       "type": "header",
       "content": "Card Design (applies to all cards)"
     },
@@ -871,6 +953,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
       "default": "assistant_n4"
     },
     {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 20
+    },
+    {
       "type": "color",
       "id": "title_color",
       "label": "Title color",
@@ -883,6 +975,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
       "default": "assistant_n4"
     },
     {
+      "type": "range",
+      "id": "desc_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description font size",
+      "default": 15
+    },
+    {
       "type": "color",
       "id": "description_color",
       "label": "Description color",
@@ -891,6 +993,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
     {
       "type": "header",
       "content": "Pricing (applies to all cards)"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Price font size",
+      "default": 16
     },
     {
       "type": "checkbox",
@@ -925,6 +1037,16 @@ html[lang^="ar-"] .product-set-card__buttons .button {
     {
       "type": "header",
       "content": "Buttons (applies to all cards)"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size",
+      "default": 15
     },
     {
       "type": "text",

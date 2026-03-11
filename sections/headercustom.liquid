@@ -348,13 +348,11 @@
     max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
     padding: 0 {{ section.settings.desktop_horizontal_padding }}px;
-    {% if localization.language.iso_code == 'ar' %}
-      direction: rtl;
-      flex-direction: row-reverse;
-    {% else %}
-      direction: ltr;
-      flex-direction: row;
-    {% endif %}
+    flex-direction: row; /* LTR: text left, images right */
+  }
+
+  [dir="rtl"] .custom-header__mega-content {
+    flex-direction: row-reverse; /* RTL: images left, text right */
   }
 
   /* Text columns area */
@@ -363,11 +361,11 @@
     gap: 3rem;
     flex: 1;
     min-width: 0;
-    {% if localization.language.iso_code == 'ar' %}
-      justify-content: flex-end;
-    {% else %}
-      justify-content: flex-start;
-    {% endif %}
+    justify-content: flex-start;
+  }
+
+  [dir="rtl"] .custom-header__mega-text-area {
+    justify-content: flex-end;
   }
 
   .custom-header__mega-column {
@@ -382,11 +380,11 @@
     color: {{ section.settings.text_color }};
     font-family: var(--font-heading-family);
     text-decoration: none;
-    {% if localization.language.iso_code == 'ar' %}
-      text-align: right;
-    {% else %}
-      text-align: left;
-    {% endif %}
+    text-align: left;
+  }
+
+  [dir="rtl"] .custom-header__mega-title {
+    text-align: right;
   }
 
   .custom-header__mega-links {
@@ -415,6 +413,10 @@
     opacity: 0.6;
   }
 
+  [dir="rtl"] .custom-header__mega-links {
+    text-align: right;
+  }
+
   /* ===========================
      BEST VALUE BADGE
   =========================== */
@@ -428,17 +430,17 @@
     padding: 3px 8px;
     border-radius: 3px;
     vertical-align: middle;
-    {% if localization.language.iso_code == 'ar' %}
-      margin-right: 6px;
-      margin-left: 0;
-    {% else %}
-      margin-left: 6px;
-      margin-right: 0;
-    {% endif %}
+    margin-left: 6px;
+    margin-right: 0;
     white-space: nowrap;
     font-family: var(--font-heading-family);
     text-decoration: none;
     pointer-events: none;
+  }
+
+  [dir="rtl"] .custom-header__badge {
+    margin-right: 6px;
+    margin-left: 0;
   }
 
   /* ===========================
@@ -1289,170 +1291,56 @@
                       {% endfor %}
                     </div>
 
-                    {%- comment -%} 
-                      Images area — static images, not hover-triggered
-                      Collects images from all child collections/products 
+                    {%- comment -%}
+                      Images area (desktop only).
+                      Looks for a matching "Mega Menu Images" block by menu item title.
+                      Falls back to the global fallback image if no block is found.
                     {%- endcomment -%}
                     {% if section.settings.show_mega_images %}
+                      {%- assign link_title_lower = link.title | downcase | strip -%}
+                      {%- assign link_handle = link.handle | downcase | strip -%}
+                      {%- assign matched_block = nil -%}
+                      {%- for block in section.blocks -%}
+                        {%- if block.type == 'mega_menu_images' -%}
+                          {%- assign block_title_lower = block.settings.menu_item_title | downcase | strip -%}
+                          {%- assign block_handle = block.settings.menu_item_title | handleize -%}
+                          {%- if block_title_lower == link_title_lower or block_handle == link_handle -%}
+                            {%- assign matched_block = block -%}
+                            {%- break -%}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+
                       <div class="custom-header__mega-images">
-                        {%- liquid
-                          assign all_images = ''
-                          assign image_count = 0
-                          
-                          for child_link in link.links
-                            if child_link.type == 'collection_link' and child_link.object
-                              if child_link.object.image and image_count < 2
-                                assign image_count = image_count | plus: 1
-                              endif
-                              if child_link.object.products.size > 0
-                                for product in child_link.object.products
-                                  if product.featured_image and image_count < 2
-                                    assign image_count = image_count | plus: 1
-                                  endif
-                                  if image_count >= 2
-                                    break
-                                  endif
-                                endfor
-                              endif
-                            elsif child_link.type == 'product_link' and child_link.object
-                              if child_link.object.featured_image and image_count < 2
-                                assign image_count = image_count | plus: 1
-                              endif
-                            endif
-                            if image_count >= 2
-                              break
-                            endif
-                          endfor
-                          
-                          assign collected_images = '' | split: ','
-                          assign img_idx = 0
-                          
-                          for child_link in link.links
-                            if img_idx >= 2
-                              break
-                            endif
-                            if child_link.type == 'collection_link' and child_link.object
-                              if child_link.object.image and img_idx < 2
-                                assign img_idx = img_idx | plus: 1
-                              endif
-                              if child_link.object.products.size > 0
-                                for product in child_link.object.products
-                                  if product.featured_image and img_idx < 2
-                                    assign img_idx = img_idx | plus: 1
-                                  endif
-                                  if img_idx >= 2
-                                    break
-                                  endif
-                                endfor
-                              endif
-                            elsif child_link.type == 'product_link' and child_link.object
-                              if child_link.object.featured_image and img_idx < 2
-                                assign img_idx = img_idx | plus: 1
-                              endif
-                            endif
-                          endfor
-                          
-                          assign total_child_links = link.links.size
-                          assign show_dual_images = false
-                          if image_count >= 2
-                            assign show_dual_images = true
-                          endif
-                        -%}
-
-                        {%- comment -%} Render actual images from collections/products {%- endcomment -%}
-                        {%- assign rendered_images = 0 -%}
-                        {% for child_link in link.links %}
-                          {% if rendered_images >= 2 %}
-                            {% break %}
-                          {% endif %}
-                          
-                          {% if child_link.type == 'collection_link' and child_link.object %}
-                            {% if child_link.object.image and rendered_images < 2 %}
-                              {% if show_dual_images %}
-                                <div class="custom-header__mega-image-large">
-                                  {{- child_link.object.image | image_url: width: 600 | image_tag: 
-                                     loading: 'lazy',
-                                     alt: child_link.title -}}
-                                </div>
-                              {% else %}
-                                <div class="custom-header__mega-image-single">
-                                  {{- child_link.object.image | image_url: width: 700 | image_tag: 
-                                     loading: 'lazy',
-                                     alt: child_link.title -}}
-                                </div>
-                              {% endif %}
-                              {% assign rendered_images = rendered_images | plus: 1 %}
-                            {% endif %}
-                            
-                            {% if child_link.object.products.size > 0 and rendered_images < 2 %}
-                              {% for product in child_link.object.products %}
-                                {% if product.featured_image and rendered_images < 2 %}
-                                  {% if show_dual_images %}
-                                    <div class="custom-header__mega-image-large">
-                                      {{- product.featured_image | image_url: width: 600 | image_tag: 
-                                         loading: 'lazy',
-                                         alt: product.title -}}
-                                    </div>
-                                  {% else %}
-                                    <div class="custom-header__mega-image-single">
-                                      {{- product.featured_image | image_url: width: 700 | image_tag: 
-                                         loading: 'lazy',
-                                         alt: product.title -}}
-                                    </div>
-                                  {% endif %}
-                                  {% assign rendered_images = rendered_images | plus: 1 %}
-                                {% endif %}
-                                {% if rendered_images >= 2 %}
-                                  {% break %}
-                                {% endif %}
-                              {% endfor %}
-                            {% endif %}
-                            
-                          {% elsif child_link.type == 'product_link' and child_link.object %}
-                            {% if child_link.object.featured_image and rendered_images < 2 %}
-                              {% if show_dual_images %}
-                                <div class="custom-header__mega-image-large">
-                                  {{- child_link.object.featured_image | image_url: width: 600 | image_tag: 
-                                     loading: 'lazy',
-                                     alt: child_link.title -}}
-                                </div>
-                              {% else %}
-                                <div class="custom-header__mega-image-single">
-                                  {{- child_link.object.featured_image | image_url: width: 700 | image_tag: 
-                                     loading: 'lazy',
-                                     alt: child_link.title -}}
-                                </div>
-                              {% endif %}
-                              {% assign rendered_images = rendered_images | plus: 1 %}
-                            {% endif %}
-                          {% endif %}
-                        {% endfor %}
-
-                        {%- comment -%} Fallback images if none found {%- endcomment -%}
-                        {% if rendered_images == 0 %}
-                          {% if section.settings.mega_fallback_image %}
-                            <div class="custom-header__mega-image-single">
-                              {{- section.settings.mega_fallback_image | image_url: width: 700 | image_tag: 
+                        {% if matched_block and matched_block.settings.image_1 %}
+                          {% if matched_block.settings.image_2 %}
+                            <div class="custom-header__mega-image-large">
+                              {{- matched_block.settings.image_1 | image_url: width: 600 | image_tag:
+                                 loading: 'lazy',
+                                 alt: link.title -}}
+                            </div>
+                            <div class="custom-header__mega-image-large">
+                              {{- matched_block.settings.image_2 | image_url: width: 600 | image_tag:
                                  loading: 'lazy',
                                  alt: link.title -}}
                             </div>
                           {% else %}
                             <div class="custom-header__mega-image-single">
-                              <div class="custom-header__mega-placeholder-large"></div>
-                            </div>
-                          {% endif %}
-                        {% elsif rendered_images == 1 and show_dual_images %}
-                          {% if section.settings.mega_fallback_image %}
-                            <div class="custom-header__mega-image-large">
-                              {{- section.settings.mega_fallback_image | image_url: width: 600 | image_tag: 
+                              {{- matched_block.settings.image_1 | image_url: width: 700 | image_tag:
                                  loading: 'lazy',
                                  alt: link.title -}}
                             </div>
-                          {% else %}
-                            <div class="custom-header__mega-image-large">
-                              <div class="custom-header__mega-placeholder-large"></div>
-                            </div>
                           {% endif %}
+                        {% elsif section.settings.mega_fallback_image %}
+                          <div class="custom-header__mega-image-single">
+                            {{- section.settings.mega_fallback_image | image_url: width: 700 | image_tag:
+                               loading: 'lazy',
+                               alt: link.title -}}
+                          </div>
+                        {% else %}
+                          <div class="custom-header__mega-image-single">
+                            <div class="custom-header__mega-placeholder-large"></div>
+                          </div>
                         {% endif %}
                       </div>
                     {% endif %}
@@ -2425,8 +2313,8 @@
     {
       "type": "image_picker",
       "id": "mega_fallback_image",
-      "label": "Default Fallback Image",
-      "info": "This image will be shown when collection/product has no images"
+      "label": "Global Fallback Image",
+      "info": "Shown when a menu item has no matching 'Mega Menu Images' block"
     },
     {
       "type": "range",
@@ -2714,6 +2602,30 @@
     {
       "type": "paragraph",
       "content": "v4.0 - Header always LTR (desktop AND mobile), only mega menu content and drawer text direction flip for Arabic"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu_images",
+      "name": "Mega Menu Images",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item_title",
+          "label": "Menu Item Title",
+          "info": "Enter the English menu item name (e.g. 'Shop', 'Discover'). Works across all languages — Arabic is matched automatically via the menu handle."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2 (optional — shows side-by-side layout when set)"
+        }
+      ]
     }
   ],
   "presets": [

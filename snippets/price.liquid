@@ -107,17 +107,6 @@
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
         </span>
-        {%- if compare_at_price > price -%}
-          {%- assign savings_amount = compare_at_price | minus: price -%}
-          {%- if settings.currency_code_enabled -%}
-            {%- assign savings_formatted = savings_amount | money_with_currency -%}
-          {%- else -%}
-            {%- assign savings_formatted = savings_amount | money_without_trailing_zeros -%}
-          {%- endif -%}
-          <div class="price__savings">
-            <span class="price__savings-amount">{{ 'products.product.save_badge' | t: amount: savings_formatted }}</span>
-          </div>
-        {%- endif -%}
       </div>
       {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
         {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}

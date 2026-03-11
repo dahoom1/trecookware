@@ -6,11 +6,17 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .rich-text:not(.rich-text--full-width) .rich-text__wrapper {
   margin: auto;
   width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .rich-text__blocks {
@@ -19,9 +25,12 @@
 
 @media screen and (min-width: 750px) {
   .rich-text__wrapper {
-    width: 100%;
+    max-width: var(--page-width);
+    padding: 0 40px;
   }
 
+  /* flex-start/flex-end are direction-aware: in RTL flex-start = right edge, flex-end = left edge.
+     No overrides needed — flexbox aligns these correctly in both LTR and RTL. */
   .rich-text__wrapper--left {
     justify-content: flex-start;
   }
@@ -36,8 +45,20 @@
 }
 
 @media screen and (min-width: 990px) {
+  .rich-text__wrapper {
+    max-width: var(--page-width);
+    padding: 0 60px;
+  }
+
   .rich-text__blocks {
     max-width: 78rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .rich-text__wrapper {
+    max-width: var(--page-width);
+    padding: 0 80px;
   }
 }
 
@@ -77,6 +98,8 @@
   margin-top: 1rem;
 }
 
+/* justify-content: flex-start/flex-end on buttons is direction-aware in RTL —
+   no override needed, they align to the correct edge automatically. */
 .rich-text__blocks.left .rich-text__buttons {
   justify-content: flex-start;
 }
@@ -85,29 +108,12 @@
   justify-content: flex-end;
 }
 
-/* RTL overrides */
+/* RTL text-align overrides — text-align: left/right are physical values and do NOT
+   flip automatically with direction:rtl, so we must explicitly correct them. */
 [dir="rtl"] .rich-text__blocks.left {
   text-align: right;
 }
 
 [dir="rtl"] .rich-text__blocks.right {
   text-align: left;
-}
-
-[dir="rtl"] .rich-text__blocks.left .rich-text__buttons {
-  justify-content: flex-end;
-}
-
-[dir="rtl"] .rich-text__blocks.right .rich-text__buttons {
-  justify-content: flex-start;
-}
-
-@media screen and (min-width: 750px) {
-  [dir="rtl"] .rich-text__wrapper--left {
-    justify-content: flex-end;
-  }
-
-  [dir="rtl"] .rich-text__wrapper--right {
-    justify-content: flex-start;
-  }
 }

@@ -12,26 +12,5 @@
   "context": {
     "market": "sa"
   },
-  "sections": {
-    "announcement-bar": {
-      "custom_css": [
-        "html[dir=\"rtl\"] .announcement-bar*,html[dir=\"rtl\"] .announcement-bar{transform: none !important;}",
-        "html[dir=\"rtl\"] .announcement-bar::before {transform: none !important;}"
-      ],
-      "settings": {},
-      "blocks": {
-        "84b99569-54af-4dbc-83a0-63ba33e534fa": {
-          "settings": {
-            "text": "No Matter the Trend, Timeless Cooking Starts Here",
-            "link": "shopify://collections/all"
-          }
-        },
-        "announcement_kBBhRH": {
-          "settings": {
-            "text": " PRESALES GET YOUR COOKWARE SET IN 3 WEEKS AND 30% DISCOUNT"
-          }
-        }
-      }
-    }
-  }
+  "sections": {}
 }

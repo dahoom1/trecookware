@@ -11,42 +11,34 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "announcement-bar": {
+    "announcement_bar_HxnRwX": {
       "type": "announcement-bar",
       "blocks": {
-        "84b99569-54af-4dbc-83a0-63ba33e534fa": {
-          "type": "announcement",
-          "settings": {
-            "text": "FREE shipping to 🇸🇦 for orders 100 SAR or above.",
-            "link": ""
-          }
-        },
-        "announcement_kBBhRH": {
-          "type": "announcement",
-          "settings": {
-            "text": "No Matter the Trend, Timeless Cooking Starts Here",
-            "link": "shopify://collections/all"
-          }
-        },
-        "announcement_gxjNFn": {
+        "announcement_9Qeq7q": {
           "type": "announcement",
           "settings": {
             "text": "🇸🇦 1-2 Days KSA Delivery | ⚡ Same-Day in Riyadh (Orders before 12 AM)",
             "link": ""
           }
+        },
+        "announcement_nNa93K": {
+          "type": "announcement",
+          "settings": {
+            "text": "Timeless Raw Essentials",
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "84b99569-54af-4dbc-83a0-63ba33e534fa",
-        "announcement_kBBhRH",
-        "announcement_gxjNFn"
+        "announcement_9Qeq7q",
+        "announcement_nNa93K"
       ],
-      "custom_css": [],
+      "name": "t:sections.announcement-bar.presets.name",
       "settings": {
-        "auto_rotate": true,
-        "change_slides_speed": 6,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
         "color_scheme": "scheme-5",
-        "show_line_separator": false,
+        "show_line_separator": true,
         "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false
@@ -54,6 +46,28 @@
     },
     "headercustom_G7Uw8C": {
       "type": "headercustom",
+      "blocks": {
+        "mega_menu_images_xBTFiA": {
+          "type": "mega_menu_images",
+          "settings": {
+            "menu_item_title": "Shop",
+            "image_1": "shopify://shop_images/DSC9730.jpg",
+            "image_2": "shopify://shop_images/stpn26-a22.webp"
+          }
+        },
+        "mega_menu_images_cwf9mn": {
+          "type": "mega_menu_images",
+          "settings": {
+            "menu_item_title": "Discover",
+            "image_1": "shopify://shop_images/IMG_6077.jpg",
+            "image_2": "shopify://shop_images/DishwasherPhoto_ad0e9d4a-e0e4-4cd8-bad2-c480103354ea.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_images_xBTFiA",
+        "mega_menu_images_cwf9mn"
+      ],
       "name": "Custom Header v3.4",
       "settings": {
         "logo": "shopify://shop_images/Asset_6logo.png",
@@ -105,7 +119,7 @@
     }
   },
   "order": [
-    "announcement-bar",
+    "announcement_bar_HxnRwX",
     "headercustom_G7Uw8C"
   ]
 }

@@ -7,7 +7,11 @@
       "Bash(ipconfig getifaddr:*)",
       "Bash(ipconfig:*)",
       "Bash(git add:*)",
-      "Bash(git checkout -b footer-moded)"
+      "Bash(git checkout -b footer-moded)",
+      "Bash(shopify theme list)",
+      "Bash(shopify theme pull --theme 182416015650)",
+      "Bash(head -20 grep -n \"overflow-hidden\\\\|document\\\\.body\\\\|preventScroll\\\\|header-drawer\" \"/Users/abdulrahmanal-omrani/Desktop/E-commerce/TRE/Trecookware build v0.1/assets/menu-drawer.js\")",
+      "Bash(python3 -c \":*)"
     ]
   }
 }

@@ -241,131 +241,129 @@ class CustomProductGallery {
     this.goToModalSlide(newIndex);
   }
 
-  // Magnifier
-  // Interaction: touch and hold (~150ms) → magnifier appears and follows finger.
-  // Quick horizontal swipe → passes through to slide navigation as normal.
+  // Magnifier: body-level fixed element (avoids overflow:hidden / z-index constraints).
+  // 50ms hold to distinguish from swipe/scroll. No e.cancelable dependency (iOS unreliable).
   setupMagnifier() {
     var self = this;
+
+    // Create one shared magnifier appended to body — lives outside any overflow:hidden
+    if (!document._galleryMagnifier) {
+      var mag = document.createElement('div');
+      mag.className = 'custom-gallery__magnifier-global';
+      document.body.appendChild(mag);
+      document._galleryMagnifier = mag;
+    }
+
     for (var i = 0; i < this.slides.length; i++) {
       var wrapper = this.slides[i].querySelector('.custom-gallery__image-wrapper');
       if (!wrapper) continue;
       (function (w) {
         var startX = 0, startY = 0, lastX = 0, lastY = 0;
-        var magnifierActive = false, swipeDetected = false;
+        var magnifierActive = false;
         var holdTimer = null;
 
-        function clearTimer() {
+        function cancelAll() {
           if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+          magnifierActive = false;
+          self.hideGlobalMagnifier();
         }
 
-        // touchstart: record position and start hold timer
+        // Suppress native long-press context menu (Android / iOS)
+        w.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
         w.addEventListener('touchstart', function (e) {
+          cancelAll();
           startX = lastX = e.touches[0].clientX;
           startY = lastY = e.touches[0].clientY;
-          magnifierActive = false;
-          swipeDetected = false;
-          clearTimer();
+
+          // 50ms hold: short enough to feel instant, long enough for swipe/scroll to cancel first
           holdTimer = setTimeout(function () {
             holdTimer = null;
-            if (!swipeDetected) {
-              magnifierActive = true;
-              self.updateMagnifier(lastX, lastY, w);
-            }
-          }, 150);
+            magnifierActive = true;
+            self.showGlobalMagnifier(lastX, lastY, w);
+          }, 50);
         }, { passive: true });
 
-        // touchmove: decide swipe vs magnifier
         w.addEventListener('touchmove', function (e) {
           lastX = e.touches[0].clientX;
           lastY = e.touches[0].clientY;
           var absDx = Math.abs(lastX - startX);
           var absDy = Math.abs(lastY - startY);
 
-          // Before magnifier activates: if user is swiping horizontally,
-          // cancel the hold timer and let the slider handle navigation
-          if (!swipeDetected && !magnifierActive && absDx > 10 && absDx > absDy) {
-            swipeDetected = true;
-            clearTimer();
-            return; // don't stopPropagation — slider's touchmove will handle it
+          if (!magnifierActive) {
+            // Cancel hold timer on any significant movement (swipe or scroll intent)
+            if ((absDx > 8 || absDy > 8) && holdTimer) {
+              clearTimeout(holdTimer);
+              holdTimer = null;
+            }
+            return;
           }
 
-          if (swipeDetected) return; // committed to swipe, ignore rest
-
-          if (magnifierActive) {
-            e.stopPropagation(); // prevent slider from treating this as a swipe
-            e.preventDefault();  // prevent page scroll (works because touch-action:none on wrapper)
-            self.updateMagnifier(lastX, lastY, w);
-          }
+          // Magnifier is active — movement only updates the loupe, never cancels it.
+          // Only touchend/touchcancel will dismiss it.
+          e.stopPropagation();
+          e.preventDefault();
+          self.showGlobalMagnifier(lastX, lastY, w);
         }, { passive: false });
 
-        // touchend: hide magnifier; stop propagation only when magnifier was active
-        // (otherwise the slider's touchend fires and handles swipe navigation)
         w.addEventListener('touchend', function (e) {
-          clearTimer();
-          if (magnifierActive) {
-            e.stopPropagation();
-          }
-          magnifierActive = false;
-          swipeDetected = false;
-          self.hideMagnifier(w);
+          var wasActive = magnifierActive;
+          cancelAll();
+          if (wasActive) e.stopPropagation();
         });
 
-        w.addEventListener('touchcancel', function () {
-          clearTimer();
-          magnifierActive = false;
-          swipeDetected = false;
-          self.hideMagnifier(w);
-        });
+        w.addEventListener('touchcancel', cancelAll);
       })(wrapper);
     }
   }
 
-  // clientX/clientY are page coordinates (from e.touches[0])
-  updateMagnifier(clientX, clientY, wrapper) {
-    var magnifier = wrapper.querySelector('.custom-gallery__magnifier');
-    if (!magnifier) return;
+  showGlobalMagnifier(clientX, clientY, wrapper) {
+    var mag = document._galleryMagnifier;
+    if (!mag) return;
+
     var img = wrapper.querySelector('.custom-gallery__image');
     if (!img) return;
 
-    var rect = wrapper.getBoundingClientRect();
-    var imgRect = img.getBoundingClientRect();
-    var x = clientX - rect.left;  // touch position relative to image
-    var y = clientY - rect.top;
+    var magSize = 200;
+    var zoom = 3;
 
-    var magSize = 140;
-    var zoom = 2.5;
-    var fingerOffset = 20; // gap between magnifier bottom and finger tip
+    // Fixed position — centered on finger horizontally, above the finger
+    var magLeft = clientX - magSize / 2;
+    var magTop = clientY - magSize - 30;
 
-    // Centre the magnifier horizontally on the finger; position it above the finger
-    var magLeft = Math.max(0, Math.min(x - magSize / 2, rect.width - magSize));
-    var magTop = Math.max(0, Math.min(y - magSize - fingerOffset, rect.height - magSize));
+    // Clamp within viewport
+    magLeft = Math.max(10, Math.min(magLeft, window.innerWidth - magSize - 10));
+    magTop = Math.max(10, Math.min(magTop, window.innerHeight - magSize - 10));
 
-    magnifier.style.left = magLeft + 'px';
-    magnifier.style.top = magTop + 'px';
+    mag.style.left = magLeft + 'px';
+    mag.style.top = magTop + 'px';
 
-    // Use the browser-chosen responsive image src
+    // Background image from the actual image element's resolved src
     var imgSrc = img.currentSrc || img.src;
-    if (magnifier._imgSrc !== imgSrc) {
-      magnifier._imgSrc = imgSrc;
-      magnifier.style.backgroundImage = 'url(' + imgSrc + ')';
+    if (mag._imgSrc !== imgSrc) {
+      mag._imgSrc = imgSrc;
+      mag.style.backgroundImage = 'url(' + imgSrc + ')';
     }
 
-    // Scale background so the image appears zoom times larger inside the circle
+    // Map touch point to image-relative coordinates for background offset
+    var imgRect = img.getBoundingClientRect();
+    var x = clientX - imgRect.left;
+    var y = clientY - imgRect.top;
+
     var bgW = imgRect.width * zoom;
     var bgH = imgRect.height * zoom;
-    magnifier.style.backgroundSize = bgW + 'px ' + bgH + 'px';
+    mag.style.backgroundSize = bgW + 'px ' + bgH + 'px';
 
-    // Shift background so the touch point appears at the centre of the magnifier
     var bgX = -(x * zoom - magSize / 2);
     var bgY = -(y * zoom - magSize / 2);
-    magnifier.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
+    mag.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
 
-    magnifier.classList.add('visible');
+    mag.classList.add('active');
   }
 
-  hideMagnifier(wrapper) {
-    var magnifier = wrapper ? wrapper.querySelector('.custom-gallery__magnifier') : null;
-    if (magnifier) magnifier.classList.remove('visible');
+  hideGlobalMagnifier() {
+    var mag = document._galleryMagnifier;
+    if (mag) mag.classList.remove('active');
   }
 
   // Touch Handling for Modal

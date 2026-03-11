@@ -34,6 +34,103 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* 1. Reset the card wrapper to allow absolute positioning */
+  #collection-{{ section.id }} .card-wrapper {
+    position: relative !important;
+    display: block !important;
+    z-index: 1;
+  }
+
+  /* 2. Place container Top-Right */
+  #collection-{{ section.id }} .quick-add {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+    width: auto !important;
+  }
+
+  /* 3. The Black Box Button */
+  #collection-{{ section.id }} .quick-add__submit {
+    background-color: #27231e !important;
+    color: #ffffff !important;
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition: background-color 0.2s ease;
+  }
+
+  #collection-{{ section.id }} .quick-add__submit:hover {
+    background-color: #333333 !important;
+  }
+
+  /* 4. Hide native text & icons */
+  #collection-{{ section.id }} .quick-add__submit > span:not(.visually-hidden),
+  #collection-{{ section.id }} .quick-add__submit > svg {
+    display: none !important;
+  }
+
+  /* 5. The Plus Sign - absolutely centered */
+  #collection-{{ section.id }} .quick-add__submit::before {
+    content: "+" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    font-size: 28px !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
+    color: #ccc !important;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  /* 6. Loading spinner */
+  #collection-{{ section.id }} .quick-add__submit .loading-overlay__spinner {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  #collection-{{ section.id }} .quick-add__submit[aria-disabled="true"]::before {
+    opacity: 0;
+  }
+
+  {% if request.locale.iso_code == 'ar' %}
+    #collection-{{ section.id }} .card__information .card__heading,
+    #collection-{{ section.id }} .card__heading a,
+    #collection-{{ section.id }} .card-information .card__heading,
+    #collection-{{ section.id }} .full-unstyled-link {
+      direction: rtl !important;
+      text-align: right !important;
+      unicode-bidi: embed !important;
+    }
+    #collection-{{ section.id }} .card__content,
+    #collection-{{ section.id }} .card__information {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+    #collection-{{ section.id }} .price,
+    #collection-{{ section.id }} .card__badge {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+  {% endif %}
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
@@ -141,6 +238,7 @@
         {%- else -%}
           <div
             class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+            id="collection-{{ section.id }}"
           >
             <div class="loading-overlay gradient"></div>
             <ul

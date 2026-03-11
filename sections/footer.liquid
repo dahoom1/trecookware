@@ -590,54 +590,33 @@
                 {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
               {%- endfor -%}
             {%- endunless -%}
-            
-            {%- comment -%} Native Payment Method Logos: Mada, Tabby, Tamara {%- endcomment -%}
 
-            {%- comment -%}
-            TESTING: Mada hardcoded image commented out to check if it renders natively
-            <!-- Mada — official logo from assets -->
-            <img
-              src="https://cdn.shopify.com/s/files/1/0736/2048/8482/files/8c922f18-0c65-4e56-8b3e-3dbbc736ca47_1768844791566_salogos.org-Mada-01.svg?v=1771590237"
-              alt="Mada"
-              class="icon icon--full-color native-payment-icon"
-              style="background: #ffffff; padding: 2px 4px; border-radius: 3px;"
-              loading="lazy"
-            >
-            {%- endcomment -%}
+            {%- if section.settings.mada_logo != blank -%}
+              <img
+                src="{{ section.settings.mada_logo | image_url: width: 80 }}"
+                alt="Mada"
+                class="icon icon--full-color native-payment-icon"
+                loading="lazy"
+              >
+            {%- endif -%}
 
-            <!-- Tabby — green badge + geometric cat face + wordmark -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 36" role="img" aria-label="Tabby" class="icon icon--full-color native-payment-icon" width="72" height="36">
-              <rect width="72" height="36" rx="3" fill="#3EB58A"/>
-              <!-- Cat left ear -->
-              <path d="M11 19 L7 8 L17 15 Z" fill="#2A9D74"/>
-              <!-- Cat right ear -->
-              <path d="M25 19 L29 8 L19 15 Z" fill="#2A9D74"/>
-              <!-- Cat face -->
-              <circle cx="18" cy="23" r="9" fill="#ffffff"/>
-              <!-- Eyes -->
-              <ellipse cx="14.5" cy="21.5" rx="2" ry="2.5" fill="#3EB58A"/>
-              <ellipse cx="21.5" cy="21.5" rx="2" ry="2.5" fill="#3EB58A"/>
-              <!-- Eye highlights -->
-              <circle cx="15.3" cy="20.5" r="0.8" fill="#ffffff"/>
-              <circle cx="22.3" cy="20.5" r="0.8" fill="#ffffff"/>
-              <!-- Nose -->
-              <path d="M17 24.5 L18 26 L19 24.5 Z" fill="#3EB58A"/>
-              <!-- tabby wordmark -->
-              <text x="52" y="24.5" text-anchor="middle" fill="#ffffff" font-size="12" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-weight="900">tabby</text>
-            </svg>
+            {%- if section.settings.tabby_logo != blank -%}
+              <img
+                src="{{ section.settings.tabby_logo | image_url: width: 80 }}"
+                alt="Tabby"
+                class="icon icon--full-color native-payment-icon"
+                loading="lazy"
+              >
+            {%- endif -%}
 
-            <!-- Tamara — dark navy + three-arc split-payment icon + wordmark -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 36" role="img" aria-label="Tamara" class="icon icon--full-color native-payment-icon" width="76" height="36">
-              <rect width="76" height="36" rx="3" fill="#1D2146"/>
-              <!-- Outer arc — pink -->
-              <path d="M5 29 A14 14 0 0 1 33 29" fill="none" stroke="#E53D76" stroke-width="3" stroke-linecap="round"/>
-              <!-- Middle arc — purple -->
-              <path d="M10 29 A9 9 0 0 1 28 29" fill="none" stroke="#8B5FCC" stroke-width="3" stroke-linecap="round"/>
-              <!-- Inner arc — blue -->
-              <path d="M15 29 A4 4 0 0 1 23 29" fill="none" stroke="#4DAEDE" stroke-width="3" stroke-linecap="round"/>
-              <!-- tamara wordmark -->
-              <text x="56" y="23" text-anchor="middle" fill="#ffffff" font-size="10" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="0.5">tamara</text>
-            </svg>
+            {%- if section.settings.tamara_logo != blank -%}
+              <img
+                src="{{ section.settings.tamara_logo | image_url: width: 80 }}"
+                alt="Tamara"
+                class="icon icon--full-color native-payment-icon"
+                loading="lazy"
+              >
+            {%- endif -%}
           </div>
         {%- endif -%}
 
@@ -811,6 +790,24 @@
       "id": "payment_enable",
       "default": true,
       "label": "Show payment icons"
+    },
+    {
+      "type": "image_picker",
+      "id": "mada_logo",
+      "label": "Mada Payment Icon",
+      "info": "Upload the official Mada logo image (recommended: 80x50px)"
+    },
+    {
+      "type": "image_picker",
+      "id": "tabby_logo",
+      "label": "Tabby Payment Icon",
+      "info": "Upload the official Tabby logo image (recommended: 80x50px)"
+    },
+    {
+      "type": "image_picker",
+      "id": "tamara_logo",
+      "label": "Tamara Payment Icon",
+      "info": "Upload the official Tamara logo image (recommended: 80x50px)"
     },
     {
       "type": "checkbox",

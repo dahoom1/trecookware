@@ -132,15 +132,6 @@
               >
                 {{- 'products.product.sold_out' | t -}}
               </span>
-            {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-              {%- assign savings = card_product.compare_at_price | minus: card_product.price -%}
-              {%- assign savings_formatted = savings | money_without_trailing_zeros -%}
-              <span
-                id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
-                class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
-              >
-                {{- 'products.product.save_badge' | t: amount: savings_formatted -}}
-              </span>
             {%- endif -%}
           </div>
         </div>
@@ -206,7 +197,7 @@
               </p>
             {%- endif -%}
 
-            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true, show_badges: true %}
             {%- if card_product.quantity_price_breaks_configured? -%}
               {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                 {% liquid
@@ -557,15 +548,6 @@
               class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
             >
               {{- 'products.product.sold_out' | t -}}
-            </span>
-          {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-            {%- assign savings = card_product.compare_at_price | minus: card_product.price -%}
-            {%- assign savings_formatted = savings | money_without_trailing_zeros -%}
-            <span
-              id="Badge-{{ section_id }}-{{ card_product.id }}"
-              class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
-            >
-              {{- 'products.product.save_badge' | t: amount: savings_formatted -}}
             </span>
           {%- endif -%}
         </div>

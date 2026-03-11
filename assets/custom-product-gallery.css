@@ -82,10 +82,7 @@
   align-items: center;
   justify-content: center;
   background-color: #f8f8f8;
-  /* Give JS full control — without this, touch-action: pan-y on the
-     parent causes the browser to ignore e.preventDefault() on touchmove,
-     making the magnifier fight with page scroll */
-  touch-action: none;
+  touch-action: pan-y;
 }
 
 .custom-gallery__image {
@@ -93,27 +90,34 @@
   height: auto;
   display: block;
   object-fit: cover;
+  -webkit-touch-callout: none; /* iOS: suppress "Save Image / Share" callout on long press */
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none; /* block native image interactions; touch events are handled by the wrapper */
 }
 
-/* Magnifying Glass */
+/* In-slide magnifier placeholder — kept for HTML compatibility but not used by JS */
 .custom-gallery__magnifier {
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  display: block;
-  overflow: hidden;
-  z-index: 10;
-  background-repeat: no-repeat;
-  opacity: 0;
-  transition: opacity 0.1s ease;
+  display: none;
 }
 
-.custom-gallery__magnifier.visible {
-  opacity: 1;
+/* Body-level magnifier — fixed position, above all content, no overflow clipping */
+.custom-gallery__magnifier-global {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99999;
+  background-repeat: no-repeat;
+  display: none;
+}
+
+.custom-gallery__magnifier-global.active {
+  display: block;
 }
 
 /* Video Badge */
