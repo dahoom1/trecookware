@@ -277,6 +277,19 @@
     border-radius: 3px !important;
   }
 
+  .custom-payment-svg {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .custom-payment-svg svg {
+    height: 20px !important;
+    width: auto !important;
+    display: block !important;
+    border-radius: 3px !important;
+  }
+
   /* Certification logos section */
   .tre-footer-certifications {
     display: flex;
@@ -458,6 +471,9 @@
                 </ul>
               </div>
             {%- endif -%}
+
+          {%- when 'payment_methods' -%}
+            {%- comment -%} Rendered in the payment icons row at the bottom {%- endcomment -%}
         {%- endcase -%}
       {%- endfor -%}
 
@@ -591,32 +607,24 @@
               {%- endfor -%}
             {%- endunless -%}
 
-            {%- if section.settings.mada_logo != blank -%}
-              <img
-                src="{{ section.settings.mada_logo | image_url: width: 80 }}"
-                alt="Mada"
-                class="icon icon--full-color native-payment-icon"
-                loading="lazy"
-              >
-            {%- endif -%}
-
-            {%- if section.settings.tabby_logo != blank -%}
-              <img
-                src="{{ section.settings.tabby_logo | image_url: width: 80 }}"
-                alt="Tabby"
-                class="icon icon--full-color native-payment-icon"
-                loading="lazy"
-              >
-            {%- endif -%}
-
-            {%- if section.settings.tamara_logo != blank -%}
-              <img
-                src="{{ section.settings.tamara_logo | image_url: width: 80 }}"
-                alt="Tamara"
-                class="icon icon--full-color native-payment-icon"
-                loading="lazy"
-              >
-            {%- endif -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'payment_methods' -%}
+                {%- assign payment_slots = 'mada,stcpay,tabby,tamara,applepay,visa,mastercard,amex,custom_1,custom_2,custom_3' | split: ',' -%}
+                {%- assign payment_labels = 'Mada,STC Pay,Tabby,Tamara,Apple Pay,Visa,Mastercard,American Express,Payment method,Payment method,Payment method' | split: ',' -%}
+                {%- for slot in payment_slots -%}
+                  {%- assign slot_image = block.settings[slot] -%}
+                  {%- if slot_image != blank -%}
+                    {%- assign slot_label = payment_labels[forloop.index0] -%}
+                    <img
+                      src="{{ slot_image | image_url: width: 80 }}"
+                      alt="{{ slot_label }}"
+                      class="icon icon--full-color native-payment-icon"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
           </div>
         {%- endif -%}
 
@@ -735,6 +743,80 @@
           "info": "Create menus in Navigation"
         }
       ]
+    },
+    {
+      "type": "payment_methods",
+      "name": "Payment Methods",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Local & BNPL"
+        },
+        {
+          "type": "image_picker",
+          "id": "mada",
+          "label": "Mada"
+        },
+        {
+          "type": "image_picker",
+          "id": "stcpay",
+          "label": "STC Pay"
+        },
+        {
+          "type": "image_picker",
+          "id": "tabby",
+          "label": "Tabby"
+        },
+        {
+          "type": "image_picker",
+          "id": "tamara",
+          "label": "Tamara"
+        },
+        {
+          "type": "header",
+          "content": "International Cards"
+        },
+        {
+          "type": "image_picker",
+          "id": "applepay",
+          "label": "Apple Pay"
+        },
+        {
+          "type": "image_picker",
+          "id": "visa",
+          "label": "Visa"
+        },
+        {
+          "type": "image_picker",
+          "id": "mastercard",
+          "label": "Mastercard"
+        },
+        {
+          "type": "image_picker",
+          "id": "amex",
+          "label": "American Express"
+        },
+        {
+          "type": "header",
+          "content": "Additional Icons"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_1",
+          "label": "Custom Icon 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_2",
+          "label": "Custom Icon 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_3",
+          "label": "Custom Icon 3"
+        }
+      ]
     }
   ],
   "settings": [
@@ -790,24 +872,6 @@
       "id": "payment_enable",
       "default": true,
       "label": "Show payment icons"
-    },
-    {
-      "type": "image_picker",
-      "id": "mada_logo",
-      "label": "Mada Payment Icon",
-      "info": "Upload the official Mada logo image (recommended: 80x50px)"
-    },
-    {
-      "type": "image_picker",
-      "id": "tabby_logo",
-      "label": "Tabby Payment Icon",
-      "info": "Upload the official Tabby logo image (recommended: 80x50px)"
-    },
-    {
-      "type": "image_picker",
-      "id": "tamara_logo",
-      "label": "Tamara Payment Icon",
-      "info": "Upload the official Tamara logo image (recommended: 80x50px)"
     },
     {
       "type": "checkbox",

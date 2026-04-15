@@ -11,13 +11,54 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "image_with_text_GpRY9T": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_U8nTND": {
+          "type": "heading",
+          "settings": {
+            "heading": "Timeless Raw Essentials",
+            "heading_size": "h1"
+          }
+        },
+        "text_ymVz3h": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Tre – Timeless Raw Essentials</strong> A brand founded to provide home essentials crafted from clean, safe, and natural materials, offering sustainable quality designed to last for years.</p><p>As we explored ways to enhance the well-being of our homes and families, we realized that a truly healthy lifestyle goes far beyond just the food we eat. Small, invisible elements impact our health cumulatively, often without us even realizing it. Once we understood that simple choices in the kitchen and around the home make a profound difference, we felt a responsibility we simply couldn't ignore</p><p><strong>From this responsibility, Tre was born.</strong></p><p>Tre is a brand dedicated to education and awareness, providing safe, healthy, and practical essentials that blend high quality with ease of use. We believe that making a conscious choice shouldn’t be complicated every home deserves essentials you can truly trust.</p><p>We advocate for a holistic, conscious lifestyle, applying this principle to every detail: from the selection of raw materials and products to the educational content we share to inspire our community. In our debut collection, we are proud to present a range of high specification stainless steel cookware. Crafted with precision, these pieces are designed to be everyday essentials that stay with you for years to come.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_U8nTND",
+        "text_ymVz3h"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/3da072e90bd28424d1e9fef57f5e881ae1abacb5.png",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "image_with_text_GpRY9T"
   ]
 }

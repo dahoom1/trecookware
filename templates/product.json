@@ -49,12 +49,6 @@
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {}
         },
-        "tabby_pay_later_pdp_final_9ffqWF": {
-          "type": "shopify://apps/tabby-pay-later/blocks/pdp-final/b31c2495-41fc-4b20-9fc7-8cb2e9dd9a95",
-          "settings": {
-            "no_price_display": true
-          }
-        },
         "inventory_QmjwaK": {
           "type": "inventory",
           "settings": {
@@ -114,7 +108,6 @@
         "variant_picker",
         "buy_buttons_RgmqYf",
         "judge_me_reviews_review_snippet_widget_VTeTtY",
-        "tabby_pay_later_pdp_final_9ffqWF",
         "inventory_QmjwaK",
         "collapsible_tab_aCPnVf",
         "collapsible_tab_nN7mVt",
@@ -168,64 +161,21 @@
         "padding_bottom": 52
       }
     },
-    "1764534482e36841d4": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_cards_carousel_y77ByQ": {
-          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": false,
-            "reviews_selection": "all",
-            "products": [],
-            "star_rating": "all",
-            "show_review_media": true,
-            "display_order": "media_first",
-            "no_image_fallback": "review_text_only",
-            "max_reviews": 20,
-            "review_length": "medium",
-            "text_size": "small",
-            "image_ratio": "1.33",
-            "reviews_shown": 4,
-            "show_reviewer_name": true,
-            "show_product_name": true,
-            "hide_arrows_mobile": true,
-            "arrows_position": "sides",
-            "max_width": 1100,
-            "corner_styling": "soft",
-            "header_text_color": "#000000",
-            "text_color": "#000000",
-            "card_color": "#f9f9f9",
-            "stars_color": "",
-            "arrows_color": "#000000",
-            "transition_speed": 5,
-            "header_text": "Customers are saying",
-            "show_average_rating": true
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_cards_carousel_y77ByQ"
-      ],
-      "disabled": true,
-      "settings": {
-        "include_margins": true
-      }
-    },
     "1772670324cdb7360c": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_review_widget_rKRMTP": {
+        "judge_me_reviews_review_widget_wX4Ctn": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "real_data",
             "max_width": 1200,
-            "show_shop_reviews": true,
+            "show_shop_reviews": false,
             "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_rKRMTP"
+        "judge_me_reviews_review_widget_wX4Ctn"
       ],
       "settings": {
         "include_margins": true
@@ -458,7 +408,6 @@
   "order": [
     "main",
     "rich_text_4mDnzT",
-    "1764534482e36841d4",
     "1772670324cdb7360c",
     "why_stainlesssteel_rV6rbQ",
     "related-products",

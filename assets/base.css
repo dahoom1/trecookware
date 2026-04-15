@@ -3010,7 +3010,7 @@ details-disclosure > details {
 }
 
 .badge {
-  border: 1px solid transparent;
+  border: 0px solid transparent;
   border-radius: var(--badge-corner-radius);
   margin-inline-start: 10px;
   display: inline-block;

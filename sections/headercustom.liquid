@@ -323,16 +323,47 @@
     {% endif %}
   }
 
-  .custom-header__nav-item:hover .custom-header__mega-menu,
   .custom-header__nav-item.is-active .custom-header__mega-menu {
     opacity: 1;
     visibility: visible;
-    
+
     {% if section.settings.dropdown_animation == 'slide' or section.settings.dropdown_animation == 'slide-fade' %}
       transform: translateY(0);
     {% elsif section.settings.dropdown_animation == 'scale' %}
       transform: scale(1);
     {% endif %}
+  }
+
+  /* ===========================
+     MEGA MENU - STAGGERED SLIDE-IN (desktop only)
+     Mirrors the mobile drawer's translateX + opacity stagger
+  =========================== */
+  @media (min-width: 768px) {
+    .custom-header__mega-column,
+    .custom-header__mega-images {
+      opacity: 0;
+      transform: translateX(-22px);
+      transition: opacity 0.25s ease,
+                  transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [dir="rtl"] .custom-header__mega-column,
+    [dir="rtl"] .custom-header__mega-images {
+      transform: translateX(22px);
+    }
+
+    .custom-header__nav-item.is-active .custom-header__mega-column,
+    .custom-header__nav-item.is-active .custom-header__mega-images {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Staggered entry delays only (exit has no delay — matches mobile pattern) */
+    .custom-header__nav-item.is-active .custom-header__mega-text-area > .custom-header__mega-column:nth-child(1) { transition-delay: 0.10s; }
+    .custom-header__nav-item.is-active .custom-header__mega-text-area > .custom-header__mega-column:nth-child(2) { transition-delay: 0.17s; }
+    .custom-header__nav-item.is-active .custom-header__mega-text-area > .custom-header__mega-column:nth-child(3) { transition-delay: 0.24s; }
+    .custom-header__nav-item.is-active .custom-header__mega-text-area > .custom-header__mega-column:nth-child(4) { transition-delay: 0.31s; }
+    .custom-header__nav-item.is-active .custom-header__mega-images                                               { transition-delay: 0.20s; }
   }
 
   /* ===========================
@@ -1193,8 +1224,22 @@
 
     .custom-header__nav {
       display: flex;
+      align-self: stretch;   /* fill full header height */
     }
-    
+
+    /* Nav list + items stretch to full header height to close the
+       gap between the nav link and the absolutely-positioned mega menu.
+       Without this, mouseleave fires as the cursor crosses the gap. */
+    .custom-header__nav-list {
+      align-self: stretch;
+    }
+
+    .custom-header__nav-item {
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
     .custom-header__account-desktop {
       display: flex !important;
     }
@@ -1299,12 +1344,24 @@
                     {% if section.settings.show_mega_images %}
                       {%- assign link_title_lower = link.title | downcase | strip -%}
                       {%- assign link_handle = link.handle | downcase | strip -%}
+                      {%- comment -%}
+                        Language-independent URL fallback:
+                        link.title and link.handle are locale-specific (Arabic in Arabic mode),
+                        so title/handle comparisons fail against the English block settings.
+                        Strip the locale prefix from the URL, then compare the last path segment
+                        against the block handle — this works regardless of the active language.
+                        e.g. /ar/collections/shop → last segment "shop" → matches block "Shop"
+                      {%- endcomment -%}
+                      {%- assign lang_prefix = '/' | append: localization.language.iso_code | append: '/' -%}
+                      {%- assign link_url_clean = link.url | downcase | replace: lang_prefix, '/' -%}
+                      {%- assign link_url_segments = link_url_clean | split: '/' -%}
+                      {%- assign link_url_last_segment = link_url_segments | last -%}
                       {%- assign matched_block = nil -%}
                       {%- for block in section.blocks -%}
                         {%- if block.type == 'mega_menu_images' -%}
                           {%- assign block_title_lower = block.settings.menu_item_title | downcase | strip -%}
                           {%- assign block_handle = block.settings.menu_item_title | handleize -%}
-                          {%- if block_title_lower == link_title_lower or block_handle == link_handle -%}
+                          {%- if block_title_lower == link_title_lower or block_handle == link_handle or block_handle == link_url_last_segment -%}
                             {%- assign matched_block = block -%}
                             {%- break -%}
                           {%- endif -%}
@@ -1674,21 +1731,44 @@
   customElements.define('sticky-header', StickyHeader);
 
   // ===========================
-  // ACTIVE NAV STATE FOR MEGA MENU
+  // DESKTOP MEGA MENU - HOVER INTENT
+  // Opens immediately on mouseenter, closes after a short delay on
+  // mouseleave so the cursor can travel from the nav link into the
+  // mega menu without the dropdown disappearing. The delay is
+  // cancelled if the cursor enters either the nav item or the mega
+  // menu itself before it fires.
+  // Mobile is unaffected — the mega menu is display:none on mobile.
   // ===========================
   const navItems = document.querySelectorAll('.custom-header__nav-item[data-has-mega-menu]');
-  
-  navItems.forEach(item => {
+  var megaMenuCloseTimer = null;
+
+  function cancelMegaClose() {
+    clearTimeout(megaMenuCloseTimer);
+  }
+
+  function scheduleMegaClose() {
+    megaMenuCloseTimer = setTimeout(function() {
+      navItems.forEach(function(ni) { ni.classList.remove('is-active'); });
+    }, 300);
+  }
+
+  navItems.forEach(function(item) {
     item.addEventListener('mouseenter', function() {
-      // Remove active from all
-      navItems.forEach(ni => ni.classList.remove('is-active'));
-      // Add active to current
+      cancelMegaClose();
+      navItems.forEach(function(ni) { ni.classList.remove('is-active'); });
       this.classList.add('is-active');
     });
-    
-    item.addEventListener('mouseleave', function() {
-      this.classList.remove('is-active');
-    });
+
+    item.addEventListener('mouseleave', scheduleMegaClose);
+
+    // Secondary guard: if the cursor crosses the gap between the nav
+    // item bottom edge and the mega menu top edge, the mega menu's own
+    // mouseenter cancels the pending close timer.
+    var megaMenu = item.querySelector('.custom-header__mega-menu');
+    if (megaMenu) {
+      megaMenu.addEventListener('mouseenter', cancelMegaClose);
+      megaMenu.addEventListener('mouseleave', scheduleMegaClose);
+    }
   });
 
   // ===========================
