@@ -18,7 +18,7 @@
       }
     },
     "image_with_text_Ld8zdw": {
-      "type": "image-with-text",
+      "type": "image-with-text-fullwidth",
       "blocks": {
         "heading_ehzYfg": {
           "type": "heading",
