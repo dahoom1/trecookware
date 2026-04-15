@@ -25,12 +25,12 @@
         "transition_duration": 1000,
         "carousel_image_1": "shopify://shop_images/DSC9730_copy.jpg",
         "show_features": true,
-        "feature_1": "بناء 5 طبقات",
-        "feature_2": "⁠تحمل عالي للحرارة  على الموقد و داخل الفرن",
-        "feature_3": "حواف محكمة الإغلاق",
-        "feature_4": "⁠مقابض مريحة وسلسة.",
-        "feature_5": "⁠آمنة داخل غسالة الأواني",
-        "feature_6": "مصنوعة من الفولاذ  18/10  لمقاومة عالية للصدأ والتآكل، ومتانة طويلة الأمد.",
+        "feature_1": "5 Ply construction",
+        "feature_2": "All heat sources",
+        "feature_3": "Sealed Rims",
+        "feature_4": "Comfortable Handles",
+        "feature_5": "18/10 stainless steel",
+        "feature_6": "Dishwasher Safe",
         "color_scheme": "background-1"
       }
     },
@@ -56,14 +56,90 @@
     },
     "17645287584159a3c6": {
       "type": "apps",
+      "blocks": {
+        "judge_me_reviews_all_reviews_page_AGBgt8": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "max_width": 1200,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": false,
+            "show_first": "product",
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_all_reviews_page_AGBgt8"
+      ],
       "settings": {
         "include_margins": true
+      }
+    },
+    "faq_custom_C7w6Qb": {
+      "type": "FAQ-custom",
+      "blocks": {
+        "collapsible_row_AiMNqb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Why should I buy this instead of a cheap $30 pan?",
+            "row_content": "<p>Cheap pans use \"impact-bonded\" discs only on the bottom. TRE is fully clad, meaning the 5 layers go all the way up the sides. You get even heat on the walls of the pan, no hot spots, and it won't warp or \"pop\" when it gets hot.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_8cBbpd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I maintain the shine?",
+            "row_content": "<p>Wash with warm soapy water. For rainbow heat tints or mineral spots, a quick rub with vinegar or Bar Keepers Friend restores the finish.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_zX3UH9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What happens if I burn something onto it?",
+            "row_content": "<p>Don't panic it's nearly indestructible. Deglaze the hot pan with water to lift the bits, or use a little Bar Keepers Friend. Unlike non-stick, you can’t ruin the surface of a TRE pan by overheating or scraping it.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_atcQ3L": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is the pan heavy?",
+            "row_content": "<p>Because of the 2.8mm 5-ply build, it has a professional heft. It feels substantial and sits perfectly flat on your burner, but we’ve balanced the weight with our ergonomic handles so it’s easy to maneuver.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_KejC9T": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I stop food from sticking to the pan?",
+            "row_content": "<p>The key is the \"Water Drop Test.\" Heat the pan on medium until a drop of water beads and dances like a marble. Only then add your oil and food. This creates a natural \"Leidenfrost\" effect that makes the surface virtually non-stick.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_AiMNqb",
+        "collapsible_row_8cBbpd",
+        "collapsible_row_zX3UH9",
+        "collapsible_row_atcQ3L",
+        "collapsible_row_KejC9T"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "color_scheme": "",
+        "open_first_collapsible_row": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },
   "order": [
     "banner",
     "product-grid",
-    "17645287584159a3c6"
+    "17645287584159a3c6",
+    "faq_custom_C7w6Qb"
   ]
 }

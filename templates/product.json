@@ -164,18 +164,19 @@
     "1772670324cdb7360c": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_review_widget_wX4Ctn": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "judge_me_reviews_all_reviews_page_7YnqnE": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "review_data": "real_data",
             "max_width": 1200,
-            "show_shop_reviews": false,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": false,
+            "show_first": "product",
             "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_wX4Ctn"
+        "judge_me_reviews_all_reviews_page_7YnqnE"
       ],
       "settings": {
         "include_margins": true
@@ -276,7 +277,7 @@
         "title_color": "#000000",
         "title_size_desktop": 56,
         "title_size_mobile": 32,
-        "description": "<p>We believe cookware should outlast trends — and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.\"</p>",
+        "description": "<p>We believe cookware should outlast trends and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.\"</p>",
         "description_font_weight": "400",
         "description_font_style": "normal",
         "description_color": "#000000",
@@ -388,12 +389,21 @@
             "row_content": "{{ product.metafields.custom.popular_question_3 | metafield_tag }}",
             "page": ""
           }
+        },
+        "collapsible_row_tgxp7M": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "{{ product.metafields.custom.popular_question_header_4.value }}",
+            "row_content": "{{ product.metafields.custom.popular_question_4 | metafield_tag }}",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_NFNUPT",
         "collapsible_row_y3hAfY",
-        "collapsible_row_7BNJpj"
+        "collapsible_row_7BNJpj",
+        "collapsible_row_tgxp7M"
       ],
       "name": "FAQ",
       "settings": {

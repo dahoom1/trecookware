@@ -14,6 +14,18 @@
     "footer": {
       "type": "footer",
       "blocks": {
+        "payment_methods_ULk7qX": {
+          "type": "payment_methods",
+          "settings": {
+            "mada": "shopify://shop_images/37bf6.svg",
+            "tabby": "shopify://shop_images/a4885.svg",
+            "tamara": "shopify://shop_images/e462e.svg",
+            "applepay": "shopify://shop_images/6620d.svg",
+            "visa": "shopify://shop_images/2c2bf.svg",
+            "mastercard": "shopify://shop_images/cd169.svg",
+            "amex": "shopify://shop_images/b34cb.svg"
+          }
+        },
         "link_list_jemXid": {
           "type": "link_list",
           "settings": {
@@ -30,6 +42,7 @@
         }
       },
       "block_order": [
+        "payment_methods_ULk7qX",
         "link_list_jemXid",
         "link_list_XMtjkc"
       ],
@@ -40,10 +53,7 @@
         "newsletter_heading": "<strong>Have A Seat at Our Table. Join TRE weekly dose of recipes!</strong>",
         "show_social": false,
         "payment_enable": true,
-        "mada_logo": "shopify://shop_images/Screenshot_2026-02-08_at_12.41.31_AM_c1f0d340-2f72-44ab-92d9-d204e3781367.png",
-        "tabby_logo": "shopify://shop_images/tabby2.png",
-        "tamara_logo": "shopify://shop_images/Tamara_Logos-06.png",
-        "show_policy": true,
+        "show_policy": false,
         "saudi_business_logo": "shopify://shop_images/387925_2_0af9420c-f3e6-4eda-81ae-6c061dfaa459.png",
         "saudi_business_url": "#",
         "saudi_business_caption": " موثق لدى المركز السعودي للأعمال",
