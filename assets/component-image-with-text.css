@@ -159,7 +159,7 @@
 
 .image-with-text__content--mobile-right > * {
   align-self: flex-end;
-  text-align: right;
+  text-align: end;
 }
 
 .image-with-text__content--mobile-center > * {
@@ -189,12 +189,12 @@
 
   .image-with-text__content--desktop-right > * {
     align-self: flex-end;
-    text-align: right;
+    text-align: end;
   }
 
   .image-with-text__content--desktop-left > * {
     align-self: flex-start;
-    text-align: left;
+    text-align: start;
   }
 
   .image-with-text__content--desktop-center > * {

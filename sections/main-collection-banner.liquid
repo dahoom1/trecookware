@@ -13,8 +13,8 @@
   }
 
   .collection-hero__text-wrapper {
-    margin-top: 32px;
-    margin-bottom: 32px;
+    margin-top: 0;
+    margin-bottom: {{ section.settings.text_features_gap }}px;
   }
 
   .collection-hero__eyebrow {
@@ -23,7 +23,7 @@
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
-    margin-bottom: 8px;
+    margin-bottom: {{ section.settings.eyebrow_heading_gap }}px;
     color: #000000;
     line-height: 1.4;
   }
@@ -33,7 +33,7 @@
     font-weight: 300;
     letter-spacing: -1px;
     margin-top: 0;
-    margin-bottom: 32px;
+    margin-bottom: {{ section.settings.heading_description_gap }}px;
     text-transform: none;
     font-family: var(--font-heading-family);
     line-height: 1.1;
@@ -51,7 +51,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    margin-bottom: 32px;
+    margin-bottom: {{ section.settings.image_bottom_gap }}px;
   }
 
   .collection-hero__carousel {
@@ -85,7 +85,7 @@
   .collection-hero__features {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px 24px;
+    gap: {{ section.settings.features_gap }}px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -128,7 +128,7 @@
 
     .collection-header-text {
       letter-spacing: -0.5px;
-      margin-bottom: 10px;
+      margin-bottom: {{ section.settings.heading_description_gap }}px;
     }
 
     .collection-hero__description {
@@ -136,8 +136,8 @@
     }
 
     .collection-hero__features {
-      gap: 8px;
-      margin-top: 20px;
+      gap: {{ section.settings.features_gap }}px;
+      margin-top: 0;
     }
 
     .collection-hero__feature-item::before {
@@ -495,6 +495,60 @@
       "id": "feature_6",
       "default": "18/10 stainless steel",
       "label": "Feature 6"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "image_bottom_gap",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space below image",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_heading_gap",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Space below eyebrow text",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "heading_description_gap",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space below heading",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "text_features_gap",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space between text and features",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "features_gap",
+      "min": 0,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap between feature items",
+      "default": 8
     },
     {
       "type": "color_scheme",

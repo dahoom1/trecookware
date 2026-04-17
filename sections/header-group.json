@@ -113,7 +113,7 @@
         "show_account": false,
         "show_login_link": true,
         "show_language_selector": true,
-        "show_track_order": true,
+        "show_track_order": false,
         "track_order_url": ""
       }
     }

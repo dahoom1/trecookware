@@ -30,9 +30,85 @@
     display: block;
   }
 
+  @media screen and (max-width: 749px) {
+    .image-with-text-fullwidth__media-wrapper {
+      aspect-ratio: 1 / 1;
+      position: relative;
+    }
+
+    .image-with-text-fullwidth__media-wrapper .image-with-text__media {
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      padding-bottom: 0 !important;
+    }
+
+    .image-with-text-fullwidth__media-wrapper img {
+      object-fit: contain;
+    }
+
+    .image-with-text-fullwidth__media-wrapper .animate--zoom-in img,
+    .image-with-text-fullwidth__media-wrapper .animate--ambient img {
+      transform: scale(1) !important;
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
   .image-with-text-fullwidth__text {
     padding-top: 3rem;
     padding-bottom: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .image-with-text-fullwidth__wrapper {
+      display: flex;
+      align-items: stretch;
+      min-height: 50vh;
+    }
+
+    .image-with-text-fullwidth__wrapper--image-first {
+      flex-direction: row;
+    }
+
+    .image-with-text-fullwidth__wrapper--text-first {
+      flex-direction: row-reverse;
+    }
+
+    .image-with-text-fullwidth__wrapper--small .image-with-text-fullwidth__media-wrapper {
+      width: 40%;
+      flex-shrink: 0;
+    }
+
+    .image-with-text-fullwidth__wrapper--medium .image-with-text-fullwidth__media-wrapper {
+      width: 50%;
+      flex-shrink: 0;
+    }
+
+    .image-with-text-fullwidth__wrapper--large .image-with-text-fullwidth__media-wrapper {
+      width: 60%;
+      flex-shrink: 0;
+    }
+
+    .image-with-text-fullwidth__wrapper .image-with-text-fullwidth__media-wrapper .image-with-text__media {
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .image-with-text-fullwidth__wrapper .image-with-text-fullwidth__text {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 4rem 5rem;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .image-with-text-fullwidth__wrapper .image-with-text-fullwidth__text .image-with-text__content {
+      max-width: 100%;
+    }
   }
 {%- endstyle -%}
 
@@ -47,33 +123,34 @@
 -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.section_color_scheme }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-  <div class="image-with-text-fullwidth__media-wrapper">
-    <div
-      class="image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}"
-      {% if section.settings.height == 'adapt' and section.settings.image != blank %}
-        style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
-      {% endif %}
-    >
-      {%- if section.settings.image != blank -%}
-        {{
-          section.settings.image
-          | image_url: width: 3000
-          | image_tag:
-            sizes: '100vw',
-            widths: '375, 750, 1100, 1500, 2000, 3000',
-            fetchpriority: fetch_priority
-        }}
-      {%- else -%}
-        {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-      {%- endif -%}
+  <div class="image-with-text-fullwidth__wrapper image-with-text-fullwidth__wrapper--{{ section.settings.layout }} image-with-text-fullwidth__wrapper--{{ section.settings.desktop_image_width }}">
+    <div class="image-with-text-fullwidth__media-wrapper">
+      <div
+        class="image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}"
+        {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+          style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+        {% endif %}
+      >
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 3000
+            | image_tag:
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              widths: '375, 750, 1100, 1500, 2000, 3000',
+              fetchpriority: fetch_priority
+          }}
+        {%- else -%}
+          {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
     </div>
-  </div>
 
-  <div class="page-width image-with-text-fullwidth__text">
-    <div
-      id="ImageWithText--{{ section.id }}"
-      class="image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} content-container background-transparent"
-    >
+    <div class="image-with-text-fullwidth__text">
+      <div
+        id="ImageWithText--{{ section.id }}"
+        class="image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} content-container background-transparent"
+      >
       {%- for block in section.blocks -%}
         {% case block.type %}
           {%- when 'heading' -%}
@@ -110,12 +187,14 @@
             {%- endif -%}
         {%- endcase -%}
       {%- endfor -%}
+      </div>
     </div>
   </div>
 </div>
 
 {% schema %}
-  "name": "Image with text (full width)",
+{
+  "name": "image with text v2",
   "class": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
