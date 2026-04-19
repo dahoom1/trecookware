@@ -180,7 +180,7 @@
       {
         "type": "range",
         "id": "spacing_grid_horizontal",
-        "min": 4,
+        "min": 0,
         "max": 40,
         "step": 4,
         "default": 8,
@@ -190,7 +190,7 @@
       {
         "type": "range",
         "id": "spacing_grid_vertical",
-        "min": 4,
+        "min": 0,
         "max": 40,
         "step": 4,
         "default": 8,

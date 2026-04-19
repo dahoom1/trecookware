@@ -1,0 +1,185 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "rich_text_CBhBWn": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_4d6PkP": {
+          "type": "heading",
+          "settings": {
+            "heading": "Tre Community",
+            "heading_size": "h0"
+          }
+        },
+        "text_7Kk8Ey": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Turn your passion for cooking into a recipe for success.</p>"
+          }
+        },
+        "caption_fEW4qj": {
+          "type": "caption",
+          "settings": {
+            "caption": "Consistency requires support. We designed the Tre Community to bridge the gap between a hobby and an entrepreneurial venture.We aren’t looking for \"advertisers\"; we want creators who share our ambition. Our mission is to help you transform every idea, video, and moment of passion into scalable revenue—without ever compromising your creative freedom or content quality.",
+            "text_style": "subtitle",
+            "text_size": "medium"
+          }
+        },
+        "button_qG6XVe": {
+          "type": "button",
+          "settings": {
+            "button_label": "Sign Up",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_4d6PkP",
+        "text_7Kk8Ey",
+        "caption_fEW4qj",
+        "button_qG6XVe"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "why_stainlesssteel_b8RFEp": {
+      "type": "Why-Stainlesssteel",
+      "blocks": {
+        "feature_pbdtJj": {
+          "type": "feature",
+          "settings": {
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Even Heat",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Distribution",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "5-ply construction ensures perfect control — no hotspots, no guesswork.",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        },
+        "feature_tcz648": {
+          "type": "feature",
+          "settings": {
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Long-Lasting",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Performance",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "Built to withstand decades of daily use without compromising quality.",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        },
+        "feature_hDJwKw": {
+          "type": "feature",
+          "settings": {
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Healthy &",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Non-Reactive",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "Pure stainless steel won't leach chemicals or react with acidic foods.",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        }
+      },
+      "block_order": [
+        "feature_pbdtJj",
+        "feature_tcz648",
+        "feature_hDJwKw"
+      ],
+      "name": "Why Stainless Steel",
+      "settings": {
+        "background_color": "#F5F5F5",
+        "padding_top": 32,
+        "padding_bottom": 32,
+        "title": "Why Stainless Steel",
+        "title_font_weight": "700",
+        "title_font_style": "normal",
+        "title_color": "#000000",
+        "title_size_desktop": 48,
+        "title_size_mobile": 28,
+        "description": "<p>We believe cookware should outlast trends — and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.</p>",
+        "description_font_weight": "400",
+        "description_font_style": "normal",
+        "description_color": "#000000",
+        "description_size_desktop": 16,
+        "description_size_mobile": 14,
+        "cta_text": "Discover More",
+        "cta_link": "",
+        "cta_font_weight": "400",
+        "cta_font_style": "normal",
+        "cta_color": "#000000",
+        "cta_size_desktop": 14,
+        "cta_size_mobile": 14
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_CBhBWn",
+    "why_stainlesssteel_b8RFEp"
+  ]
+}

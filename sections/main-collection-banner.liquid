@@ -115,6 +115,42 @@
     .collection-header-text.hide-desktop {
       display: none;
     }
+
+    .collection-hero--with-image .collection-hero__inner {
+      display: grid !important;
+      grid-template-columns: 2fr 3fr;
+      grid-template-areas:
+        "text image"
+        "text features";
+      column-gap: 5rem;
+    }
+
+    .collection-hero--with-image .collection-hero__text-wrapper {
+      grid-area: text;
+      align-self: start;
+      margin-bottom: 0;
+    }
+
+    .collection-hero--with-image .collection-hero__image-container {
+      grid-area: image;
+      margin-left: 0;
+      margin-bottom: 0;
+      align-self: start;
+      flex: none;
+      width: 100%;
+    }
+
+    .collection-hero--with-image .collection-hero__carousel {
+      aspect-ratio: 4 / 3;
+    }
+
+    .collection-hero--with-image .collection-hero__features {
+      grid-area: features;
+      margin-top: {{ section.settings.image_bottom_gap }}px;
+      margin-left: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 
   @media screen and (max-width: 749px) {

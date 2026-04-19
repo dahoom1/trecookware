@@ -251,7 +251,7 @@
         "product_set_zWTcPm": {
           "type": "product_set",
           "settings": {
-            "product": "26cm-set",
+            "product": "26cm-stainless-steel-set",
             "custom_title": "",
             "description": "Includes: 5 pieces of universal 26cm size collection."
           }
@@ -259,7 +259,7 @@
         "product_set_hXAHVE": {
           "type": "product_set",
           "settings": {
-            "product": "large-family",
+            "product": "large-family-set",
             "custom_title": "",
             "description": "Includes: 7 pieces, different sizes for all large families needs"
           }
@@ -267,7 +267,7 @@
         "product_set_mYDzEQ": {
           "type": "product_set",
           "settings": {
-            "product": "full-collection",
+            "product": "the-essential-collection",
             "custom_title": "Full Essential Collection",
             "description": "Includes: 10 pieces of all the essential collections"
           }
@@ -287,7 +287,7 @@
         "heading_size": "h0",
         "heading_font": "serif",
         "show_savings_badge": true,
-        "savings_text": "And Save 20%",
+        "savings_text": "Save up to 15%",
         "savings_bg_color": "#c0ddea",
         "savings_text_color": "#000000",
         "savings_font": "assistant_n4",
@@ -300,7 +300,7 @@
         "view_all_font": "serif",
         "view_all_font_size": 14,
         "card_bg_color": "#ffffff",
-        "image_bg_color": "#f8f8f8",
+        "image_bg_color": "#faf8f5",
         "title_font": "serif",
         "title_font_size": 20,
         "title_color": "#121212",
@@ -416,7 +416,7 @@
           "type": "collapsible_row",
           "settings": {
             "heading": "Can stainless steel pans be nonstick?",
-            "row_content": "<p>Yes! When properly preheated and used correctly, stainless steel creates a natural nonstick surface—without any chemicals.</p>",
+            "row_content": "<p>Yes! When properly preheated and used correctly, stainless steel creates a natural nonstick surface without any chemicals.</p>",
             "page": ""
           }
         },

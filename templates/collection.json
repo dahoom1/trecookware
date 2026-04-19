@@ -12,13 +12,13 @@
     "banner": {
       "type": "main-collection-banner",
       "settings": {
-        "eyebrow_text": "",
+        "eyebrow_text": "Made of",
         "show_header_text": true,
         "header_text": "Only What Is Essential",
         "show_header_text_desktop": true,
         "show_header_text_mobile": true,
         "show_collection_description": true,
-        "custom_description": "",
+        "custom_description": "The Essential Collection is our quiet promise: to care for your kitchen, your meals, and the moments that matter most, with tools built to endure and made to nurture.",
         "show_collection_image": true,
         "enable_autoplay": true,
         "slide_interval": 7,
@@ -31,11 +31,11 @@
         "feature_4": "Comfortable Handles",
         "feature_5": "18/10 stainless steel",
         "feature_6": "Dishwasher Safe",
-        "image_bottom_gap": 12,
-        "eyebrow_heading_gap": 0,
-        "heading_description_gap": 0,
-        "text_features_gap": 0,
-        "features_gap": 4,
+        "image_bottom_gap": 4,
+        "eyebrow_heading_gap": 8,
+        "heading_description_gap": 20,
+        "text_features_gap": 8,
+        "features_gap": 8,
         "color_scheme": "background-1"
       }
     },
