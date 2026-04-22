@@ -50,7 +50,7 @@
         "mega_menu_images_xBTFiA": {
           "type": "mega_menu_images",
           "settings": {
-            "menu_item_title": "المنتجات",
+            "menu_item_title": "shop",
             "image_1": "shopify://shop_images/DSC9730.jpg",
             "image_2": "shopify://shop_images/stpn26-a22.webp"
           }
@@ -58,7 +58,7 @@
         "mega_menu_images_cwf9mn": {
           "type": "mega_menu_images",
           "settings": {
-            "menu_item_title": "اكتشف",
+            "menu_item_title": "Discover",
             "image_1": "shopify://shop_images/IMG_6077.jpg",
             "image_2": "shopify://shop_images/DishwasherPhoto_ad0e9d4a-e0e4-4cd8-bad2-c480103354ea.jpg"
           }
@@ -83,6 +83,7 @@
         "desktop_padding": 16,
         "desktop_horizontal_padding": 32,
         "nav_font_size": 16,
+        "desktop_lang_size": 16,
         "nav_font_weight": "400",
         "nav_spacing": 48,
         "show_mega_images": true,
