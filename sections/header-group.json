@@ -17,7 +17,7 @@
         "announcement_9Qeq7q": {
           "type": "announcement",
           "settings": {
-            "text": "🇸🇦 1-2 Days KSA Delivery | ⚡ Same-Day in Riyadh (Orders before 12 AM)",
+            "text": "🇸🇦 KSA Delivery  1-2 Days | 🇦🇪🇶🇦🇰🇼🇧🇭🇴🇲 GCC Shipping 3-5 Days",
             "link": ""
           }
         },
@@ -36,7 +36,7 @@
       "name": "t:sections.announcement-bar.presets.name",
       "settings": {
         "auto_rotate": false,
-        "change_slides_speed": 5,
+        "change_slides_speed": 3,
         "color_scheme": "scheme-5",
         "show_line_separator": true,
         "show_social": false,
@@ -50,7 +50,7 @@
         "mega_menu_images_xBTFiA": {
           "type": "mega_menu_images",
           "settings": {
-            "menu_item_title": "Shop",
+            "menu_item_title": "المنتجات",
             "image_1": "shopify://shop_images/DSC9730.jpg",
             "image_2": "shopify://shop_images/stpn26-a22.webp"
           }
@@ -58,7 +58,7 @@
         "mega_menu_images_cwf9mn": {
           "type": "mega_menu_images",
           "settings": {
-            "menu_item_title": "Discover",
+            "menu_item_title": "اكتشف",
             "image_1": "shopify://shop_images/IMG_6077.jpg",
             "image_2": "shopify://shop_images/DishwasherPhoto_ad0e9d4a-e0e4-4cd8-bad2-c480103354ea.jpg"
           }

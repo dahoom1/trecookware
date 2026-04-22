@@ -281,6 +281,64 @@
     }
   {% endif %}
 
+  /* Hover animation for language trigger - mirrors nav link style */
+  {% if section.settings.enable_hover_animation %}
+    {% if section.settings.hover_animation_style == 'underline-grow' %}
+      .custom-header__language-trigger::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: {{ section.settings.text_color }};
+        transition: width {{ section.settings.hover_animation_duration }}ms ease;
+      }
+
+      .custom-header__language-trigger:hover::after {
+        width: 100%;
+      }
+    {% elsif section.settings.hover_animation_style == 'underline-center' %}
+      .custom-header__language-trigger::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 1px;
+        background-color: {{ section.settings.text_color }};
+        transition: width {{ section.settings.hover_animation_duration }}ms ease, left {{ section.settings.hover_animation_duration }}ms ease;
+      }
+
+      .custom-header__language-trigger:hover::after {
+        width: 100%;
+        left: 0;
+      }
+    {% elsif section.settings.hover_animation_style == 'fade-in' %}
+      .custom-header__language-trigger::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: {{ section.settings.text_color }};
+        opacity: 0;
+        transition: opacity {{ section.settings.hover_animation_duration }}ms ease;
+      }
+
+      .custom-header__language-trigger:hover::after {
+        opacity: 1;
+      }
+    {% endif %}
+  {% else %}
+    .custom-header__language-trigger:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 6px;
+    }
+  {% endif %}
+
   /* ===========================
      MEGA MENU WITH ANIMATION
   =========================== */
@@ -579,33 +637,61 @@
     }
   }
 
+  /* Shared globe icon */
+  .custom-header__lang-globe {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    opacity: 0.65;
+  }
+
+  /* Shared checkmark */
+  .custom-header__lang-check {
+    font-size: 0.85em;
+    flex-shrink: 0;
+    opacity: 0.75;
+    line-height: 1;
+  }
+
   .custom-header__language-trigger {
-    background: none;
-    border: none;
+    background: transparent;
+    border: 1px solid {{ section.settings.border_color }};
+    border-radius: 100px;
     cursor: pointer;
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.6rem 0.35rem 0.55rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-small);
+    font-size: {{ section.settings.desktop_lang_size }}px;
     font-weight: {{ section.settings.nav_font_weight }};
     font-family: var(--font-body-family);
-    transition: opacity 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     position: relative;
+    white-space: nowrap;
   }
 
   .custom-header__language-trigger:hover {
-    opacity: 0.6;
+    border-color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.text_color | color_modify: 'alpha', 0.04 }};
+  }
+
+  .custom-header__language-dropdown.is-open .custom-header__language-trigger {
+    border-color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.text_color | color_modify: 'alpha', 0.05 }};
   }
 
   .custom-header__language-arrow {
-    width: 16px;
-    height: 16px;
+    width: 11px;
+    height: 11px;
     stroke: currentColor;
     stroke-width: 2;
     fill: none;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease;
+    opacity: 0.65;
+    flex-shrink: 0;
   }
 
   .custom-header__language-dropdown.is-open .custom-header__language-arrow {
@@ -618,32 +704,36 @@
     right: 0;
     background-color: {{ section.settings.mega_menu_bg }};
     border: 1px solid {{ section.settings.border_color }};
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-width: 180px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.05);
+    min-width: 150px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translateY(-8px) scale(0.97);
+    transform-origin: top right;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
     z-index: var(--z-language-dropdown);
     overflow: hidden;
+    padding: 5px 0;
   }
 
   .custom-header__language-dropdown.is-open .custom-header__language-menu {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .custom-header__language-option {
-    display: block;
-    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
     color: {{ section.settings.text_color }};
-    text-decoration: none;
-    font-size: {{ section.settings.nav_font_size }}px;
+    font-size: {{ section.settings.desktop_lang_size }}px;
     font-weight: {{ section.settings.nav_font_weight }};
-    font-family: var(--font-heading-family);
-    transition: background-color 0.2s ease, opacity 0.2s ease;
+    font-family: var(--font-body-family);
+    transition: background-color 0.15s ease;
     cursor: pointer;
     border: none;
     background: none;
@@ -652,12 +742,11 @@
   }
 
   .custom-header__language-option:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: {{ section.settings.text_color | color_modify: 'alpha', 0.05 }};
   }
 
   .custom-header__language-option.is-active {
     font-weight: 600;
-    background-color: rgba(0, 0, 0, 0.02);
   }
 
   /* ===========================
@@ -1112,7 +1201,7 @@
   .custom-header__drawer-footer-link {
     text-decoration: underline;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-small);
+    font-size: {{ section.settings.mobile_footer_size }}px;
     font-weight: {{ section.settings.mobile_footer_weight }};
     padding: 0;
     font-family: var(--font-body-family);
@@ -1123,22 +1212,24 @@
   /* Language selector button in mobile footer */
   .custom-header__mobile-lang-wrapper {
     position: relative;
+    display: inline-block;
   }
 
   .custom-header__language-selector {
-    text-decoration: underline;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-small);
+    font-size: {{ section.settings.mobile_footer_size }}px;
     font-weight: {{ section.settings.mobile_footer_weight }};
-    padding: 0;
+    padding: 0.4rem 0.7rem 0.4rem 0.6rem;
     cursor: pointer;
-    background: none;
-    border: none;
+    background: transparent;
+    border: 1px solid {{ section.settings.border_color }};
+    border-radius: 100px;
     font-family: var(--font-body-family);
-    text-underline-offset: 4px;
     display: inline-flex;
     align-items: center;
-    gap: 2px;
+    gap: 0.35rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap;
     {% if localization.language.iso_code == 'ar' %}
       text-align: right;
     {% else %}
@@ -1146,11 +1237,30 @@
     {% endif %}
   }
 
+  .custom-header__language-selector:hover {
+    border-color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.text_color | color_modify: 'alpha', 0.04 }};
+  }
+
+  .custom-header__mobile-lang-wrapper.is-open .custom-header__language-selector {
+    border-color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.text_color | color_modify: 'alpha', 0.05 }};
+  }
+
   .custom-header__mobile-lang-chevron {
-    display: inline-block;
-    font-size: 0.75em;
-    transition: transform 0.3s ease;
-    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+    opacity: 0.65;
+  }
+
+  .custom-header__mobile-lang-chevron svg {
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
   }
 
   .custom-header__mobile-lang-wrapper.is-open .custom-header__mobile-lang-chevron {
@@ -1171,24 +1281,27 @@
 
   .custom-header__mobile-lang-options {
     list-style: none;
-    margin: 0.5rem 0 0 0;
+    margin: 0.6rem 0 0 0;
     padding: 0;
   }
 
   .custom-header__mobile-lang-options li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
   }
 
   .custom-header__mobile-lang-option {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.35rem 0;
+    padding: 0.45rem 0;
     color: {{ section.settings.text_color }};
-    font-size: var(--t-small);
+    font-size: {{ section.settings.mobile_footer_size }}px;
     font-weight: {{ section.settings.mobile_footer_weight }};
     font-family: var(--font-body-family);
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
     width: 100%;
     {% if localization.language.iso_code == 'ar' %}
       text-align: right;
@@ -1205,6 +1318,31 @@
   .custom-header__mobile-lang-option.is-active {
     font-weight: 600;
   }
+
+  /* ===========================
+     MOBILE DRAWER FOOTER - SLIDE-IN ANIMATION
+     Mirrors the main nav items' translateX + opacity stagger
+  =========================== */
+  .custom-header__drawer-footer > * {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  {% if localization.language.iso_code == 'ar' %}
+    .custom-header__drawer-footer > * {
+      transform: translateX(30px);
+    }
+  {% endif %}
+
+  .custom-header__drawer.is-open .custom-header__drawer-footer > * {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .custom-header__drawer.is-open .custom-header__drawer-footer > *:nth-child(1) { transition-delay: 0.62s; }
+  .custom-header__drawer.is-open .custom-header__drawer-footer > *:nth-child(2) { transition-delay: 0.69s; }
+  .custom-header__drawer.is-open .custom-header__drawer-footer > *:nth-child(3) { transition-delay: 0.76s; }
 
   /* ===========================
      DESKTOP BREAKPOINT
@@ -1419,20 +1557,28 @@
         {% if section.settings.show_language_selector and localization.available_languages.size > 1 %}
           <div class="custom-header__language-dropdown" id="languageDropdown">
             <button class="custom-header__language-trigger" id="languageTrigger" aria-expanded="false" aria-haspopup="true">
-              <span>{{ localization.language.endonym_name }}</span>
-              <svg class="custom-header__language-arrow" viewBox="0 0 24 24">
-                <polyline points="6 9 12 15 18 9"/>
+              <svg class="custom-header__lang-globe" viewBox="0 0 16 16" stroke-width="1.5">
+                <circle cx="8" cy="8" r="6.5"/>
+                <ellipse cx="8" cy="8" rx="2.5" ry="6.5"/>
+                <line x1="1.5" y1="8" x2="14.5" y2="8"/>
+              </svg>
+              <span>{{ localization.language.iso_code | upcase }}</span>
+              <svg class="custom-header__language-arrow" viewBox="0 0 16 16">
+                <polyline points="4 6 8 10 12 6"/>
               </svg>
             </button>
-            
+
             <div class="custom-header__language-menu" id="languageMenu">
               {% for language in localization.available_languages %}
-                <button 
+                <button
                   class="custom-header__language-option {% if language.iso_code == localization.language.iso_code %}is-active{% endif %}"
                   data-language-code="{{ language.iso_code }}"
                   data-language-url="{{ language.root_url }}"
                 >
-                  {{ language.endonym_name }}
+                  <span>{{ language.endonym_name }}</span>
+                  {% if language.iso_code == localization.language.iso_code %}
+                    <span class="custom-header__lang-check">✓</span>
+                  {% endif %}
                 </button>
               {% endfor %}
             </div>
@@ -1541,19 +1687,30 @@
       {% if section.settings.show_language_selector and localization.available_languages.size > 1 %}
         <div class="custom-header__mobile-lang-wrapper" id="mobileLangWrapper">
           <button class="custom-header__language-selector" id="mobileLangToggle" type="button" aria-expanded="false">
-            Language<span class="custom-header__mobile-lang-chevron">˅</span>
+            <svg class="custom-header__lang-globe" viewBox="0 0 16 16" stroke-width="1.5">
+              <circle cx="8" cy="8" r="6.5"/>
+              <ellipse cx="8" cy="8" rx="2.5" ry="6.5"/>
+              <line x1="1.5" y1="8" x2="14.5" y2="8"/>
+            </svg>
+            <span>{{ localization.language.endonym_name }}</span>
+            <span class="custom-header__mobile-lang-chevron">
+              <svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg>
+            </span>
           </button>
           <div class="custom-header__mobile-lang-dropdown" id="mobileLangDropdown">
             <ul class="custom-header__mobile-lang-options">
               {% for language in localization.available_languages %}
                 <li>
-                  <button 
+                  <button
                     class="custom-header__mobile-lang-option {% if language.iso_code == localization.language.iso_code %}is-active{% endif %}"
                     data-language-code="{{ language.iso_code }}"
                     data-language-url="{{ language.root_url }}"
                     type="button"
                   >
-                    {{ language.endonym_name }}
+                    <span>{{ language.endonym_name }}</span>
+                    {% if language.iso_code == localization.language.iso_code %}
+                      <span class="custom-header__lang-check">✓</span>
+                    {% endif %}
                   </button>
                 </li>
               {% endfor %}
@@ -1859,6 +2016,27 @@
   const overlay = document.getElementById('headerOverlay');
 
   function openDrawer() {
+    // Reset all accordion states so first-item auto-open is always fresh
+    drawer.querySelectorAll('.custom-header__drawer-accordion').forEach(acc => {
+      acc.classList.remove('is-visible');
+    });
+    drawer.querySelectorAll('[data-parent-nav]').forEach(nav => {
+      nav.classList.remove('active');
+    });
+    drawer.querySelectorAll('[data-accordion-trigger]').forEach(trigger => {
+      trigger.setAttribute('aria-expanded', 'false');
+      const icon = trigger.querySelector('.custom-header__drawer-accordion-icon');
+      if (icon) icon.textContent = '+';
+      const item = trigger.closest('.custom-header__drawer-accordion-item');
+      if (item) {
+        const content = item.querySelector('.custom-header__drawer-accordion-content');
+        if (content) content.classList.remove('is-open');
+      }
+    });
+
+    // Auto-open first menu item and its first sub-accordion
+    openFirstAccordion();
+
     // Use the same offset as cart drawer (accounts for announcement bar + header)
     const cartDrawerOffset = getComputedStyle(document.documentElement)
       .getPropertyValue('--cart-drawer-offset').trim();
@@ -1907,17 +2085,29 @@
   // ===========================
   const parentNavs = drawer.querySelectorAll('[data-parent-nav]');
 
-  // Open first accordion by default
+  // Open first accordion and its first sub-item by default
   function openFirstAccordion() {
     const firstParentNav = drawer.querySelector('[data-parent-nav]');
-    if (firstParentNav) {
-      const parentHandle = firstParentNav.getAttribute('data-parent-nav');
-      const accordion = drawer.querySelector(`[data-accordion-for="${parentHandle}"]`);
+    if (!firstParentNav) return;
 
-      if (accordion) {
-        accordion.classList.add('is-visible');
-        firstParentNav.classList.add('active');
-      }
+    const parentHandle = firstParentNav.getAttribute('data-parent-nav');
+    const accordion = drawer.querySelector(`[data-accordion-for="${parentHandle}"]`);
+
+    if (!accordion) return;
+
+    accordion.classList.add('is-visible');
+    firstParentNav.classList.add('active');
+
+    // Also expand the first sub-accordion trigger within this accordion
+    const firstTrigger = accordion.querySelector('[data-accordion-trigger]');
+    if (firstTrigger) {
+      const firstItem = firstTrigger.closest('.custom-header__drawer-accordion-item');
+      const firstContent = firstItem ? firstItem.querySelector('.custom-header__drawer-accordion-content') : null;
+      const firstIcon = firstTrigger.querySelector('.custom-header__drawer-accordion-icon');
+
+      firstTrigger.setAttribute('aria-expanded', 'true');
+      if (firstIcon) firstIcon.textContent = '−';
+      if (firstContent) firstContent.classList.add('is-open');
     }
   }
 
@@ -2358,6 +2548,16 @@
       "default": 16
     },
     {
+      "type": "range",
+      "id": "desktop_lang_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Language Selector Size",
+      "default": 16
+    },
+    {
       "type": "select",
       "id": "nav_font_weight",
       "label": "Navigation Font Weight",
@@ -2496,10 +2696,10 @@
       "type": "range",
       "id": "mobile_footer_size",
       "min": 12,
-      "max": 20,
+      "max": 32,
       "step": 1,
       "unit": "px",
-      "label": "Footer Link Size",
+      "label": "Login & Language Size (Mobile)",
       "default": 16
     },
     {

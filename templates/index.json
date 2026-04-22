@@ -106,6 +106,116 @@
         "mobile_button_padding_horizontal": 24
       }
     },
+    "why_stainlesssteel_dwM38L": {
+      "type": "Why-Stainlesssteel",
+      "blocks": {
+        "feature_AqY6RR": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "5 Layers Of Performance",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "performance your family deserves",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<p>Buy it once. Use it for life.</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_JLJKiL": {
+          "type": "feature",
+          "settings": {
+            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Your Health Is Not A Trend",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<p>Corporations want you to keep buying. We want you to stop. In 2026, \"trendy\" pans have become the cornerstone of corporate profit at the expense of your health and your wallet.</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_NiGqKQ": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
+            "banner_background_color": "#c8d5b9",
+            "feature_title": "Lifetime Durability",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Investment Quality",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<p>Premium 18/10 stainless steel resists warping and wear.</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        }
+      },
+      "block_order": [
+        "feature_AqY6RR",
+        "feature_JLJKiL",
+        "feature_NiGqKQ"
+      ],
+      "name": "Why Stainless Steel",
+      "settings": {
+        "background_color": "#f8f8f8",
+        "padding_top": 20,
+        "padding_bottom": 24,
+        "title": "Stop Renting Your Cookware. Start Owning It",
+        "title_font_weight": "300",
+        "title_font_style": "normal",
+        "title_color": "#121212",
+        "title_size_desktop": 20,
+        "title_size_mobile": 32,
+        "description": "<p>In a world of \"trendy\" kitchenware designed to fail, large corporations have turned your kitchen into a recurring subscription. To them, you aren't a chef you're a revenue stream. But we believe your health shouldn't be secondary to a profit margin, and your children deserve tools that last forever.</p>",
+        "description_font_weight": "400",
+        "description_font_style": "normal",
+        "description_color": "#000000",
+        "description_size_desktop": 15,
+        "description_size_mobile": 16,
+        "cta_text": "Discover More",
+        "cta_link": "shopify://pages/our-materials",
+        "cta_font_weight": "400",
+        "cta_font_style": "normal",
+        "cta_color": "#000000",
+        "cta_size_desktop": 14,
+        "cta_size_mobile": 14
+      }
+    },
     "featured_collection_n4BUU4": {
       "type": "featured-collection",
       "name": "t:sections.featured-collection.presets.name",
@@ -133,116 +243,6 @@
         "swipe_on_mobile": false,
         "padding_top": 28,
         "padding_bottom": 20
-      }
-    },
-    "why_stainlesssteel_dwM38L": {
-      "type": "Why-Stainlesssteel",
-      "blocks": {
-        "feature_AqY6RR": {
-          "type": "feature",
-          "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
-            "banner_background_color": "#c8d5b9",
-            "feature_title": "No Hotspots",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "Perfect Every Time",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "5 ply design eliminates cold spots for flawless cooking",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_JLJKiL": {
-          "type": "feature",
-          "settings": {
-            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
-            "banner_background_color": "#c8d5b9",
-            "feature_title": "Heats Up Quickly",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "Save Time Daily",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "Superior heat conductivity gets you cooking faster",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_NiGqKQ": {
-          "type": "feature",
-          "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
-            "banner_background_color": "#c8d5b9",
-            "feature_title": "Lifetime Durability",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "Investment Quality",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "Premium 18/10 stainless steel resists warping and wear.",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        }
-      },
-      "block_order": [
-        "feature_AqY6RR",
-        "feature_JLJKiL",
-        "feature_NiGqKQ"
-      ],
-      "name": "Why Stainless Steel",
-      "settings": {
-        "background_color": "#f8f8f8",
-        "padding_top": 20,
-        "padding_bottom": 24,
-        "title": "Why Stainless Steel",
-        "title_font_weight": "300",
-        "title_font_style": "normal",
-        "title_color": "#121212",
-        "title_size_desktop": 20,
-        "title_size_mobile": 32,
-        "description": "<p>We believe cookware should outlast trends and serve you for decades. That's why we chose 5-ply stainless steel: durable, pure, and endlessly reliable.</p>",
-        "description_font_weight": "400",
-        "description_font_style": "normal",
-        "description_color": "#000000",
-        "description_size_desktop": 15,
-        "description_size_mobile": 16,
-        "cta_text": "Discover More",
-        "cta_link": "shopify://pages/our-materials",
-        "cta_font_weight": "400",
-        "cta_font_style": "normal",
-        "cta_color": "#000000",
-        "cta_size_desktop": 14,
-        "cta_size_mobile": 14
       }
     },
     "product_set_selector_8iF49y": {
@@ -463,8 +463,8 @@
   },
   "order": [
     "video_hero_banner_yifDgW",
-    "featured_collection_n4BUU4",
     "why_stainlesssteel_dwM38L",
+    "featured_collection_n4BUU4",
     "product_set_selector_8iF49y",
     "video_carosle_3iKgF7",
     "176253019774d27060",

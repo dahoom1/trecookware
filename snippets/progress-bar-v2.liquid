@@ -14,10 +14,12 @@
   endif
 -%}
 
-<div class="shipping-progress-wrapper" 
+<div class="shipping-progress-wrapper"
      data-shipping-wrapper
      data-threshold="{{ free_shipping_threshold }}"
-     data-currency="{{ cart.currency.iso_code }}">
+     data-currency="{{ cart.currency.iso_code }}"
+     data-text-remaining="{{ 'sections.cart.progress_bar.add_for_free_shipping' | t: amount: 'AMOUNT_PLACEHOLDER' | escape }}"
+     data-text-unlocked="{{ 'sections.cart.progress_bar.free_shipping_unlocked' | t | escape }}">
   
   <div class="shipping-progress-bar">
     <div class="shipping-progress-fill" 
@@ -28,13 +30,10 @@
 
   <div class="shipping-progress-text">
     {%- if remaining_amount > 0 -%}
-      <p>
-        Add <strong>{{ remaining_amount | money }}</strong> for free shipping
-      </p>
+      {%- assign remaining_formatted = remaining_amount | money -%}
+      <p>{{ 'sections.cart.progress_bar.add_for_free_shipping' | t: amount: remaining_formatted }}</p>
     {%- else -%}
-      <p class="success-text">
-        🎉 You qualify for free shipping!
-      </p>
+      <p class="success-text">{{ 'sections.cart.progress_bar.free_shipping_unlocked' | t }}</p>
     {%- endif -%}
   </div>
 </div>
@@ -80,7 +79,7 @@
       rgba(29, 12, 12, 0) 100%
     );
     transform: translateX(-100%);
-    animation: shimmer 1s infinite;
+    animation: shimmer 3s linear infinite;
   }
 
   @keyframes shimmer {
@@ -146,9 +145,12 @@
 
       // Update Text
       if (remaining > 0) {
-        textDiv.innerHTML = `<p>Add <strong>${formatMoney(remaining, currency)}</strong> for free shipping</p>`;
+        const template = wrapper.dataset.textRemaining || 'Add AMOUNT_PLACEHOLDER for free shipping';
+        const text = template.replace('AMOUNT_PLACEHOLDER', `<strong>${formatMoney(remaining, currency)}</strong>`);
+        textDiv.innerHTML = `<p>${text}</p>`;
       } else {
-        textDiv.innerHTML = `<p class="success-text">🎉 You qualify for free shipping!</p>`;
+        const unlockedText = wrapper.dataset.textUnlocked || '🎉 You qualify for free shipping!';
+        textDiv.innerHTML = `<p class="success-text">${unlockedText}</p>`;
       }
     });
   };

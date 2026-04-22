@@ -80,6 +80,60 @@
         "include_margins": true
       }
     },
+    "multicolumn_L73Vxt": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_xgNp9z": {
+          "type": "column",
+          "settings": {
+            "title": "No More Burnt Meals",
+            "text": "<p>Ever had dinner ruined by one burnt spot? Our 5-layer design spreads heat evenly, so your chicken cooks perfectly while you help with homework or fold laundry</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_GATzc4": {
+          "type": "column",
+          "settings": {
+            "title": "Dishwasher Safe",
+            "text": "<p>After a long day, the last thing you want is scrubbing pans. Toss them in the dishwasher and spend your evening relaxing, not cleaning</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_J3gEdX": {
+          "type": "column",
+          "settings": {
+            "title": "Thick lid",
+            "text": "<p>A 1.0 mm thick stainless steel lid, heavier and more durable than ordinary lids, seals tightly to trap steam, moisture, and all flavors during cooking.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_xgNp9z",
+        "column_GATzc4",
+        "column_J3gEdX"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "FEATURES AND BENEFITS",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "button_label": "Button label",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "faq_custom_C7w6Qb": {
       "type": "FAQ-custom",
       "blocks": {
@@ -139,12 +193,31 @@
         "padding_top": 12,
         "padding_bottom": 12
       }
+    },
+    "17767199451ee4f820": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_featured_carousel_wNh7Lx": {
+          "type": "shopify://apps/judge-me-reviews/blocks/featured_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "maxwidth": 1080
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_featured_carousel_wNh7Lx"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "banner",
     "product-grid",
     "17645287584159a3c6",
-    "faq_custom_C7w6Qb"
+    "multicolumn_L73Vxt",
+    "faq_custom_C7w6Qb",
+    "17767199451ee4f820"
   ]
 }

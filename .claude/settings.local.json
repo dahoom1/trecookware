@@ -11,7 +11,10 @@
       "Bash(shopify theme list)",
       "Bash(shopify theme pull --theme 182416015650)",
       "Bash(head -20 grep -n \"overflow-hidden\\\\|document\\\\.body\\\\|preventScroll\\\\|header-drawer\" \"/Users/abdulrahmanal-omrani/Desktop/E-commerce/TRE/Trecookware build v0.1/assets/menu-drawer.js\")",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "Bash(shopify theme:*)",
+      "Read(//private/tmp/copy-of-dawn/**)",
+      "Read(//private/tmp/copy-of-dawn/locales/**)"
     ]
   }
 }

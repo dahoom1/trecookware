@@ -424,6 +424,10 @@
       "login": {
         "title": "Have an account?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link underlined-link\">Log in</a> to check out faster."
+      },
+      "progress_bar": {
+        "add_for_free_shipping": "Add {{ amount }} for free shipping",
+        "free_shipping_unlocked": "🎉 You qualify for free shipping!"
       }
     },
     "footer": {

@@ -10,6 +10,7 @@
 /* Why Stainless Steel Section Styles */
 .why-stainless-steel {
   width: 100%;
+  isolation: isolate; /* contain all card z-indices so they never compete with the fixed header */
 }
 
 .why-stainless-steel .page-width {
@@ -18,25 +19,10 @@
   padding: 0 20px;
 }
 
-/* Animation Keyframes */
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Animation Keyframes — used only for the carousel dots fade-in */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* Header Layout */
@@ -49,9 +35,6 @@
 
 .wss-title-wrapper {
   width: 100%;
-  opacity: 0;
-  animation: slideUpFade 0.8s ease-out forwards;
-  animation-delay: 0.1s;
 }
 
 .wss-title {
@@ -63,9 +46,6 @@
 
 .wss-content-wrapper {
   width: 100%;
-  opacity: 0;
-  animation: slideUpFade 0.8s ease-out forwards;
-  animation-delay: 0.3s;
 }
 
 .wss-description {
@@ -81,9 +61,6 @@
 
 .wss-cta-wrapper {
   width: 100%;
-  opacity: 0;
-  animation: slideUpFade 0.8s ease-out forwards;
-  animation-delay: 0.5s;
 }
 
 .wss-cta {
@@ -142,9 +119,6 @@
     padding: 4px 8px;
     margin-top: 20px;
     background-color: transparent;
-    opacity: 0;
-    animation: fadeIn 0.6s ease-out forwards;
-    animation-delay: 1.3s;
   }
 
   .wss-carousel-dot {
@@ -182,28 +156,6 @@
   position: relative;
   background: #ffffff;
   overflow: hidden;
-  opacity: 0;
-  animation: slideUpFade 0.8s ease-out forwards;
-}
-
-/* Staggered animation delays for cards */
-.wss-feature-card:nth-child(1) {
-  animation-delay: 0.6s;
-}
-.wss-feature-card:nth-child(2) {
-  animation-delay: 0.8s;
-}
-.wss-feature-card:nth-child(3) {
-  animation-delay: 1s;
-}
-.wss-feature-card:nth-child(4) {
-  animation-delay: 1.2s;
-}
-.wss-feature-card:nth-child(5) {
-  animation-delay: 1.4s;
-}
-.wss-feature-card:nth-child(6) {
-  animation-delay: 1.6s;
 }
 
 /* Feature Image/Video Banner - FIXED 1:1 ASPECT RATIO */
@@ -236,19 +188,6 @@
   height: 50px;
   flex-shrink: 0;
   z-index: 2;
-  opacity: 0;
-  animation: fadeIn 0.6s ease-out forwards;
-  animation-delay: 1.4s;
-}
-
-.wss-feature-card:nth-child(1) .wss-feature-icon {
-  animation-delay: 1.4s;
-}
-.wss-feature-card:nth-child(2) .wss-feature-icon {
-  animation-delay: 1.6s;
-}
-.wss-feature-card:nth-child(3) .wss-feature-icon {
-  animation-delay: 1.8s;
 }
 
 .wss-feature-icon img {
@@ -298,6 +237,24 @@
   overflow: hidden;
 }
 
+.wss-feature-description p {
+  margin: 0;
+}
+
+.wss-feature-description p + p {
+  margin-top: 0.4em;
+}
+
+.wss-feature-description ul,
+.wss-feature-description ol {
+  margin: 0.25em 0 0;
+  padding-left: 1.25em;
+}
+
+.wss-feature-description li {
+  margin-bottom: 0.2em;
+}
+
 /* Clickable content banner */
 .wss-feature-content-banner[data-wss-expand] {
   cursor: pointer;
@@ -334,12 +291,15 @@
   justify-content: center;
   padding: 24px;
   opacity: 0;
+  transform: translateY(100%);
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .wss-feature-overlay.active {
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
@@ -450,16 +410,11 @@
   }
 }
 
-/* Reduced motion support */
+/* Reduced motion: disable overlay slide */
 @media (prefers-reduced-motion: reduce) {
-  .wss-title-wrapper,
-  .wss-content-wrapper,
-  .wss-cta-wrapper,
-  .wss-feature-card,
-  .wss-feature-icon,
-  .wss-carousel-dots {
-    animation: none;
-    opacity: 1;
+  .wss-feature-overlay {
+    transition: opacity 0.2s ease;
+    transform: none;
   }
 }
 
@@ -577,7 +532,7 @@
               </div>
             {% endif %}
 
-            <div class="wss-feature-content-banner" {% if block.settings.feature_description != blank %}data-wss-expand aria-label="Read more about {{ block.settings.feature_title | escape }}" role="button" tabindex="0"{% endif %}>
+            <div class="wss-feature-content-banner" {% if block.settings.feature_description != blank and block.settings.enable_expand %}data-wss-expand aria-label="Read more about {{ block.settings.feature_title | escape }}" role="button" tabindex="0"{% endif %}>
               <div class="wss-feature-content">
                 {% if block.settings.feature_title != blank %}
                   <h3 class="wss-feature-title" style="
@@ -600,19 +555,19 @@
                 {% endif %}
 
                 {% if block.settings.feature_description != blank %}
-                  <p class="wss-feature-description" style="
+                  <div class="wss-feature-description" style="
                     color: {{ block.settings.feature_description_color }};
                     font-weight: {{ block.settings.feature_desc_font_weight }};
                     font-style: {{ block.settings.feature_desc_font_style }};
                   ">
                     {{ block.settings.feature_description }}
-                  </p>
+                  </div>
                 {% endif %}
               </div>
 
             </div>
 
-            {% if block.settings.feature_description != blank %}
+            {% if block.settings.feature_description != blank and block.settings.enable_expand %}
               <div
                 class="wss-feature-overlay"
                 style="background-color: {{ block.settings.banner_background_color | color_modify: 'alpha', 0.93 }};"
@@ -635,14 +590,14 @@
                       font-weight: {{ block.settings.feature_subtitle_font_weight }};
                     ">{{ block.settings.feature_subtitle }}</p>
                   {% endif %}
-                  <p class="wss-feature-description" style="
+                  <div class="wss-feature-description" style="
                     color: {{ block.settings.feature_description_color }};
                     font-weight: {{ block.settings.feature_desc_font_weight }};
                     font-style: {{ block.settings.feature_desc_font_style }};
                     display: block;
                     -webkit-line-clamp: unset;
                     overflow: visible;
-                  ">{{ block.settings.feature_description }}</p>
+                  ">{{ block.settings.feature_description }}</div>
                 </div>
               </div>
             {% endif %}
@@ -666,91 +621,173 @@
 <script>
 (function() {
   const sectionId = '{{ section.id }}';
-  const carousel = document.getElementById('wss-features-' + sectionId);
-  const dotsContainer = document.getElementById('wss-dots-' + sectionId);
+  const carousel  = document.getElementById('wss-features-' + sectionId);
+  const dotsWrap  = document.getElementById('wss-dots-' + sectionId);
 
-  if (!carousel || !dotsContainer) return;
+  if (!carousel) return;
 
-  const dots = dotsContainer.querySelectorAll('.wss-carousel-dot');
-  const cards = carousel.querySelectorAll('.wss-feature-card');
+  const dots  = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.wss-carousel-dot')) : [];
+  const cards = Array.from(carousel.querySelectorAll('.wss-feature-card'));
 
-  if (window.innerWidth >= 750 || dots.length === 0) return;
+  /* ── overlay helpers ── */
+  const expandTimers   = new Map();
+  const manuallyClosed = new Set();
 
-  // Find which card has the most visible area inside the carousel viewport
-  const getMostVisibleIndex = () => {
-    const containerRect = carousel.getBoundingClientRect();
-    let maxVisible = -1;
-    let activeIndex = 0;
+  function resumeVideo(card) {
+    const video = card.querySelector('video');
+    if (video && video.paused) video.play().catch(() => {});
+  }
 
-    cards.forEach((card, index) => {
-      const rect = card.getBoundingClientRect();
-      const visibleWidth = Math.max(
-        0,
-        Math.min(rect.right, containerRect.right) - Math.max(rect.left, containerRect.left)
-      );
-      if (visibleWidth > maxVisible) {
-        maxVisible = visibleWidth;
-        activeIndex = index;
-      }
-    });
-
-    return activeIndex;
-  };
-
-  const setActiveDot = (index) => {
-    dots.forEach(d => d.classList.remove('active'));
-    if (dots[index]) dots[index].classList.add('active');
-  };
-
-  // Live scroll listener — updates dot as user swipes
-  carousel.addEventListener('scroll', () => {
-    setActiveDot(getMostVisibleIndex());
-  }, { passive: true });
-
-  // Dot click — scrollIntoView handles RTL/LTR automatically
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      const target = cards[index];
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
-    });
-  });
-})();
-
-// Feature card overlay toggle (runs on all screen sizes)
-(function() {
-  document.querySelectorAll('.wss-feature-card').forEach(card => {
-    const banner = card.querySelector('[data-wss-expand]');
+  function openOverlay(card) {
     const overlay = card.querySelector('.wss-feature-overlay');
-    const closeBtn = card.querySelector('.wss-overlay-close');
+    if (!overlay) return;
+    card.style.minHeight = card.offsetHeight + 'px';
+    card.classList.add('wss-overlay-open');
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    resumeVideo(card);
+  }
 
-    if (!banner || !overlay) return;
-
-    const openOverlay = () => {
-      // Lock card height before media leaves the flow
-      card.style.minHeight = card.offsetHeight + 'px';
-      card.classList.add('wss-overlay-open');
-      overlay.classList.add('active');
-      overlay.setAttribute('aria-hidden', 'false');
-    };
-
-    const closeOverlay = () => {
-      card.classList.remove('wss-overlay-open');
+  function closeOverlay(card) {
+    clearTimeout(expandTimers.get(card));
+    card.classList.remove('wss-overlay-open');
+    const overlay = card.querySelector('.wss-feature-overlay');
+    if (overlay) {
       overlay.classList.remove('active');
       overlay.setAttribute('aria-hidden', 'true');
-      card.style.minHeight = '';
-    };
+    }
+    card.style.minHeight = '';
+    resumeVideo(card);
+  }
 
-    banner.addEventListener('click', openOverlay);
-    // Keyboard support for the banner acting as a button
-    banner.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverlay(); }
+  function scheduleOpen(card, delay) {
+    clearTimeout(expandTimers.get(card));
+    if (manuallyClosed.has(card)) return;
+    expandTimers.set(card, setTimeout(() => openOverlay(card), delay != null ? delay : 1000));
+  }
+
+  /* ── wire close buttons & manual taps on every card ── */
+  cards.forEach(card => {
+    const closeBtn = card.querySelector('.wss-overlay-close');
+    const banner   = card.querySelector('[data-wss-expand]');
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        manuallyClosed.add(card);
+        closeOverlay(card);
+      });
+    }
+    if (banner) {
+      banner.addEventListener('click', () => {
+        manuallyClosed.delete(card);
+        openOverlay(card);
+      });
+      banner.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          manuallyClosed.delete(card);
+          openOverlay(card);
+        }
+      });
+    }
+  });
+
+  /* ── mobile carousel (< 750px): expand active card on swipe ── */
+  if (window.innerWidth < 750 && dots.length > 0) {
+    let activeIndex = -1;
+
+    function getMostVisible() {
+      const cr = carousel.getBoundingClientRect();
+      let max = -1, idx = 0;
+      cards.forEach((c, i) => {
+        const r = c.getBoundingClientRect();
+        const w = Math.max(0, Math.min(r.right, cr.right) - Math.max(r.left, cr.left));
+        if (w > max) { max = w; idx = i; }
+      });
+      return idx;
+    }
+
+    function updateActive() {
+      const next = getMostVisible();
+      if (next === activeIndex) return;
+
+      // Close the card we're leaving and reset its state so re-entry re-triggers
+      if (activeIndex >= 0 && cards[activeIndex]) {
+        closeOverlay(cards[activeIndex]);
+        manuallyClosed.delete(cards[activeIndex]);
+      }
+
+      activeIndex = next;
+      dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+
+      // 1-second delay lets the user see the image before the overlay expands
+      scheduleOpen(cards[activeIndex], 1000);
+    }
+
+    carousel.addEventListener('scroll', updateActive, { passive: true });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        cards[i] && cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
     });
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeOverlay();
+
+    // Kick off the first card when the section scrolls into view
+    const sectionEl = carousel.closest('.why-stainless-steel') || carousel;
+    const sectionIO = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        sectionIO.disconnect();
+        updateActive();
+      }
+    }, { threshold: 0.25 });
+    sectionIO.observe(sectionEl);
+
+  } else {
+    /* ── desktop grid (≥ 750px): expand each card as it enters the viewport ── */
+    const cardObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const card  = entry.target;
+        // Stagger cards that enter together: card 0 = +1 s, card 1 = +1.25 s, etc.
+        const delay = 1000 + cards.indexOf(card) * 250;
+
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+          scheduleOpen(card, delay);
+        } else {
+          closeOverlay(card);
+          manuallyClosed.delete(card); // reset so re-entry works
+        }
+      });
+    }, { threshold: [0, 0.45] });
+
+    cards.forEach(card => {
+      if (card.querySelector('.wss-feature-overlay')) cardObserver.observe(card);
     });
+  }
+
+  /* ── close all overlays when the header menu opens ── */
+  function closeAllOverlays() {
+    cards.forEach(card => {
+      closeOverlay(card);
+      manuallyClosed.delete(card);
+    });
+  }
+
+  // Mobile drawer
+  const headerDrawer = document.getElementById('headerDrawer');
+  if (headerDrawer) {
+    new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.attributeName === 'class' && headerDrawer.classList.contains('is-open')) {
+          closeAllOverlays();
+        }
+      });
+    }).observe(headerDrawer, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // Desktop mega menu nav items
+  document.querySelectorAll('.custom-header__nav-item[data-has-mega-menu]').forEach(function(item) {
+    item.addEventListener('mouseenter', closeAllOverlays);
   });
 })();
 </script>
@@ -1015,6 +1052,13 @@
           "default": "#C8D5B9"
         },
         {
+          "type": "checkbox",
+          "id": "enable_expand",
+          "label": "Expand on scroll",
+          "info": "When enabled, this card's overlay slides up automatically when scrolled into view. Disable to keep the card static.",
+          "default": true
+        },
+        {
           "type": "header",
           "content": "Feature Title"
         },
@@ -1139,10 +1183,10 @@
           "content": "Feature Description"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "feature_description",
           "label": "Description",
-          "default": "5-ply construction ensures perfect control — no hotspots, no guesswork."
+          "default": "<p>5-ply construction ensures perfect control — no hotspots, no guesswork.</p>"
         },
         {
           "type": "color",
@@ -1206,7 +1250,7 @@
           "settings": {
             "feature_title": "Even Heat",
             "feature_subtitle": "Distribution",
-            "feature_description": "5-ply construction ensures perfect control — no hotspots, no guesswork.",
+            "feature_description": "<p>5-ply construction ensures perfect control — no hotspots, no guesswork.</p>",
             "banner_background_color": "#C8D5B9"
           }
         },
@@ -1215,7 +1259,7 @@
           "settings": {
             "feature_title": "Long-Lasting",
             "feature_subtitle": "Performance",
-            "feature_description": "Built to withstand decades of daily use without compromising quality.",
+            "feature_description": "<p>Built to withstand decades of daily use without compromising quality.</p>",
             "banner_background_color": "#C8D5B9"
           }
         },
@@ -1224,7 +1268,7 @@
           "settings": {
             "feature_title": "Healthy &",
             "feature_subtitle": "Non-Reactive",
-            "feature_description": "Pure stainless steel won't leach chemicals or react with acidic foods.",
+            "feature_description": "<p>Pure stainless steel won't leach chemicals or react with acidic foods.</p>",
             "banner_background_color": "#C8D5B9"
           }
         }
