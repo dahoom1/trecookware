@@ -520,29 +520,31 @@
                   </div>
                 {%- endif -%}
               {%- when 'icon_feature' -%}
-                {%- assign prev_index = forloop.index0 | minus: 1 -%}
-                {%- assign next_index = forloop.index0 | plus: 1 -%}
-                {%- assign prev_block = section.blocks[prev_index] -%}
-                {%- assign next_block = section.blocks[next_index] -%}
-                {%- if forloop.first or prev_block.type != 'icon_feature' -%}
-                  <div class="product__icon-features-row quick-add-hidden">
-                {%- endif -%}
-                <div class="product__icon-feature-item" {{ block.shopify_attributes }}>
-                  {%- if block.settings.icon_image != blank -%}
-                    <div class="product__icon-feature-image">
-                      {{- block.settings.icon_image | image_url: width: 96 | image_tag: loading: 'lazy', alt: block.settings.icon_label -}}
-                    </div>
-                  {%- endif -%}
-                  {%- if block.settings.icon_label != blank -%}
-                    <p class="product__icon-feature-label">{{ block.settings.icon_label }}</p>
-                  {%- endif -%}
-                  {%- if block.settings.icon_description != blank -%}
-                    <p class="product__icon-feature-description">{{ block.settings.icon_description }}</p>
-                  {%- endif -%}
+                <div class="product__icon-features-row quick-add-hidden" {{ block.shopify_attributes }}>
+                  {%- for i in (1..8) -%}
+                    {%- assign img_key = 'icon_' | append: i | append: '_image' -%}
+                    {%- assign lbl_key = 'icon_' | append: i | append: '_label' -%}
+                    {%- assign desc_key = 'icon_' | append: i | append: '_description' -%}
+                    {%- assign img_val = block.settings[img_key] -%}
+                    {%- assign lbl_val = block.settings[lbl_key] -%}
+                    {%- assign desc_val = block.settings[desc_key] -%}
+                    {%- if img_val != blank or lbl_val != blank -%}
+                      <div class="product__icon-feature-item">
+                        {%- if img_val != blank -%}
+                          <div class="product__icon-feature-image">
+                            {{- img_val | image_url: width: 96 | image_tag: loading: 'lazy', alt: lbl_val -}}
+                          </div>
+                        {%- endif -%}
+                        {%- if lbl_val != blank -%}
+                          <p class="product__icon-feature-label">{{ lbl_val }}</p>
+                        {%- endif -%}
+                        {%- if desc_val != blank -%}
+                          <p class="product__icon-feature-description">{{ desc_val }}</p>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
                 </div>
-                {%- if forloop.last or next_block.type != 'icon_feature' -%}
-                  </div>
-                {%- endif -%}
               {%- when 'sku' -%}
                 <p
                   class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
@@ -2074,22 +2076,40 @@
     {
       "type": "icon_feature",
       "name": "t:sections.main-product.blocks.icon_feature.name",
+      "limit": 1,
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "icon_image",
-          "label": "t:sections.main-product.blocks.icon_feature.settings.icon_image.label"
-        },
-        {
-          "type": "text",
-          "id": "icon_label",
-          "label": "t:sections.main-product.blocks.icon_feature.settings.icon_label.label"
-        },
-        {
-          "type": "textarea",
-          "id": "icon_description",
-          "label": "t:sections.main-product.blocks.icon_feature.settings.icon_description.label"
-        }
+        { "type": "header", "content": "Icon 1" },
+        { "type": "image_picker", "id": "icon_1_image", "label": "Icon" },
+        { "type": "text", "id": "icon_1_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_1_description", "label": "Description" },
+        { "type": "header", "content": "Icon 2" },
+        { "type": "image_picker", "id": "icon_2_image", "label": "Icon" },
+        { "type": "text", "id": "icon_2_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_2_description", "label": "Description" },
+        { "type": "header", "content": "Icon 3" },
+        { "type": "image_picker", "id": "icon_3_image", "label": "Icon" },
+        { "type": "text", "id": "icon_3_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_3_description", "label": "Description" },
+        { "type": "header", "content": "Icon 4" },
+        { "type": "image_picker", "id": "icon_4_image", "label": "Icon" },
+        { "type": "text", "id": "icon_4_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_4_description", "label": "Description" },
+        { "type": "header", "content": "Icon 5" },
+        { "type": "image_picker", "id": "icon_5_image", "label": "Icon" },
+        { "type": "text", "id": "icon_5_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_5_description", "label": "Description" },
+        { "type": "header", "content": "Icon 6" },
+        { "type": "image_picker", "id": "icon_6_image", "label": "Icon" },
+        { "type": "text", "id": "icon_6_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_6_description", "label": "Description" },
+        { "type": "header", "content": "Icon 7" },
+        { "type": "image_picker", "id": "icon_7_image", "label": "Icon" },
+        { "type": "text", "id": "icon_7_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_7_description", "label": "Description" },
+        { "type": "header", "content": "Icon 8" },
+        { "type": "image_picker", "id": "icon_8_image", "label": "Icon" },
+        { "type": "text", "id": "icon_8_label", "label": "Label" },
+        { "type": "textarea", "id": "icon_8_description", "label": "Description" }
       ]
     },
     {
