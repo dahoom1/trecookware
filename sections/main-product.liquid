@@ -301,7 +301,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1.2rem;
-      padding: 1.6rem 0;
+      padding: 1.6rem;
       border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
       border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
     }
@@ -342,6 +342,40 @@
       color: rgba(var(--color-foreground), 0.65);
       margin: 0;
       line-height: 1.4;
+    }
+
+    /* Marquee mode */
+    .product__icon-features--marquee {
+      overflow: hidden;
+      flex-wrap: nowrap;
+      gap: 0;
+      padding: 1.6rem 0;
+    }
+
+    .product__icon-marquee-track {
+      display: flex;
+      flex-shrink: 0;
+      width: max-content;
+      gap: 2.4rem;
+      animation: product-icon-marquee var(--marquee-speed, 20s) linear infinite;
+    }
+
+    .product__icon-features--marquee .product__icon-feature-item {
+      flex-shrink: 0;
+      padding: 0 1.2rem;
+    }
+
+    @keyframes product-icon-marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    [dir="rtl"] .product__icon-marquee-track {
+      animation-direction: reverse;
+    }
+
+    .product__icon-marquee-track:hover {
+      animation-play-state: paused;
     }
   {%- endstyle -%}
 
@@ -520,30 +554,41 @@
                   </div>
                 {%- endif -%}
               {%- when 'icon_feature' -%}
-                <div class="product__icon-features-row quick-add-hidden" {{ block.shopify_attributes }}{% if block.settings.background_color != blank %} style="background-color: {{ block.settings.background_color }}"{% endif %}>
-                  {%- for i in (1..8) -%}
-                    {%- assign img_key = 'icon_' | append: i | append: '_image' -%}
-                    {%- assign lbl_key = 'icon_' | append: i | append: '_label' -%}
-                    {%- assign desc_key = 'icon_' | append: i | append: '_description' -%}
-                    {%- assign img_val = block.settings[img_key] -%}
-                    {%- assign lbl_val = block.settings[lbl_key] -%}
-                    {%- assign desc_val = block.settings[desc_key] -%}
-                    {%- if img_val != blank or lbl_val != blank -%}
-                      <div class="product__icon-feature-item">
-                        {%- if img_val != blank -%}
-                          <div class="product__icon-feature-image">
-                            {{- img_val | image_url: width: 96 | image_tag: loading: 'lazy', alt: lbl_val -}}
+                {%- assign marquee_enabled = block.settings.enable_marquee -%}
+                <div class="product__icon-features-row{% if marquee_enabled %} product__icon-features--marquee{% endif %} quick-add-hidden" {{ block.shopify_attributes }}{% if block.settings.background_color != blank %} style="background-color: {{ block.settings.background_color }}"{% endif %}>
+                  {%- if marquee_enabled -%}
+                    <div class="product__icon-marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed }}s">
+                  {%- endif -%}
+                  {%- for pass in (1..2) -%}
+                    {%- if pass == 1 or marquee_enabled -%}
+                      {%- for i in (1..8) -%}
+                        {%- assign img_key = 'icon_' | append: i | append: '_image' -%}
+                        {%- assign lbl_key = 'icon_' | append: i | append: '_label' -%}
+                        {%- assign desc_key = 'icon_' | append: i | append: '_description' -%}
+                        {%- assign img_val = block.settings[img_key] -%}
+                        {%- assign lbl_val = block.settings[lbl_key] -%}
+                        {%- assign desc_val = block.settings[desc_key] -%}
+                        {%- if img_val != blank or lbl_val != blank -%}
+                          <div class="product__icon-feature-item"{% if pass == 2 %} aria-hidden="true"{% endif %}>
+                            {%- if img_val != blank -%}
+                              <div class="product__icon-feature-image">
+                                {{- img_val | image_url: width: 96 | image_tag: loading: 'lazy', alt: lbl_val -}}
+                              </div>
+                            {%- endif -%}
+                            {%- if lbl_val != blank -%}
+                              <p class="product__icon-feature-label">{{ lbl_val }}</p>
+                            {%- endif -%}
+                            {%- if desc_val != blank -%}
+                              <p class="product__icon-feature-description">{{ desc_val }}</p>
+                            {%- endif -%}
                           </div>
                         {%- endif -%}
-                        {%- if lbl_val != blank -%}
-                          <p class="product__icon-feature-label">{{ lbl_val }}</p>
-                        {%- endif -%}
-                        {%- if desc_val != blank -%}
-                          <p class="product__icon-feature-description">{{ desc_val }}</p>
-                        {%- endif -%}
-                      </div>
+                      {%- endfor -%}
                     {%- endif -%}
                   {%- endfor -%}
+                  {%- if marquee_enabled -%}
+                    </div>
+                  {%- endif -%}
                 </div>
               {%- when 'sku' -%}
                 <p
@@ -2080,6 +2125,8 @@
       "settings": [
         { "type": "header", "content": "Style" },
         { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
+        { "type": "checkbox", "id": "enable_marquee", "label": "Enable marquee animation", "default": false },
+        { "type": "range", "id": "marquee_speed", "min": 5, "max": 60, "step": 5, "unit": "s", "label": "Marquee speed", "default": 20 },
         { "type": "header", "content": "Icon 1" },
         { "type": "image_picker", "id": "icon_1_image", "label": "Icon" },
         { "type": "text", "id": "icon_1_label", "label": "Label" },
