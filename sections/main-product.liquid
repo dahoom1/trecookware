@@ -520,7 +520,7 @@
                   </div>
                 {%- endif -%}
               {%- when 'icon_feature' -%}
-                <div class="product__icon-features-row quick-add-hidden" {{ block.shopify_attributes }}>
+                <div class="product__icon-features-row quick-add-hidden" {{ block.shopify_attributes }}{% if block.settings.background_color != blank %} style="background-color: {{ block.settings.background_color }}"{% endif %}>
                   {%- for i in (1..8) -%}
                     {%- assign img_key = 'icon_' | append: i | append: '_image' -%}
                     {%- assign lbl_key = 'icon_' | append: i | append: '_label' -%}
@@ -2078,6 +2078,8 @@
       "name": "t:sections.main-product.blocks.icon_feature.name",
       "limit": 1,
       "settings": [
+        { "type": "header", "content": "Style" },
+        { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
         { "type": "header", "content": "Icon 1" },
         { "type": "image_picker", "id": "icon_1_image", "label": "Icon" },
         { "type": "text", "id": "icon_1_label", "label": "Label" },
