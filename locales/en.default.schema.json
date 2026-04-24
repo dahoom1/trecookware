@@ -2032,6 +2032,20 @@
         "description": {
           "name": "Description"
         },
+        "icon_feature": {
+          "name": "Icon Feature",
+          "settings": {
+            "icon_image": {
+              "label": "Icon"
+            },
+            "icon_label": {
+              "label": "Label"
+            },
+            "icon_description": {
+              "label": "Description"
+            }
+          }
+        },
         "sku": {
           "name": "SKU",
           "settings": {
