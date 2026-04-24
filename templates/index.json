@@ -198,20 +198,20 @@
         "background_color": "#f8f8f8",
         "padding_top": 20,
         "padding_bottom": 24,
-        "title": "Why 5 Ply Stainless Steel?",
+        "title": "5-Ply Stainless Steel?",
         "title_font_weight": "300",
         "title_font_style": "normal",
         "title_color": "#121212",
         "title_size_desktop": 20,
         "title_size_mobile": 32,
-        "description": "<p>In a world of \"trendy\" kitchenware designed to fail, large corporations have turned your kitchen into a recurring subscription. To them, you aren't a chef you're a revenue stream. But we believe your health shouldn't be secondary to a profit margin, and your children deserve tools that last forever.</p>",
+        "description": "<p><strong>Highest international standards and maximum safety.</strong><br/>Non-reactive materials that withstand high temperatures. Our <strong>5-ply stainless steel</strong> features a <strong>triple-layer aluminum core</strong> for perfect heat distribution, encased in high-quality <strong>18/10 stainless steel</strong>. Designed with <strong>sealed edges</strong> to protect the internal layers, ensuring it lasts for decades.</p>",
         "description_font_weight": "400",
         "description_font_style": "normal",
         "description_color": "#000000",
         "description_size_desktop": 15,
         "description_size_mobile": 16,
         "cta_text": "Discover More",
-        "cta_link": "shopify://pages/our-materials",
+        "cta_link": "shopify://collections/shop-by-collection",
         "cta_font_weight": "400",
         "cta_font_style": "normal",
         "cta_color": "#000000",
@@ -246,6 +246,27 @@
         "swipe_on_mobile": false,
         "padding_top": 28,
         "padding_bottom": 20
+      }
+    },
+    "176253019774d27060": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_all_reviews_page_Azw3YM": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "max_width": 1200,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": false,
+            "show_first": "product",
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_all_reviews_page_Azw3YM"
+      ],
+      "settings": {
+        "include_margins": true
       }
     },
     "product_set_selector_8iF49y": {
@@ -391,27 +412,6 @@
         "bg_color": "#ffffff"
       }
     },
-    "176253019774d27060": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_all_reviews_page_Azw3YM": {
-          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "max_width": 1200,
-            "review_source": "all",
-            "show_all_reviews_in_same_tab": false,
-            "show_first": "product",
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_all_reviews_page_Azw3YM"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
     "faq_custom_wyTcTx": {
       "type": "FAQ-custom",
       "blocks": {
@@ -468,9 +468,9 @@
     "video_hero_banner_yifDgW",
     "why_stainlesssteel_dwM38L",
     "featured_collection_n4BUU4",
+    "176253019774d27060",
     "product_set_selector_8iF49y",
     "video_carosle_3iKgF7",
-    "176253019774d27060",
     "faq_custom_wyTcTx"
   ]
 }

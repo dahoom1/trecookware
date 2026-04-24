@@ -21,17 +21,17 @@
             "link": ""
           }
         },
-        "announcement_nNa93K": {
+        "announcement_Jd76cY": {
           "type": "announcement",
           "settings": {
-            "text": "Timeless Raw Essentials",
-            "link": ""
+            "text": "Shop Our New Clean Cooking Collection:",
+            "link": "shopify://collections/shop-by-collection"
           }
         }
       },
       "block_order": [
         "announcement_9Qeq7q",
-        "announcement_nNa93K"
+        "announcement_Jd76cY"
       ],
       "name": "t:sections.announcement-bar.presets.name",
       "settings": {
