@@ -520,8 +520,10 @@
                   </div>
                 {%- endif -%}
               {%- when 'icon_feature' -%}
-                {%- assign prev_block = section.blocks[forloop.index0 | minus: 1] -%}
-                {%- assign next_block = section.blocks[forloop.index0 | plus: 1] -%}
+                {%- assign prev_index = forloop.index0 | minus: 1 -%}
+                {%- assign next_index = forloop.index0 | plus: 1 -%}
+                {%- assign prev_block = section.blocks[prev_index] -%}
+                {%- assign next_block = section.blocks[next_index] -%}
                 {%- if forloop.first or prev_block.type != 'icon_feature' -%}
                   <div class="product__icon-features-row quick-add-hidden">
                 {%- endif -%}
