@@ -65,6 +65,17 @@
           letter-spacing: 0.02em;
           line-height: 1;
         }
+
+        /* RTL: reverse scroll direction so text enters from the left */
+        [dir="rtl"] .announcement-bar__marquee-track {
+          animation-direction: reverse;
+        }
+
+        /* RTL: flip the arrow icon to point left */
+        [dir="rtl"] .announcement-bar__marquee-item .icon-arrow {
+          transform: scaleX(-1);
+          display: inline-block;
+        }
       </style>
       <div
         class="announcement-bar announcement-bar--marquee"
