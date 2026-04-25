@@ -27,6 +27,37 @@
           "type": "description",
           "settings": {}
         },
+        "icon_feature_RbLKg6": {
+          "type": "icon_feature",
+          "settings": {
+            "background_color": "#ffffff",
+            "enable_marquee": false,
+            "marquee_speed": 20,
+            "icon_1_image": "shopify://shop_images/5ply.svg",
+            "icon_1_label": "Full 5-Ply Build",
+            "icon_1_description": "",
+            "icon_2_image": "shopify://shop_images/oven.svg",
+            "icon_2_label": "Oven Safe Up to 295c",
+            "icon_2_description": "",
+            "icon_3_image": "shopify://shop_images/tools.svg",
+            "icon_3_label": "Scratch Resistant",
+            "icon_3_description": "",
+            "icon_4_image": "shopify://shop_images/dishwasher.svg",
+            "icon_4_label": "Dishwaher Safe",
+            "icon_4_description": "",
+            "icon_5_image": "shopify://shop_images/delivery.svg",
+            "icon_5_label": "Rapid Delivery",
+            "icon_5_description": "",
+            "icon_6_image": "shopify://shop_images/heat.svg",
+            "icon_6_label": "Even Heat Distribution",
+            "icon_6_description": "",
+            "icon_7_image": "shopify://shop_images/sustainable.svg",
+            "icon_7_label": " Eco-Friendly",
+            "icon_7_description": "",
+            "icon_8_label": "",
+            "icon_8_description": ""
+          }
+        },
         "price_mbHfCr": {
           "type": "price",
           "settings": {}
@@ -104,6 +135,7 @@
         "text_LKtztK",
         "title",
         "description",
+        "icon_feature_RbLKg6",
         "price_mbHfCr",
         "variant_picker",
         "buy_buttons_RgmqYf",
@@ -190,6 +222,8 @@
           "settings": {
             "icon": "shopify://shop_images/a3a01972a53c0fc5b4984ee9516334dd6e8b4401.png",
             "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
             "feature_title": "Even Heat",
             "feature_title_color": "#000000",
             "feature_title_font_weight": "600",
@@ -215,6 +249,8 @@
           "settings": {
             "icon": "shopify://shop_images/a3a01972a53c0fc5b4984ee9516334dd6e8b4401.png",
             "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
             "feature_title": "Long-Lasting",
             "feature_title_color": "#000000",
             "feature_title_font_weight": "600",
@@ -240,6 +276,8 @@
           "settings": {
             "icon": "shopify://shop_images/fad91d3991c7bfdc544a7d25296775945efcf77b.png",
             "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
             "feature_title": "Healthy &",
             "feature_title_color": "#000000",
             "feature_title_font_weight": "600",
