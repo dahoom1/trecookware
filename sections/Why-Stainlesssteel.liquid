@@ -473,7 +473,7 @@
     <div class="wss-features-wrapper">
       <div class="wss-features" id="wss-features-{{ section.id }}">
         {% for block in section.blocks %}
-          <div class="wss-feature-card" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+          <div class="wss-feature-card" data-block-id="{{ block.id }}" data-reveal-delay="{{ block.settings.reveal_delay | times: 1000 }}" {{ block.shopify_attributes }}>
             {% comment %} Check if video exists, otherwise use image {% endcomment %}
             {% if block.settings.feature_video != blank %}
               <div class="wss-feature-media">
@@ -721,8 +721,8 @@
       activeIndex = next;
       dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
 
-      // 1-second delay lets the user see the image before the overlay expands
-      scheduleOpen(cards[activeIndex], 1000);
+      const mobileDelay = parseInt(cards[activeIndex].dataset.revealDelay, 10) || 3000;
+      scheduleOpen(cards[activeIndex], mobileDelay);
     }
 
     carousel.addEventListener('scroll', updateActive, { passive: true });
@@ -744,25 +744,18 @@
     sectionIO.observe(sectionEl);
 
   } else {
-    /* ── desktop grid (≥ 750px): expand each card as it enters the viewport ── */
-    const cardObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const card  = entry.target;
-        // Stagger cards that enter together: card 0 = +1 s, card 1 = +1.25 s, etc.
-        const delay = 1000 + cards.indexOf(card) * 250;
-
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
-          scheduleOpen(card, delay);
-        } else {
-          closeOverlay(card);
-          manuallyClosed.delete(card); // reset so re-entry works
-        }
+    /* ── desktop grid (≥ 750px): expand cards after section enters the viewport ── */
+    const desktopSectionEl = carousel.closest('.why-stainless-steel') || carousel;
+    const desktopSectionIO = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      desktopSectionIO.disconnect();
+      cards.forEach(card => {
+        if (!card.querySelector('.wss-feature-overlay')) return;
+        const delay = parseInt(card.dataset.revealDelay, 10) || 3000;
+        scheduleOpen(card, delay);
       });
-    }, { threshold: [0, 0.45] });
-
-    cards.forEach(card => {
-      if (card.querySelector('.wss-feature-overlay')) cardObserver.observe(card);
-    });
+    }, { threshold: 0.25 });
+    desktopSectionIO.observe(desktopSectionEl);
   }
 
   /* ── close all overlays when the header menu opens ── */
@@ -1057,6 +1050,17 @@
           "label": "Expand on scroll",
           "info": "When enabled, this card's overlay slides up automatically when scrolled into view. Disable to keep the card static.",
           "default": true
+        },
+        {
+          "type": "range",
+          "id": "reveal_delay",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "unit": "s",
+          "label": "Reveal delay",
+          "info": "Seconds to wait after the section scrolls into view before this card reveals.",
+          "default": 3
         },
         {
           "type": "header",
