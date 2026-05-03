@@ -106,122 +106,6 @@
         "mobile_button_padding_horizontal": 24
       }
     },
-    "why_stainlesssteel_dwM38L": {
-      "type": "Why-Stainlesssteel",
-      "blocks": {
-        "feature_AqY6RR": {
-          "type": "feature",
-          "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": true,
-            "reveal_delay": 5,
-            "feature_title": "What does 5 Ply (Layers) in cookware mean?",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "In short: Performance",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>Cookware designed from 5 Ply (Layers) is a stable tool in every professional kitchen.<br/>Simply due to the fact Stainless steel when combined with Aluminum provides the highest level of durability and functionality a resturnat will ever need. Regardless how many hours it is used in the kitchen!</p>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_JLJKiL": {
-          "type": "feature",
-          "settings": {
-            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": false,
-            "reveal_delay": 3,
-            "feature_title": "Your Health Is Not A Trend",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "Keep It Simple With Premium 5-Ply Stainless Steel",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>Forever</p>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_NiGqKQ": {
-          "type": "feature",
-          "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": true,
-            "reveal_delay": 5,
-            "feature_title": "Toxin-Free Surface",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "Zero Coating, Zero Degradation",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<ul><li><strong>Non-stick (PTFE):</strong> Scratches, flakes, and loses its release properties under high heat.</li><li><strong>Ceramic:</strong> Micro-cracks (crazing) eventually lead to sticking and staining.</li><li><strong>Stainless Steel:</strong> There is no coating to wear off. The material is the same from the surface to the core. If you scratch it, you just reveal more stainless steel.</li></ul>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        }
-      },
-      "block_order": [
-        "feature_AqY6RR",
-        "feature_JLJKiL",
-        "feature_NiGqKQ"
-      ],
-      "name": "Why Stainless Steel",
-      "settings": {
-        "background_color": "#f8f8f8",
-        "padding_top": 20,
-        "padding_bottom": 24,
-        "title": "5-Ply Stainless Steel?",
-        "title_font_weight": "300",
-        "title_font_style": "normal",
-        "title_color": "#121212",
-        "title_size_desktop": 20,
-        "title_size_mobile": 32,
-        "description": "<p><strong>Highest international standards and maximum safety.</strong><br/>Non-reactive materials that withstand high temperatures. Our <strong>5-ply stainless steel</strong> features a <strong>triple-layer aluminum core</strong> for perfect heat distribution, encased in high-quality <strong>18/10 stainless steel</strong>. Designed with <strong>sealed edges</strong> to protect the internal layers, ensuring it lasts for decades.</p>",
-        "description_font_weight": "400",
-        "description_font_style": "normal",
-        "description_color": "#000000",
-        "description_size_desktop": 15,
-        "description_size_mobile": 16,
-        "cta_text": "Discover More",
-        "cta_link": "shopify://collections/shop-by-collection",
-        "cta_font_weight": "400",
-        "cta_font_style": "normal",
-        "cta_color": "#000000",
-        "cta_size_desktop": 14,
-        "cta_size_mobile": 14
-      }
-    },
     "featured_collection_n4BUU4": {
       "type": "featured-collection",
       "name": "t:sections.featured-collection.presets.name",
@@ -249,6 +133,23 @@
         "swipe_on_mobile": false,
         "padding_top": 28,
         "padding_bottom": 20
+      }
+    },
+    "1777541418ae6d3196": {
+      "type": "apps",
+      "blocks": {
+        "gsc_instagram_feed_instafeed_gKPBC8": {
+          "type": "shopify://apps/gsc-instagram-feed/blocks/instafeed/96970b1b-b770-454f-b16b-51f47e1aa4ed",
+          "settings": {
+            "widget_id": "GSC-VIAluRUHfNiXvws"
+          }
+        }
+      },
+      "block_order": [
+        "gsc_instagram_feed_instafeed_gKPBC8"
+      ],
+      "settings": {
+        "include_margins": true
       }
     },
     "176253019774d27060": {
@@ -415,6 +316,123 @@
         "bg_color": "#ffffff"
       }
     },
+    "why_stainlesssteel_dwM38L": {
+      "type": "Why-Stainlesssteel",
+      "blocks": {
+        "feature_AqY6RR": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 10,
+            "feature_title": "What does 5 Ply (Layers) in cookware mean?",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "In short: Performance",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<p>Cookware designed from 5 Ply (Layers) is a stable tool in every professional kitchen.<br/>Simply due to the fact Stainless steel when combined with Aluminum provides the highest level of durability and functionality a resturnat will ever need. Regardless how many hours it is used in the kitchen!</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_JLJKiL": {
+          "type": "feature",
+          "settings": {
+            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": false,
+            "reveal_delay": 3,
+            "feature_title": "Your Health Is Not A Trend",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Keep It Simple With Premium 5-Ply Stainless Steel",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<p>Forever</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        },
+        "feature_NiGqKQ": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 4,
+            "feature_title": "Toxin-Free Surface",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 24,
+            "feature_title_size_mobile": 20,
+            "feature_subtitle": "Zero Coating, Zero Degradation",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 16,
+            "feature_subtitle_size_mobile": 14,
+            "feature_description": "<ul><li><strong>Non-stick (PTFE):</strong> Scratches, flakes, and loses its release properties under high heat.</li><li><strong>Ceramic:</strong> Micro-cracks (crazing) eventually lead to sticking and staining.</li><li><strong>Stainless Steel:</strong> There is no coating to wear off. The material is the same from the surface to the core. If you scratch it, you just reveal more stainless steel.</li></ul>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 16,
+            "feature_description_size_mobile": 14
+          }
+        }
+      },
+      "block_order": [
+        "feature_AqY6RR",
+        "feature_JLJKiL",
+        "feature_NiGqKQ"
+      ],
+      "disabled": true,
+      "name": "Why Stainless Steel",
+      "settings": {
+        "background_color": "#f8f8f8",
+        "padding_top": 20,
+        "padding_bottom": 24,
+        "title": "5-Ply Stainless Steel?",
+        "title_font_weight": "300",
+        "title_font_style": "normal",
+        "title_color": "#121212",
+        "title_size_desktop": 20,
+        "title_size_mobile": 32,
+        "description": "<p><strong>Highest international standards and maximum safety.</strong><br/>Non-reactive materials that withstand high temperatures. Our <strong>5-ply stainless steel</strong> features a <strong>triple-layer aluminum core</strong> for perfect heat distribution, encased in high-quality <strong>18/10 stainless steel</strong>. Designed with <strong>sealed edges</strong> to protect the internal layers, ensuring it lasts for decades.</p>",
+        "description_font_weight": "400",
+        "description_font_style": "normal",
+        "description_color": "#000000",
+        "description_size_desktop": 15,
+        "description_size_mobile": 16,
+        "cta_text": "Discover More",
+        "cta_link": "shopify://collections/shop-by-collection",
+        "cta_font_weight": "400",
+        "cta_font_style": "normal",
+        "cta_color": "#000000",
+        "cta_size_desktop": 14,
+        "cta_size_mobile": 14
+      }
+    },
     "faq_custom_wyTcTx": {
       "type": "FAQ-custom",
       "blocks": {
@@ -469,11 +487,12 @@
   },
   "order": [
     "video_hero_banner_yifDgW",
-    "why_stainlesssteel_dwM38L",
     "featured_collection_n4BUU4",
     "176253019774d27060",
+    "1777541418ae6d3196",
     "product_set_selector_8iF49y",
     "video_carosle_3iKgF7",
+    "why_stainlesssteel_dwM38L",
     "faq_custom_wyTcTx"
   ]
 }

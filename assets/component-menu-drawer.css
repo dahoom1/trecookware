@@ -241,3 +241,181 @@ details[open].menu-opening > .menu-drawer__submenu {
     transition: none !important;
   }
 }
+
+/* ============================================================
+   REDESIGNED DRAWER LAYOUT
+   ============================================================ */
+
+/* Make inner-container a flex column so account-row is fixed at top */
+.menu-drawer__inner-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navigation container fills remaining height and scrolls */
+.menu-drawer__navigation-container {
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: 1fr auto auto;
+  align-content: start;
+}
+
+/* ── Account row ── */
+.menu-drawer__account-row {
+  flex-shrink: 0;
+  padding: 1.8rem 3rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.menu-drawer__account-row-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  font-size: 1.5rem;
+}
+
+.menu-drawer__account-row-link .svg-wrapper {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.menu-drawer__account-row-link account-icon > .svg-wrapper {
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+}
+
+/* ── Section label ("Explore") ── */
+.menu-drawer__section-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  padding: 0 3rem;
+  margin: 2.4rem 0 0.4rem;
+}
+
+/* ── Primary nav items – larger and bolder ── */
+.menu-drawer__navigation > .menu-drawer__menu > li > .menu-drawer__menu-item {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Arrow on leaf (no-children) items */
+.menu-drawer__leaf-arrow {
+  width: 15px;
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ── Sub-nav section ── */
+.menu-drawer__sub-nav {
+  padding: 2rem 3rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.menu-drawer__sub-nav-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin: 0 0 1.2rem;
+}
+
+.menu-drawer__sub-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+}
+
+.menu-drawer__sub-nav-item {
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  padding: 0.5rem 0;
+  display: block;
+  opacity: 0.85;
+}
+
+.menu-drawer__sub-nav-item:hover {
+  opacity: 1;
+}
+
+/* ── Bottom bar ── */
+.menu-drawer__bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 3rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.menu-drawer__bottom-bar .menu-drawer__localization {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0;
+  background: none;
+}
+
+.menu-drawer__bottom-login {
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.menu-drawer__bottom-login:hover {
+  opacity: 0.7;
+}
+
+/* ============================================================
+   RTL OVERRIDES
+   ============================================================ */
+
+/* Flip main-nav arrows to point left in RTL */
+[dir="rtl"] .menu-drawer__menu-item > .svg-wrapper {
+  right: auto;
+  left: 3rem;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+/* Leaf arrow */
+[dir="rtl"] .menu-drawer__leaf-arrow {
+  right: auto;
+  left: 3rem;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+/* Summary padding swap */
+[dir="rtl"] .menu-drawer summary.menu-drawer__menu-item {
+  padding-right: 3rem;
+  padding-left: 5.2rem;
+}
+
+/* Close/back button arrow: in RTL it points right (no rotation) */
+[dir="rtl"] .menu-drawer__close-button .svg-wrapper {
+  transform: scaleX(-1);
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+/* Account row icon gap is handled by flex gap; no mirroring needed */
+
+/* Bottom bar: reverse order for RTL (language selector on right, login on left) */
+[dir="rtl"] .menu-drawer__bottom-bar {
+  flex-direction: row-reverse;
+}

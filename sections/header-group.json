@@ -113,6 +113,9 @@
         "show_cart": true,
         "show_account": false,
         "show_login_link": true,
+        "sub_menu_handle": "know-more",
+        "drawer_explore_label": "Explore",
+        "drawer_submenu_label": "Know More",
         "show_language_selector": true,
         "show_track_order": false,
         "track_order_url": ""

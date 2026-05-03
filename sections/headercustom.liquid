@@ -1401,6 +1401,212 @@
       display: none;
     }
   }
+
+  /* ===========================
+     MOBILE DRAWER – REDESIGNED LAYOUT
+  =========================== */
+
+  /* Spacer that sits below the fixed page header */
+  .custom-header__drawer-header-spacer {
+    flex-shrink: 0;
+    height: var(--header-height, 6rem);
+  }
+
+  /* Account / Login row at top of drawer */
+  .custom-header__drawer-account-row {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 2rem;
+    text-decoration: none;
+    color: {{ section.settings.text_color }};
+    font-size: 1.5rem;
+    font-family: var(--font-body-family);
+    /* Slide-in animation — same curve as nav items */
+    opacity: 0;
+    {% if localization.language.iso_code == 'ar' %}
+      transform: translateX(30px);
+    {% else %}
+      transform: translateX(-30px);
+    {% endif %}
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .custom-header__drawer.is-open .custom-header__drawer-account-row {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.15s;
+  }
+
+  .custom-header__drawer-account-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+  }
+
+  /* Separator line */
+  .custom-header__drawer-separator {
+    height: 1px;
+    background-color: {{ section.settings.border_color }};
+    flex-shrink: 0;
+  }
+
+  /* Scrollable area (replaces overflow on drawer-nav) */
+  .custom-header__drawer-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2rem;
+  }
+
+  /* "Explore" section label — tighter top padding */
+  .custom-header__drawer-section-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    color: {{ section.settings.text_color }};
+    padding: 1.6rem 2rem 0.4rem;
+    margin: 0;
+  }
+
+  /* Override: nav is no longer the scroll container */
+  .custom-header__drawer-nav {
+    flex: unset !important;
+    overflow-y: unset !important;
+    padding: 0 2rem !important;
+  }
+
+  /* Override: remove old padding-top + tighten item gap */
+  .custom-header__drawer-nav > ul {
+    padding-top: 0 !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .custom-header__drawer-nav > ul > li {
+    margin-bottom: 0 !important;
+  }
+
+  /* Shrink nav font to fit all items in the viewport */
+  .custom-header__drawer-nav-parent {
+    font-size: clamp(2.8rem, 6.5vw, 3.6rem) !important;
+    line-height: 1.15 !important;
+    padding: 0.3rem 0 !important;
+  }
+
+  /* Chevron arrow on nav items that have children */
+  .custom-header__drawer-nav-chevron {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .custom-header__drawer-nav-chevron svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  /* Parent items with children: flex so chevron sits on the right */
+  .custom-header__drawer-nav-parent.has-children {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* RTL: flip chevron direction */
+  {% if localization.language.iso_code == 'ar' %}
+    .custom-header__drawer-nav-chevron svg {
+      transform: scaleX(-1);
+    }
+  {% endif %}
+
+  /* Sub-menu section — slides in as a block after nav items */
+  .custom-header__drawer-submenu {
+    border-top: 1px solid {{ section.settings.border_color }};
+    padding: 1.6rem 2rem 0.5rem;
+    opacity: 0;
+    {% if localization.language.iso_code == 'ar' %}
+      transform: translateX(30px);
+    {% else %}
+      transform: translateX(-30px);
+    {% endif %}
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .custom-header__drawer.is-open .custom-header__drawer-submenu {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.60s;
+  }
+
+  .custom-header__drawer-submenu-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    color: {{ section.settings.text_color }};
+    margin: 0 0 1rem;
+  }
+
+  .custom-header__drawer-submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Sub-menu items: same slide-in as nav items, staggered after them */
+  .custom-header__drawer-submenu-list li {
+    opacity: 0;
+    {% if localization.language.iso_code == 'ar' %}
+      transform: translateX(30px);
+    {% else %}
+      transform: translateX(-30px);
+    {% endif %}
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(1) { transition-delay: 0.67s; }
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(2) { transition-delay: 0.72s; }
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(3) { transition-delay: 0.77s; }
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(4) { transition-delay: 0.82s; }
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(5) { transition-delay: 0.87s; }
+  .custom-header__drawer.is-open .custom-header__drawer-submenu-list li:nth-child(6) { transition-delay: 0.92s; }
+
+  .custom-header__drawer-submenu-link {
+    text-decoration: none;
+    color: {{ section.settings.text_color }};
+    font-size: 1.5rem;
+    font-family: var(--font-body-family);
+    display: block;
+    padding: 0.55rem 0;
+    opacity: 0.85;
+  }
+
+  .custom-header__drawer-submenu-link:hover,
+  .custom-header__drawer-submenu-link.is-active {
+    opacity: 1;
+  }
+
+  /* Footer: language selector only — horizontal, no gap needed */
+  .custom-header__drawer-footer {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+  }
 </style>
 
 {% liquid
@@ -1576,9 +1782,6 @@
                   data-language-url="{{ language.root_url }}"
                 >
                   <span>{{ language.endonym_name }}</span>
-                  {% if language.iso_code == localization.language.iso_code %}
-                    <span class="custom-header__lang-check">✓</span>
-                  {% endif %}
                 </button>
               {% endfor %}
             </div>
@@ -1625,65 +1828,107 @@
 {%- comment -%} Mobile drawer {%- endcomment -%}
 <div class="custom-header__drawer" id="headerDrawer">
   <div class="custom-header__drawer-content">
-    <nav class="custom-header__drawer-nav" role="navigation">
-      <ul>
-        {% for link in section.settings.menu.links %}
-          <li>
-            {% if link.links.size > 0 %}
-              <span class="custom-header__drawer-nav-parent has-children" data-parent-nav="{{ link.title | handle }}">
-                {{ link.title }}
-              </span>
-              
-              <div class="custom-header__drawer-accordion" data-accordion-for="{{ link.title | handle }}">
-                {% for child_link in link.links %}
-                  {% if child_link.links.size > 0 %}
-                    <div class="custom-header__drawer-accordion-item">
-                      <button class="custom-header__drawer-accordion-trigger" 
-                              aria-expanded="false"
-                              data-accordion-trigger
-                              data-url="{{ child_link.url }}">
-                        <span class="custom-header__drawer-accordion-title">{{ child_link.title }}</span>
-                        <span class="custom-header__drawer-accordion-icon">+</span>
-                      </button>
-                      <div class="custom-header__drawer-accordion-content" data-accordion-content>
-                        <ul class="custom-header__drawer-accordion-links">
-                          {% for grandchild_link in child_link.links %}
-                            <li>
-                              <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
-                            </li>
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-                  {% else %}
-                    <div class="custom-header__drawer-accordion-item">
-                      <a href="{{ child_link.url }}" class="custom-header__drawer-simple-link">
-                        {{ child_link.title }}
-                      </a>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            {% else %}
-              <a href="{{ link.url }}" class="custom-header__drawer-nav-parent">
-                {{ link.title }}
-              </a>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
 
+    {%- comment -%} Spacer: pushes content below the fixed page header {%- endcomment -%}
+    <div class="custom-header__drawer-header-spacer"></div>
+
+    {%- comment -%} Account / Login row — always visible {%- endcomment -%}
+    <a
+      href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url | default: '/account/login' }}{%- endif -%}"
+      class="custom-header__drawer-account-row"
+      rel="nofollow"
+    >
+      <svg class="custom-header__drawer-account-icon" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke="currentColor">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/>
+      </svg>
+      <span>
+        {%- if customer -%}
+          {{ 'customer.account_fallback' | t }}
+        {%- else -%}
+          {{ 'customer.log_in' | t }}
+        {%- endif -%}
+      </span>
+    </a>
+
+    {%- comment -%} Separator line {%- endcomment -%}
+    <div class="custom-header__drawer-separator"></div>
+
+    {%- comment -%} Scrollable area: nav + sub-menu {%- endcomment -%}
+    <div class="custom-header__drawer-scroll">
+
+      <p class="custom-header__drawer-section-label">{{ section.settings.drawer_explore_label | escape }}</p>
+
+      <nav class="custom-header__drawer-nav" role="navigation">
+        <ul>
+          {% for link in section.settings.menu.links %}
+            <li>
+              {% if link.links.size > 0 %}
+                <span class="custom-header__drawer-nav-parent has-children" data-parent-nav="{{ link.title | handle }}">
+                  {{ link.title }}
+                  <span class="custom-header__drawer-nav-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"/></svg>
+                  </span>
+                </span>
+
+                <div class="custom-header__drawer-accordion" data-accordion-for="{{ link.title | handle }}">
+                  {% for child_link in link.links %}
+                    {% if child_link.links.size > 0 %}
+                      <div class="custom-header__drawer-accordion-item">
+                        <button class="custom-header__drawer-accordion-trigger"
+                                aria-expanded="false"
+                                data-accordion-trigger
+                                data-url="{{ child_link.url }}">
+                          <span class="custom-header__drawer-accordion-title">{{ child_link.title }}</span>
+                          <span class="custom-header__drawer-accordion-icon">+</span>
+                        </button>
+                        <div class="custom-header__drawer-accordion-content" data-accordion-content>
+                          <ul class="custom-header__drawer-accordion-links">
+                            {% for grandchild_link in child_link.links %}
+                              <li><a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a></li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="custom-header__drawer-accordion-item">
+                        <a href="{{ child_link.url }}" class="custom-header__drawer-simple-link">{{ child_link.title }}</a>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% else %}
+                <a href="{{ link.url }}" class="custom-header__drawer-nav-parent">{{ link.title }}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      {%- comment -%} Sub-menu: native Shopify link list via handle set in theme editor {%- endcomment -%}
+      {%- assign drawer_sub_menu = linklists[section.settings.sub_menu_handle] -%}
+      {%- if drawer_sub_menu != blank and drawer_sub_menu.links.size > 0 -%}
+        <div class="custom-header__drawer-submenu">
+          <p class="custom-header__drawer-submenu-label">{{ section.settings.drawer_submenu_label | escape }}</p>
+          <ul class="custom-header__drawer-submenu-list">
+            {%- for link in drawer_sub_menu.links -%}
+              <li>
+                <a
+                  href="{{ link.url }}"
+                  class="custom-header__drawer-submenu-link{% if link.current %} is-active{% endif %}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >{{ link.title | escape }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} Bottom bar: language selector + login {%- endcomment -%}
     <div class="custom-header__drawer-footer">
-      {% if section.settings.show_login_link %}
-        {% if customer %}
-          <a href="{{ routes.account_url }}" class="custom-header__drawer-footer-link">Log in</a>
-        {% else %}
-          <a href="{{ routes.account_login_url }}" class="custom-header__drawer-footer-link">Log in</a>
-        {% endif %}
-      {% endif %}
-      
-      {%- comment -%} Language selector with inline dropdown {%- endcomment -%}
+
       {% if section.settings.show_language_selector and localization.available_languages.size > 1 %}
         <div class="custom-header__mobile-lang-wrapper" id="mobileLangWrapper">
           <button class="custom-header__language-selector" id="mobileLangToggle" type="button" aria-expanded="false">
@@ -1708,9 +1953,6 @@
                     type="button"
                   >
                     <span>{{ language.endonym_name }}</span>
-                    {% if language.iso_code == localization.language.iso_code %}
-                      <span class="custom-header__lang-check">✓</span>
-                    {% endif %}
                   </button>
                 </li>
               {% endfor %}
@@ -1718,10 +1960,7 @@
           </div>
         </div>
       {% endif %}
-      
-      {% if section.settings.show_track_order %}
-        <a href="{{ section.settings.track_order_url | default: '/pages/track-order' }}" class="custom-header__drawer-footer-link">Track order</a>
-      {% endif %}
+
     </div>
   </div>
 </div>
@@ -2857,6 +3096,26 @@
       "id": "show_login_link",
       "label": "Show Login in Drawer",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "sub_menu_handle",
+      "label": "Sub-menu handle",
+      "info": "Go to Online Store → Navigation, create a menu, and paste its handle here (e.g. drawer-sub-menu). Links will appear as a single-column list below the main nav."
+    },
+    {
+      "type": "text",
+      "id": "drawer_explore_label",
+      "label": "Explore section label",
+      "default": "Explore",
+      "info": "Text shown above the main nav items in the mobile drawer."
+    },
+    {
+      "type": "text",
+      "id": "drawer_submenu_label",
+      "label": "Sub-menu section label",
+      "default": "More",
+      "info": "Text shown above the sub-menu links in the mobile drawer."
     },
     {
       "type": "checkbox",

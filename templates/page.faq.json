@@ -1,0 +1,121 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "faq_custom_4rtH8w": {
+      "type": "FAQ-custom",
+      "blocks": {
+        "collapsible_row_7WG6Gd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I ensure food doesn't stick to the stainless steel pan?",
+            "row_content": "<p>The secret is preheating the pan while it is empty (the \"water drop test\"). Once water drops form beads that glide across the surface, the pan is ready. IMMEDIATELY lower the heat and wait a few seconds before adding oil or butter. This creates a natural non-stick surface.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_VBcJB6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Why does my oil or butter burn immediately after I add it to the pan?",
+            "row_content": "<p>This happens because the pan is too hot. After performing the water test, you must lower the heat and wait for the temperature to adjust to the type of food you are cooking. Butter and olive oil have low smoke points and require much lower heat than high smoke point oil like Avocado oil or Coconut oil!</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_m7Qbfg": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do I need to perform the preheating and water test every time I cook?",
+            "row_content": "<p>Yes, it is recommended to preheat the pan slightly before adding oil every time you use stainless steel. With experience, you will eventually know the exact timing for your stove without needing to test with water.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_z7qf9E": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I know when the pan has cooled down enough after lowering the heat?",
+            "row_content": "<p>Beginners can use the water drop method again to check the reaction. Over time, you will understand your cookware better. Tre cookware is made of five layers for even heat distribution, which makes temperature control much easier.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_gknnMP": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "I tried the technique with eggs, but they burnt and the pan turned brown. What went wrong?",
+            "row_content": "<p>The heat exceeded the correct level. Eggs require low heat. After preheating and lowering the flame, left the pan off the stove and wait a few seconds for the pan to reach a gentle temperature before adding the eggs.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_BUf84a": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "The oil burnt and left brown stains on my pan. How can I restore its color?",
+            "row_content": "<p>Stainless steel is very durable and can always return to its original state. Boil water with lemon slices in the pan (with the lid on) for several minutes. Let it cool slightly, then scrub with a sponge, dish soap, and baking soda. For very stubborn stains, use a specialized stainless steel cleaner.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_iLGgrn": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I use Tre cookware in the oven? And do the handles get hot?",
+            "row_content": "<p>Yes, the pans are oven-safe. The handles are heat-resistant for daily stovetop cooking and usually don't require gloves. However, since they are made of stainless steel, they will get hot during long cooking sessions or when used inside the oven.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_TRwEAX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "If I have to use oil anyway, why is stainless steel better than \"non-stick\" (Tefal/Granite) pans?",
+            "row_content": "<p>Traditional non-stick coatings lose their properties over time, peel off, and can eventually become harmful to your health. Learning to cook with stainless steel ensures you have a healthy, sustainable tool that lasts for many years without needing replacement.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_LMbtfp": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What are the specifications of Tre cookware?",
+            "row_content": "<p>Our cookware is made of high-quality 18/10 stainless steel and consists of 5 layers (alternating steel and aluminum). Unlike pans with a separate attached base, our 5-ply construction goes up the side walls, ensuring the entire pot is thick and distributes heat evenly to prevent hot spots and burning.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_7WG6Gd",
+        "collapsible_row_VBcJB6",
+        "collapsible_row_m7Qbfg",
+        "collapsible_row_z7qf9E",
+        "collapsible_row_gknnMP",
+        "collapsible_row_BUf84a",
+        "collapsible_row_iLGgrn",
+        "collapsible_row_TRwEAX",
+        "collapsible_row_LMbtfp"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "color_scheme": "",
+        "open_first_collapsible_row": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq_custom_4rtH8w"
+  ]
+}

@@ -389,6 +389,8 @@
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",
+      "drawer_explore_label": "Explore",
+      "drawer_sub_menu_label": "Sub-menu",
       "cart_count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"

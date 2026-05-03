@@ -4314,6 +4314,8 @@
     "header": {
       "announcement": "إعلان",
       "menu": "القائمة",
+      "drawer_explore_label": "اكتشف",
+      "drawer_sub_menu_label": "المزيد",
       "cart_count": {
         "one": "{{ count }} منتج",
         "other": "{{ count }} منتجات"

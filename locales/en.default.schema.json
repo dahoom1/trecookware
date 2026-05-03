@@ -1095,6 +1095,13 @@
         "menu": {
           "label": "Menu"
         },
+        "sub_menu_header": {
+          "content": "Drawer sub-menu links"
+        },
+        "sub_menu_handle": {
+          "label": "Sub-menu handle",
+          "info": "Go to Online Store → Navigation, create or open a menu, and paste its handle here (e.g. drawer-sub-menu)"
+        },
         "menu_type_desktop": {
           "label": "Menu type",
           "options__1": {
