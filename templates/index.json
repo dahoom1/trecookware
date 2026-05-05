@@ -135,23 +135,6 @@
         "padding_bottom": 20
       }
     },
-    "1777541418ae6d3196": {
-      "type": "apps",
-      "blocks": {
-        "gsc_instagram_feed_instafeed_gKPBC8": {
-          "type": "shopify://apps/gsc-instagram-feed/blocks/instafeed/96970b1b-b770-454f-b16b-51f47e1aa4ed",
-          "settings": {
-            "widget_id": "GSC-VIAluRUHfNiXvws"
-          }
-        }
-      },
-      "block_order": [
-        "gsc_instagram_feed_instafeed_gKPBC8"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
     "176253019774d27060": {
       "type": "apps",
       "blocks": {
@@ -168,6 +151,23 @@
       },
       "block_order": [
         "judge_me_reviews_all_reviews_page_Azw3YM"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1777541418ae6d3196": {
+      "type": "apps",
+      "blocks": {
+        "gsc_instagram_feed_instafeed_gKPBC8": {
+          "type": "shopify://apps/gsc-instagram-feed/blocks/instafeed/96970b1b-b770-454f-b16b-51f47e1aa4ed",
+          "settings": {
+            "widget_id": "GSC-VIAluRUHfNiXvws"
+          }
+        }
+      },
+      "block_order": [
+        "gsc_instagram_feed_instafeed_gKPBC8"
       ],
       "settings": {
         "include_margins": true
@@ -406,7 +406,6 @@
         "feature_JLJKiL",
         "feature_NiGqKQ"
       ],
-      "disabled": true,
       "name": "Why Stainless Steel",
       "settings": {
         "background_color": "#f8f8f8",
@@ -487,12 +486,12 @@
   },
   "order": [
     "video_hero_banner_yifDgW",
+    "why_stainlesssteel_dwM38L",
     "featured_collection_n4BUU4",
     "176253019774d27060",
     "1777541418ae6d3196",
     "product_set_selector_8iF49y",
     "video_carosle_3iKgF7",
-    "why_stainlesssteel_dwM38L",
     "faq_custom_wyTcTx"
   ]
 }

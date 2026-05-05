@@ -18,7 +18,7 @@
      data-shipping-wrapper
      data-threshold="{{ free_shipping_threshold }}"
      data-currency="{{ cart.currency.iso_code }}"
-     data-text-remaining="{{ 'sections.cart.progress_bar.add_for_free_shipping_html' | t: amount: 'AMOUNT_PLACEHOLDER' | escape }}"
+     data-text-remaining="{{ 'sections.cart.progress_bar.add_for_free_shipping' | t: amount: 'AMOUNT_PLACEHOLDER' | escape }}"
      data-text-unlocked="{{ 'sections.cart.progress_bar.free_shipping_unlocked' | t | escape }}">
   
   <div class="shipping-progress-bar">
@@ -31,7 +31,7 @@
   <div class="shipping-progress-text">
     {%- if remaining_amount > 0 -%}
       {%- assign remaining_formatted = remaining_amount | money -%}
-      <p>{{ 'sections.cart.progress_bar.add_for_free_shipping_html' | t: amount: remaining_formatted }}</p>
+      <p>{{ 'sections.cart.progress_bar.add_for_free_shipping' | t: amount: remaining_formatted }}</p>
     {%- else -%}
       <p class="success-text">{{ 'sections.cart.progress_bar.free_shipping_unlocked' | t }}</p>
     {%- endif -%}
