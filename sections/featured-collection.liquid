@@ -1,11 +1,10 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
-
-{{ 'component-slider.css' | asset_url | stylesheet_tag }}
-{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'template-collection.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {% if section.settings.image_shape == 'blob' %}
-  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="{{ 'mask-blobs.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
 {%- unless section.settings.quick_add == 'none' -%}
@@ -171,6 +170,100 @@
   /* END RTL SUPPORT                            */
   /* ------------------------------------------- */
 
+  /* ------------------------------------------- */
+  /* MOBILE IMAGE SWIPE (TestImageSwipe)        */
+  /* ------------------------------------------- */
+
+  /* Desktop: preserve current behaviour — hide secondary image if section setting is off */
+  {% unless section.settings.show_secondary_image %}
+    @media screen and (min-width: 750px) {
+      #collection-{{ section.id }} .card__media .media--hover-effect img + img {
+        display: none !important;
+      }
+    }
+  {% endunless %}
+
+  @media screen and (max-width: 749px) {
+    /* Both images visible, no transition on load — prevents zoom glitch when
+       browser applies translateX on page paint. Transition is added by JS
+       via img-swipe-ready only after first touch. */
+    #collection-{{ section.id }} .card__media .media--hover-effect img {
+      opacity: 1 !important;
+    }
+
+    /* Transition enabled only after first user interaction */
+    #collection-{{ section.id }} .card__media.img-swipe-ready .media--hover-effect img {
+      transition: transform 0.2s ease-out !important;
+      will-change: transform;
+    }
+
+    /* Disable desktop hover-scale on mobile */
+    #collection-{{ section.id }} .card-wrapper:hover .media--hover-effect > img:first-child {
+      transform: translateX(0%) !important;
+    }
+
+    /* LTR: img2 starts to the LEFT — swipe right reveals it */
+    #collection-{{ section.id }} .card__media .media--hover-effect img + img {
+      transform: translateX(-100%) !important;
+    }
+
+    /* LTR active: img1 exits right, img2 slides to centre */
+    #collection-{{ section.id }} .card__media.img-swipe--active .media--hover-effect img:first-child {
+      transform: translateX(100%) !important;
+    }
+    #collection-{{ section.id }} .card__media.img-swipe--active .media--hover-effect img + img {
+      transform: translateX(0%) !important;
+    }
+
+    {% if request.locale.iso_code == 'ar' %}
+    /* Arabic: img2 starts to the RIGHT — swipe left reveals it */
+    #collection-{{ section.id }} .card__media .media--hover-effect img + img {
+      transform: translateX(100%) !important;
+    }
+
+    /* Arabic active: img1 exits left, img2 slides to centre from right */
+    #collection-{{ section.id }} .card__media.img-swipe--active .media--hover-effect img:first-child {
+      transform: translateX(-100%) !important;
+    }
+    #collection-{{ section.id }} .card__media.img-swipe--active .media--hover-effect img + img {
+      transform: translateX(0%) !important;
+    }
+    {% endif %}
+
+    /* Indicator lines — overlaid at the bottom of the image */
+    #collection-{{ section.id }} .card-img-swipe-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #collection-{{ section.id }} .card-img-swipe-dot {
+      width: 20px;
+      height: 2px;
+      border-radius: 1px;
+      background-color: rgba(200, 200, 200, 0.6);
+      border: none;
+      padding: 0;
+      display: block;
+      transition: background-color 0.25s ease;
+    }
+
+    #collection-{{ section.id }} .card-img-swipe-dot.active {
+      background-color: rgba(80, 80, 80, 0.9);
+    }
+  }
+
+  /* ------------------------------------------- */
+  /* END MOBILE IMAGE SWIPE                     */
+  /* ------------------------------------------- */
+
 {%- endstyle -%}
 
 
@@ -258,7 +351,7 @@
                   media_aspect_ratio: section.settings.image_ratio,
                   image_shape: section.settings.image_shape,
                   lazy_load: lazy_load,
-                  show_secondary_image: section.settings.show_secondary_image,
+                  show_secondary_image: true,
                   show_vendor: section.settings.show_vendor,
                   show_rating: section.settings.show_rating,
                   skip_styles: skip_card_product_styles,
@@ -349,6 +442,118 @@
     {%- endif -%}
   </div>
 </div>
+
+<script>
+(function () {
+  function initImageSwipe() {
+    if (window.innerWidth >= 750) return;
+
+    var sectionEl = document.getElementById('collection-{{ section.id }}');
+    if (!sectionEl) return;
+
+    /* Use Liquid locale — Dawn uses CSS-only RTL, not <html dir="rtl"> */
+    var isRTL = '{{ request.locale.iso_code }}' === 'ar';
+    var cardMediaList = sectionEl.querySelectorAll('.card__media');
+
+    cardMediaList.forEach(function (cardMedia) {
+      var media = cardMedia.querySelector('.media--hover-effect');
+      if (!media) return;
+      var imgs = media.querySelectorAll('img');
+      if (imgs.length < 2) return;
+
+      var dotsWrap = document.createElement('div');
+      dotsWrap.className = 'card-img-swipe-dots';
+
+      var dot1 = document.createElement('span');
+      dot1.className = 'card-img-swipe-dot active';
+      var dot2 = document.createElement('span');
+      dot2.className = 'card-img-swipe-dot';
+      dotsWrap.appendChild(dot1);
+      dotsWrap.appendChild(dot2);
+
+      /* Inject inside card__inner (after card__media) so dots are
+         positioned relative to the image area, not below it */
+      cardMedia.insertAdjacentElement('afterend', dotsWrap);
+
+      var showingSecond = false;
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchingImage = false;
+      var swipeAxis = null;
+
+      function showSecond() {
+        showingSecond = true;
+        cardMedia.classList.add('img-swipe--active');
+        dot1.classList.remove('active');
+        dot2.classList.add('active');
+      }
+
+      function showFirst() {
+        showingSecond = false;
+        cardMedia.classList.remove('img-swipe--active');
+        dot1.classList.add('active');
+        dot2.classList.remove('active');
+      }
+
+      /* Attach to card-wrapper — the card link's ::after overlay has z-index:1
+         and sits above card__media, so touch events never reach card__media.
+         We listen on the wrapper and filter by image bounds instead. */
+      var cardWrapper = cardMedia.closest('.card-wrapper');
+      if (!cardWrapper) return;
+
+      cardWrapper.addEventListener('touchstart', function (e) {
+        var rect = cardMedia.getBoundingClientRect();
+        var t = e.touches[0];
+        touchingImage = (
+          t.clientX >= rect.left && t.clientX <= rect.right &&
+          t.clientY >= rect.top  && t.clientY <= rect.bottom
+        );
+        if (touchingImage) {
+          touchStartX = t.clientX;
+          touchStartY = t.clientY;
+          swipeAxis = null;
+          /* Enable transition on first touch so page-load has no animation */
+          cardMedia.classList.add('img-swipe-ready');
+        }
+      }, { passive: true });
+
+      cardWrapper.addEventListener('touchmove', function (e) {
+        if (!touchingImage || swipeAxis === 'vertical') return;
+        var dx = e.touches[0].clientX - touchStartX;
+        var dy = e.touches[0].clientY - touchStartY;
+        if (swipeAxis === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+          swipeAxis = Math.abs(dx) >= Math.abs(dy) ? 'horizontal' : 'vertical';
+        }
+        if (swipeAxis === 'horizontal') {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      cardWrapper.addEventListener('touchend', function (e) {
+        if (!touchingImage || swipeAxis !== 'horizontal') return;
+        touchingImage = false;
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        var dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) < 20 || Math.abs(dx) < Math.abs(dy)) return;
+
+        if (isRTL) {
+          if (dx < 0 && !showingSecond) showSecond();
+          else if (dx > 0 && showingSecond) showFirst();
+        } else {
+          if (dx > 0 && !showingSecond) showSecond();
+          else if (dx < 0 && showingSecond) showFirst();
+        }
+      }, { passive: true });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImageSwipe);
+  } else {
+    initImageSwipe();
+  }
+})();
+</script>
 
 {% schema %}
 {
