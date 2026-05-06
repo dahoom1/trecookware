@@ -2255,7 +2255,7 @@
   const overlay = document.getElementById('headerOverlay');
 
   function openDrawer() {
-    // Reset all accordion states so first-item auto-open is always fresh
+    // Reset all accordion states
     drawer.querySelectorAll('.custom-header__drawer-accordion').forEach(acc => {
       acc.classList.remove('is-visible');
     });
@@ -2272,9 +2272,6 @@
         if (content) content.classList.remove('is-open');
       }
     });
-
-    // Auto-open first menu item and its first sub-accordion
-    openFirstAccordion();
 
     // Use the same offset as cart drawer (accounts for announcement bar + header)
     const cartDrawerOffset = getComputedStyle(document.documentElement)
@@ -2323,35 +2320,6 @@
   // MOBILE ACCORDION FUNCTIONALITY
   // ===========================
   const parentNavs = drawer.querySelectorAll('[data-parent-nav]');
-
-  // Open first accordion and its first sub-item by default
-  function openFirstAccordion() {
-    const firstParentNav = drawer.querySelector('[data-parent-nav]');
-    if (!firstParentNav) return;
-
-    const parentHandle = firstParentNav.getAttribute('data-parent-nav');
-    const accordion = drawer.querySelector(`[data-accordion-for="${parentHandle}"]`);
-
-    if (!accordion) return;
-
-    accordion.classList.add('is-visible');
-    firstParentNav.classList.add('active');
-
-    // Also expand the first sub-accordion trigger within this accordion
-    const firstTrigger = accordion.querySelector('[data-accordion-trigger]');
-    if (firstTrigger) {
-      const firstItem = firstTrigger.closest('.custom-header__drawer-accordion-item');
-      const firstContent = firstItem ? firstItem.querySelector('.custom-header__drawer-accordion-content') : null;
-      const firstIcon = firstTrigger.querySelector('.custom-header__drawer-accordion-icon');
-
-      firstTrigger.setAttribute('aria-expanded', 'true');
-      if (firstIcon) firstIcon.textContent = '−';
-      if (firstContent) firstContent.classList.add('is-open');
-    }
-  }
-
-  // Call on page load
-  openFirstAccordion();
 
   parentNavs.forEach(parentNav => {
     parentNav.addEventListener('click', function() {

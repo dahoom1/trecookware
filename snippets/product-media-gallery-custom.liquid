@@ -6,8 +6,7 @@
   - Swipe support for mobile
 {% endcomment %}
 
-<link rel="stylesheet" href="{{ 'custom-product-gallery.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="{{ 'custom-product-gallery.css' | asset_url }}"></noscript>
+{{ 'custom-product-gallery.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
@@ -36,7 +35,7 @@
               featured_media.preview_image
               | image_url: width: 1500
               | image_tag:
-                loading: 'lazy',
+                loading: 'eager',
                 sizes: '100vw',
                 class: 'custom-gallery__image',
                 alt: featured_media.alt,
