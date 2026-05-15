@@ -11,13 +11,132 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 0,
         "padding_bottom": 0
       }
+    },
+    "why_stainlesssteel_rPeneb": {
+      "type": "Why-Stainlesssteel",
+      "blocks": {
+        "feature_PVP6JG": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/IMG_1022.webp",
+            "icon": "shopify://shop_images/a3a01972a53c0fc5b4984ee9516334dd6e8b4401.png",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
+            "feature_title": "TRE™",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Unlimited Lifetime Warranty",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "<p>We adhere to the highest international standards in crafting our <strong>5-Ply Stainless Steel </strong>to ensure professional performance and exceptional durability. Buy it once. Use it for life.</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        },
+        "feature_dJnqgx": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/IMG_6077.jpg",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
+            "feature_title": "What Is Covered?",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Performance",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "<ul><li><strong>Structural Defects </strong>Defects in the distribution or bonding of the five layers.</li><li><strong>Layer Separation & Metal Warping </strong>Any delamination or warping arising from manufacturing.</li><li><strong>Handles & Welds </strong>Defects in handle attachment points and weld integrity.</li></ul>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        },
+        "feature_FrGpBU": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/IMG_7367_2.jpg",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 0,
+            "feature_title": "How to Claim Your Warranty",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "600",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "<p>reach out to our Customer Care team and include the following: </p><ol><li><strong>Photo of the defect: </strong>A clear, well-lit image showing the issue.</li><li><strong>Proof of purchase: </strong>Your order number or invoice OR Email us your purchase confirmation letter.</li><li><strong>Description of the issue: </strong>Explain the defect and how it occurred</li><li><strong>Delivery address: </strong>Where we should send the replacement.</li></ol>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        }
+      },
+      "block_order": [
+        "feature_PVP6JG",
+        "feature_dJnqgx",
+        "feature_FrGpBU"
+      ],
+      "name": "Why Stainless Steel",
+      "settings": {
+        "background_color": "#f5f5f5",
+        "padding_top": 32,
+        "padding_bottom": 32,
+        "title": "Tre Warranty",
+        "title_font_weight": "600",
+        "title_font_style": "normal",
+        "title_color": "#000000",
+        "title_size_desktop": 48,
+        "title_size_mobile": 28,
+        "description": "<h5>Our Promise<br/><br/>We believe the best tools are the ones you only have to buy once. Our promise is to provide professional-grade performance that doesn't just last a season, but becomes a staple in your kitchen for generations. If our craftsmanship doesn't stand the test of time, we'll make it right.<br/><br/>Get in Touch<br/><br/>Email: Info@trecookware.com<br/><br/>WhatsApp: +966 55 388 6895</h5><h5></h5>",
+        "description_font_weight": "300",
+        "description_font_style": "normal",
+        "description_color": "#000000",
+        "description_size_desktop": 16,
+        "description_size_mobile": 14,
+        "cta_text": "",
+        "cta_link": "",
+        "cta_font_weight": "400",
+        "cta_font_style": "normal",
+        "cta_color": "#000000",
+        "cta_size_desktop": 14,
+        "cta_size_mobile": 14
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "why_stainlesssteel_rPeneb"
   ]
 }

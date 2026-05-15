@@ -315,7 +315,15 @@
           "close": "إغلاق",
           "expand": "توسيع",
           "collapse": "طي"
-        }
+        },
+        "thank_you_confirmed_with_email_description": {
+          "single_store": "ستصلك رسالة تأكيد عبر البريد الإلكتروني قريباً"
+        },
+        "thank_you_confirmed_with_email_and_phone_description": {
+          "single_store": "ستصلك رسالة تأكيد عبر البريد الإلكتروني قريباً"
+        },
+        "page_title": "!%{display_name} شكراً لك",
+        "customer_information_title": "تفاصيل الطلب"
       },
       "general": {
         "page_title": "إتمام الدفع",
@@ -2179,7 +2187,8 @@
           "continue_purchase_in_window": "متابعة الشراء في نافذة {{walletName}}",
           "and_return_to_checkout": "والعودة إلى صفحة الدفع",
           "cancel": "إلغاء"
-        }
+        },
+        "recovery_notice": "هناك مشكلة في تفاصيل طلبك. يرجى تحديث بياناتك لإتمام عملية الدفع."
       },
       "store_credit_errors": {
         "generic_error": "حدثت مشكلة في رصيد المتجر. حاول مرة أخرى أو أعد تحميل الصفحة."
@@ -3900,7 +3909,8 @@
         "subheading_with_sign_in_options": "اختر طريقة تسجيل الدخول",
         "input_field_label": "البريد الإلكتروني",
         "button": "متابعة",
-        "or": "أو"
+        "or": "أو",
+        "consent_agreement": "بمتابعتك، أنت توافق على %{terms}"
       },
       "error": {
         "invalid": {

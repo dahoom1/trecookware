@@ -39,6 +39,17 @@
   display: block;
 }
 
+/* Lazy-load poster: stays visible until the real video can play */
+.hero-video-banner__video--poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease;
+}
+.hero-video-banner__video-wrapper.is-video-ready .hero-video-banner__video--poster {
+  opacity: 0;
+}
+
 .hero-video-banner__overlay {
   position: absolute;
   top: 0;
@@ -179,7 +190,7 @@
   .hero-video-banner {
     display: flex;
     flex-direction: column;
-    height: calc(100svh - var(--cart-drawer-offset, 100px));
+    height: calc(100svh - var(--initial-header-offset, 100px));
   }
 
   .hero-video-banner__video-panel {
@@ -294,15 +305,36 @@
   <!-- RIGHT: Video panel — full width on mobile (top), 2/3 on desktop -->
   <div class="hero-video-banner__video-panel">
     {% if section.settings.video_shopify != blank %}
-      <div class="hero-video-banner__video-wrapper">
-        {{ section.settings.video_shopify | video_tag:
-          autoplay: section.settings.video_autoplay,
-          loop: section.settings.video_loop,
-          muted: section.settings.video_muted,
-          controls: false,
-          class: 'hero-video-banner__video',
-          image_size: '1920x'
-        }}
+      <div class="hero-video-banner__video-wrapper"{% if section.settings.video_lazy_load %} data-lazy-hero-video{% endif %}>
+        {% if section.settings.video_lazy_load and section.settings.video_shopify.preview_image != blank %}
+          {{ section.settings.video_shopify.preview_image | image_url: width: 1920 | image_tag:
+            class: 'hero-video-banner__video hero-video-banner__video--poster',
+            loading: 'eager',
+            fetchpriority: 'high',
+            sizes: '100vw',
+            widths: '375, 750, 1100, 1500, 1920',
+            alt: ''
+          }}
+          <template data-hero-video-template>
+            {{ section.settings.video_shopify | video_tag:
+              autoplay: section.settings.video_autoplay,
+              loop: section.settings.video_loop,
+              muted: section.settings.video_muted,
+              controls: false,
+              class: 'hero-video-banner__video',
+              image_size: '1920x'
+            }}
+          </template>
+        {% else %}
+          {{ section.settings.video_shopify | video_tag:
+            autoplay: section.settings.video_autoplay,
+            loop: section.settings.video_loop,
+            muted: section.settings.video_muted,
+            controls: false,
+            class: 'hero-video-banner__video',
+            image_size: '1920x'
+          }}
+        {% endif %}
       </div>
     {% endif %}
 
@@ -344,6 +376,61 @@
   </div>
 
 </div>
+
+<script>
+  (function () {
+    var wrappers = document.querySelectorAll('[data-lazy-hero-video]');
+    if (!wrappers.length) return;
+
+    function init(wrapper) {
+      var template = wrapper.querySelector('template[data-hero-video-template]');
+      if (!template) return;
+
+      var loaded = false;
+      function loadVideo() {
+        if (loaded) return;
+        loaded = true;
+        var clone = template.content.cloneNode(true);
+        var videoEl = clone.querySelector('video');
+        if (videoEl) {
+          videoEl.addEventListener('playing', function () {
+            wrapper.classList.add('is-video-ready');
+          }, { once: true });
+        }
+        template.parentNode.insertBefore(clone, template);
+        template.remove();
+      }
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+              loadVideo();
+              io.disconnect();
+              return;
+            }
+          }
+        }, { rootMargin: '200px' });
+        io.observe(wrapper);
+      } else {
+        loadVideo();
+      }
+    }
+
+    function start() {
+      wrappers.forEach(init);
+    }
+
+    // Wait for window.load so critical above-the-fold paint (poster, text, buttons)
+    // is not competing with the video for bandwidth — especially helpful in
+    // Instagram/Snapchat in-app browsers.
+    if (document.readyState === 'complete') {
+      start();
+    } else {
+      window.addEventListener('load', start, { once: true });
+    }
+  })();
+</script>
 
 {% schema %}
 {

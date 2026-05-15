@@ -143,6 +143,13 @@ class CustomProductGallery {
     if (index < 0 || index >= this.slides.length) return;
     this.currentSlide = index;
 
+    // LTR: slides left→right, translateX(-n*100%) moves strip left, next slide enters from right
+    // RTL: slides right→left (inherited dir), translateX(+n*100%) moves strip right, next slide enters from left
+    var sign = this.isRTL ? 1 : -1;
+    this.slider.style.transition = 'transform 0.35s ease';
+    this.slider.style.transform = 'translateX(' + (sign * index * 100) + '%)';
+
+    // Keep active class for variant-switching compatibility
     for (var i = 0; i < this.slides.length; i++) {
       this.slides[i].classList.toggle('active', i === index);
     }
@@ -165,20 +172,38 @@ class CustomProductGallery {
     this.touchStartX = e.touches[0].clientX;
     this.touchStartY = e.touches[0].clientY;
     this.isSwiping = false;
+    // Disable transition so the slide follows the finger instantly
+    this.slider.style.transition = 'none';
   }
 
   handleTouchMove(e) {
     if (!this.touchStartX) return;
-    var deltaX = Math.abs(e.touches[0].clientX - this.touchStartX);
-    var deltaY = Math.abs(e.touches[0].clientY - this.touchStartY);
-    if (deltaX > deltaY && deltaX > 10) {
+    var deltaX = e.touches[0].clientX - this.touchStartX;
+    var deltaY = e.touches[0].clientY - this.touchStartY;
+    if (!this.isSwiping && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
       this.isSwiping = true;
+    }
+    if (this.isSwiping) {
       e.preventDefault();
+      var sliderWidth = this.slider.offsetWidth;
+      var sign = this.isRTL ? 1 : -1;
+      var basePercent = sign * this.currentSlide * 100;
+      var dragPercent = (deltaX / sliderWidth) * 100;
+      // Boundary rubber-band
+      // LTR: right-swipe (deltaX>0) at slide 0 = before start; RTL: left-swipe (deltaX<0) = before start
+      var atStart = this.currentSlide === 0 && (this.isRTL ? deltaX < 0 : deltaX > 0);
+      var atEnd = this.currentSlide === this.slides.length - 1 && (this.isRTL ? deltaX > 0 : deltaX < 0);
+      if (atStart || atEnd) dragPercent *= 0.3;
+      this.slider.style.transform = 'translateX(' + (basePercent + dragPercent) + '%)';
     }
   }
 
   handleTouchEnd(e) {
-    if (!this.isSwiping) return;
+    if (!this.isSwiping) {
+      this.touchStartX = 0;
+      this.slider.style.transition = 'transform 0.35s ease';
+      return;
+    }
     this.touchEndX = e.changedTouches[0].clientX;
     this.handleSwipe(false);
     this.touchStartX = 0;
@@ -188,8 +213,15 @@ class CustomProductGallery {
 
   handleSwipe(isModal) {
     var diff = this.touchStartX - this.touchEndX;
-    if (Math.abs(diff) < 50) return;
 
+    // Snap back if swipe was too short
+    if (!isModal && Math.abs(diff) < 50) {
+      this.goToSlide(this.currentSlide);
+      return;
+    }
+    if (isModal && Math.abs(diff) < 50) return;
+
+    // LTR: swipe left (diff > 0) = next; RTL: swipe right (diff < 0) = next
     var goNext = this.isRTL ? diff < 0 : diff > 0;
 
     if (isModal) {

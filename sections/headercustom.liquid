@@ -1986,13 +1986,15 @@
       this.header = document.getElementById('customHeader');
       this.stickyType = this.getAttribute('data-sticky-type');
 
+      // Always set a stable initial-header-offset (used by hero banner sizing).
+      // This must not change on scroll, so it is set independently of sticky mode.
+      this.measureAnnouncementBar();
+      this.setInitialHeaderOffset();
+
       // Exit early if static mode (no sticky behavior)
       if (this.stickyType === 'none') {
         return;
       }
-
-      // Measure announcement bar height
-      this.measureAnnouncementBar();
 
       // Set initial header height CSS variable
       this.setHeaderHeight();
@@ -2005,6 +2007,7 @@
       window.addEventListener('scroll', this.onScrollHandler, { passive: true });
       window.addEventListener('resize', this.throttle(() => {
         this.measureAnnouncementBar();
+        this.setInitialHeaderOffset();
         this.setHeaderHeight();
       }, 100));
 
@@ -2025,6 +2028,16 @@
       }
       // Also update cart drawer offset
       this.updateCartDrawerOffset();
+    }
+
+    setInitialHeaderOffset() {
+      // Stable variable: announcement bar + header height as measured on load/resize.
+      // Hero banner height calc uses this so it does NOT change while scrolling.
+      const height = this.header ? this.header.offsetHeight : 0;
+      document.documentElement.style.setProperty(
+        '--initial-header-offset',
+        `${this.announcementHeight + height}px`
+      );
     }
 
     updateCartDrawerOffset() {

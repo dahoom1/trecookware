@@ -27,6 +27,21 @@
           "type": "price",
           "settings": {}
         },
+        "inventory_QmjwaK": {
+          "type": "inventory",
+          "settings": {
+            "text_style": "uppercase",
+            "inventory_threshold": 100,
+            "show_inventory_quantity": false
+          }
+        },
+        "buy_buttons_RgmqYf": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -69,24 +84,9 @@
             "swatch_shape": "circle"
           }
         },
-        "buy_buttons_RgmqYf": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": false,
-            "show_gift_card_recipient": false
-          }
-        },
         "judge_me_reviews_review_snippet_widget_VTeTtY": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {}
-        },
-        "inventory_QmjwaK": {
-          "type": "inventory",
-          "settings": {
-            "text_style": "uppercase",
-            "inventory_threshold": 100,
-            "show_inventory_quantity": false
-          }
         },
         "sku_DM9rGh": {
           "type": "sku",
@@ -141,12 +141,12 @@
         "text_LKtztK",
         "title",
         "price_mbHfCr",
+        "inventory_QmjwaK",
+        "buy_buttons_RgmqYf",
         "description",
         "icon_feature_RbLKg6",
         "variant_picker",
-        "buy_buttons_RgmqYf",
         "judge_me_reviews_review_snippet_widget_VTeTtY",
-        "inventory_QmjwaK",
         "sku_DM9rGh",
         "collapsible_tab_aCPnVf",
         "collapsible_tab_nN7mVt",

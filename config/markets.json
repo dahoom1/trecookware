@@ -14,6 +14,9 @@
     },
     "international": {
       "parent": "@default"
+    },
+    "saudi-arabia": {
+      "parent": "@default"
     }
   }
 }

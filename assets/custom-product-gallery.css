@@ -49,29 +49,21 @@
 }
 
 .custom-gallery__slider {
-  display: block;
-  position: relative;
+  display: flex;
   width: 100%;
-  height: 100%;
+  will-change: transform;
+  touch-action: pan-y;
+  /* Inherits direction from document: ltr flows left→right, rtl flows right→left */
 }
 
 .custom-gallery__slide {
+  flex: 0 0 100%;
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  pointer-events: none;
+  position: relative;
 }
 
-.custom-gallery__slide.active {
-  position: relative;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
+/* .active is kept for JS state tracking (variant switching) but needs no visual difference */
+.custom-gallery__slide.active {}
 
 .custom-gallery__image-wrapper {
   position: relative;
@@ -161,6 +153,8 @@
   padding: 4px 8px;
   background-color: transparent;
 }
+
+/* RTL: dots inherit document direction — dot[0] appears rightmost naturally */
 
 .custom-gallery__dot {
   width: 20px;

@@ -59,6 +59,45 @@
         "padding_bottom": 36
       }
     },
+    "177819556796aecffb": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_reviews_grid_widget_QR6qa3": {
+          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": false,
+            "review_selection": "all",
+            "products": [],
+            "show_media_only": false,
+            "display_order": "media_first",
+            "card_grouping": "per_media",
+            "columns_desktop": 3,
+            "rows_desktop": 3,
+            "columns_mobile": "2",
+            "rows_mobile": 6,
+            "show_stars": false,
+            "show_reviewer_name": false,
+            "show_review_title_on_hover_desktop": true,
+            "max_width": 1100,
+            "corner_styling": "square",
+            "card_spacing": "small",
+            "header_text_color": "#26231e",
+            "star_and_reviewer_name_color": "#F9F9F9",
+            "drop_shadow_color": "rgba(0,0,0,0)",
+            "overlay_and_background_color": "#c8d5b9",
+            "content_color": "#F9F9F9",
+            "header_text": "From our customers",
+            "show_average_rating": true
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_reviews_grid_widget_QR6qa3"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
     "multicolumn_L73Vxt": {
       "type": "multicolumn",
       "blocks": {
@@ -111,27 +150,6 @@
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
-      }
-    },
-    "17645287584159a3c6": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_all_reviews_page_AGBgt8": {
-          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "max_width": 1200,
-            "review_source": "all",
-            "show_all_reviews_in_same_tab": false,
-            "show_first": "product",
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_all_reviews_page_AGBgt8"
-      ],
-      "settings": {
-        "include_margins": true
       }
     },
     "faq_custom_C7w6Qb": {
@@ -198,8 +216,8 @@
   "order": [
     "banner",
     "product-grid",
+    "177819556796aecffb",
     "multicolumn_L73Vxt",
-    "17645287584159a3c6",
     "faq_custom_C7w6Qb"
   ]
 }
