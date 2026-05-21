@@ -12,6 +12,39 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "product_tags_xeKAhF": {
+          "type": "product_tags",
+          "settings": {
+            "tag_1_text": "READY TO SHIP",
+            "tag_1_bg_color": "#f3f3ee",
+            "tag_1_text_color": "#26231e",
+            "tag_1_show_dot": true,
+            "tag_1_dot_color": "#9bbf86",
+            "tag_1_enable_info": false,
+            "tag_1_info_heading": "",
+            "tag_1_info_body": "",
+            "tag_2_text": "5 PLY",
+            "tag_2_bg_color": "#f3f3ee",
+            "tag_2_text_color": "#26231e",
+            "tag_2_show_dot": false,
+            "tag_2_dot_color": "#9bbf86",
+            "tag_2_enable_info": false,
+            "tag_2_info_heading": "",
+            "tag_2_info_body": "",
+            "tag_3_text": "",
+            "tag_3_bg_color": "#f3f3ee",
+            "tag_3_text_color": "#26231e",
+            "tag_3_show_dot": false,
+            "tag_3_dot_color": "#9bbf86",
+            "tag_3_enable_info": false,
+            "tag_3_info_heading": "",
+            "tag_3_info_body": ""
+          }
+        },
+        "judge_me_reviews_preview_badge_miBjq8": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
         "text_LKtztK": {
           "type": "text",
           "settings": {
@@ -27,13 +60,9 @@
           "type": "price",
           "settings": {}
         },
-        "inventory_QmjwaK": {
-          "type": "inventory",
-          "settings": {
-            "text_style": "uppercase",
-            "inventory_threshold": 100,
-            "show_inventory_quantity": false
-          }
+        "description": {
+          "type": "description",
+          "settings": {}
         },
         "buy_buttons_RgmqYf": {
           "type": "buy_buttons",
@@ -41,10 +70,6 @@
             "show_dynamic_checkout": false,
             "show_gift_card_recipient": false
           }
-        },
-        "description": {
-          "type": "description",
-          "settings": {}
         },
         "icon_feature_RbLKg6": {
           "type": "icon_feature",
@@ -62,7 +87,7 @@
             "icon_3_label": "Scratch Resistant",
             "icon_3_description": "",
             "icon_4_image": "shopify://shop_images/dishwasher.svg",
-            "icon_4_label": "Dishwaher Safe",
+            "icon_4_label": "Dishwasher Safe",
             "icon_4_description": "",
             "icon_5_image": "shopify://shop_images/delivery.svg",
             "icon_5_label": "Rapid Delivery",
@@ -87,6 +112,14 @@
         "judge_me_reviews_review_snippet_widget_VTeTtY": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {}
+        },
+        "inventory_QmjwaK": {
+          "type": "inventory",
+          "settings": {
+            "text_style": "uppercase",
+            "inventory_threshold": 100,
+            "show_inventory_quantity": false
+          }
         },
         "sku_DM9rGh": {
           "type": "sku",
@@ -138,15 +171,17 @@
         }
       },
       "block_order": [
+        "product_tags_xeKAhF",
+        "judge_me_reviews_preview_badge_miBjq8",
         "text_LKtztK",
         "title",
         "price_mbHfCr",
-        "inventory_QmjwaK",
-        "buy_buttons_RgmqYf",
         "description",
+        "buy_buttons_RgmqYf",
         "icon_feature_RbLKg6",
         "variant_picker",
         "judge_me_reviews_review_snippet_widget_VTeTtY",
+        "inventory_QmjwaK",
         "sku_DM9rGh",
         "collapsible_tab_aCPnVf",
         "collapsible_tab_nN7mVt",
@@ -203,19 +238,37 @@
     "1772670324cdb7360c": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_all_reviews_page_7YnqnE": {
-          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "judge_me_reviews_reviews_grid_widget_fg7eVE": {
+          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "max_width": 1200,
-            "review_source": "all",
-            "show_all_reviews_in_same_tab": false,
-            "show_first": "product",
-            "empty_state": "empty_widget"
+            "show_sample_reviews": false,
+            "review_selection": "all",
+            "products": [],
+            "show_media_only": false,
+            "display_order": "media_first",
+            "card_grouping": "per_media",
+            "columns_desktop": 3,
+            "rows_desktop": 3,
+            "columns_mobile": "2",
+            "rows_mobile": 6,
+            "show_stars": false,
+            "show_reviewer_name": false,
+            "show_review_title_on_hover_desktop": true,
+            "max_width": 1100,
+            "corner_styling": "square",
+            "card_spacing": "small",
+            "header_text_color": "#26231e",
+            "star_and_reviewer_name_color": "#26231e",
+            "drop_shadow_color": "#c8d5b9",
+            "overlay_and_background_color": "#c8d5b9",
+            "content_color": "#26231e",
+            "header_text": "From our customers",
+            "show_average_rating": true
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_all_reviews_page_7YnqnE"
+        "judge_me_reviews_reviews_grid_widget_fg7eVE"
       ],
       "settings": {
         "include_margins": true

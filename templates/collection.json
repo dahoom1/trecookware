@@ -82,10 +82,10 @@
             "corner_styling": "square",
             "card_spacing": "small",
             "header_text_color": "#26231e",
-            "star_and_reviewer_name_color": "#F9F9F9",
+            "star_and_reviewer_name_color": "#f9f9f9",
             "drop_shadow_color": "rgba(0,0,0,0)",
             "overlay_and_background_color": "#c8d5b9",
-            "content_color": "#F9F9F9",
+            "content_color": "#f9f9f9",
             "header_text": "From our customers",
             "show_average_rating": true
           }
@@ -140,7 +140,7 @@
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
-        "button_label": "Button label",
+        "button_label": "",
         "button_link": "",
         "columns_desktop": 3,
         "column_alignment": "left",

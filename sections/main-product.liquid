@@ -40,14 +40,15 @@
 
     /* Custom Add to Cart Button Styling */
     #MainProduct-{{ section.id }} .product-form__submit.button {
-      --color-button: 38, 35, 30; /* RGB for #26231e */
+      --color-button: 192, 64, 1; /* RGB for #c04001 */
       --color-button-text: 255, 255, 255; /* White text */
       --shadow-opacity: 0; /* Remove shadow */
       --buttons-border-opacity: 0; /* Remove default border */
-      background-color: #26231e;
+      background-color: #c04001;
       position: relative;
       overflow: hidden;
-      border: 1px solid #26231e !important;
+      border: 1px solid #c04001 !important;
+      border-radius: 2px !important;
     }
 
     #MainProduct-{{ section.id }} .product-form__submit.button::before {
@@ -55,11 +56,11 @@
     }
 
     #MainProduct-{{ section.id }} .product-form__submit.button::after {
-      box-shadow: 0 0 0 1px #26231e !important;
+      box-shadow: 0 0 0 1px #c04001 !important;
     }
 
     #MainProduct-{{ section.id }} .product-form__submit.button:not([disabled]):hover::after {
-      box-shadow: 0 0 0 1px #26231e !important;
+      box-shadow: 0 0 0 1px #c04001 !important;
     }
 
     /* Flare effect - works in both LTR and RTL */
@@ -145,33 +146,46 @@
       box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.1);
     }
 
-
-    .sticky-atc__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.6rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+    body.nav-drawer-open .sticky-atc {
+      visibility: hidden;
+      pointer-events: none;
     }
 
-    .sticky-atc__info {
-      flex: 1;
-      min-width: 0;
+
+    /* ── Inner: stack meta row above full-width button ── */
+    .sticky-atc__inner {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.7rem;
+      padding-top: 0.8rem;
+      padding-bottom: 1.2rem;
+    }
+
+    /* ── Meta row: title (start) | price (end) ── */
+    .sticky-atc__info {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1.2rem;
+      min-width: 0;
     }
 
     .sticky-atc__title {
+      flex: 1;
+      min-width: 0;
       font-family: var(--font-heading-family);
-      font-size: var(--font-heading-scale, 1) * 1.4rem;
-      font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+      font-size: clamp(1.2rem, 1.5vw, 1.4rem);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin: 0;
       line-height: 1.2;
+    }
+
+    /* ── Price (end of meta row) ── */
+    .sticky-atc__price {
+      flex-shrink: 0;
     }
 
     .sticky-atc__price .price {
@@ -180,26 +194,43 @@
 
     .sticky-atc__price .price__container {
       display: flex;
-      gap: 0.8rem;
+      gap: 0.5rem;
       align-items: center;
     }
 
-    .sticky-atc__price .price-item {
+    /* Regular price (no compare-at) — full contrast */
+    .sticky-atc__price .price-item--regular {
       font-size: 1.4rem;
+      font-weight: 600;
+      opacity: 1;
     }
 
+    /* Sale price */
+    .sticky-atc__price .price-item--sale {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    /* Compare-at (crossed-out) — only when .price--on-sale parent exists */
+    .sticky-atc__price .price--on-sale .price-item--regular {
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    /* ── Full-width ATC button ── */
     .sticky-atc__button {
-      flex-shrink: 0;
-      min-width: 16rem;
-      --color-button: 38, 35, 30;
+      width: 100%;
+      --color-button: 192, 64, 1;
       --color-button-text: 255, 255, 255;
       --shadow-opacity: 0;
       background-color: rgb(var(--color-button));
       color: rgb(var(--color-button-text));
-      border: 1px solid #26231e !important;
-      padding: 1rem 2.4rem;
+      border: 1px solid #c04001 !important;
+      border-radius: 2px;
+      padding: 1.4rem 2.4rem;
       font-family: var(--font-body-family);
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       cursor: pointer;
       transition: opacity 0.2s ease;
     }
@@ -212,6 +243,31 @@
     .sticky-atc__button::before,
     .sticky-atc__button::after {
       box-shadow: none !important;
+    }
+
+    /* ── Loading spinner ── */
+    @keyframes sticky-spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    .sticky-atc__spinner {
+      display: none;
+      position: absolute;
+      right: 1.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.8rem;
+      height: 1.8rem;
+      pointer-events: none;
+    }
+
+    .sticky-atc__button.loading .sticky-atc__spinner {
+      display: block;
+      animation: sticky-spin 0.7s linear infinite;
+    }
+
+    .sticky-atc__button.loading span {
+      opacity: 0.5;
     }
 
     /* ── Glare effect on sticky button (mirrors original ATC flare) ── */
@@ -276,10 +332,12 @@
       animation: sticky-glare-rtl 0.6s linear;
     }
 
-    [dir="rtl"] .sticky-atc__inner {
-      flex-direction: row-reverse;
-    }
-
+    /*
+     * RTL: flex-direction: row naturally starts from the right in RTL, so the
+     * meta row lays out as  [price (left/end)] … [title (right/start)]  without
+     * any extra override — which is the correct Arabic reading layout.
+     * The column stack on .sticky-atc__inner is direction-independent.
+     */
     html[lang="ar"] .sticky-atc__button,
     html[lang^="ar-"] .sticky-atc__button {
       font-family: var(--font-body-family) !important;
@@ -287,12 +345,17 @@
 
     @media screen and (max-width: 749px) {
       .sticky-atc__title {
+        font-size: 1.2rem;
+      }
+      .sticky-atc__price .price-item--sale {
         font-size: 1.3rem;
       }
+      .sticky-atc__price .price-item--regular {
+        font-size: 1.1rem;
+      }
       .sticky-atc__button {
-        min-width: 12rem;
-        padding: 1rem 1.6rem;
-        font-size: 1.3rem;
+        padding: 1.3rem 1.6rem;
+        font-size: 1.4rem;
       }
     }
 
@@ -1999,6 +2062,12 @@
             {{ sticky_btn_label }}
           {%- endif -%}
         </span>
+        <div class="sticky-atc__spinner" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+            <circle cx="10" cy="10" r="7" stroke="rgba(255,255,255,0.3)" stroke-width="2.5"/>
+            <path d="M10 3 A7 7 0 0 1 17 10" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
       </button>
     </div>
   </div>
@@ -2032,26 +2101,26 @@
     }
 
     /* ── Show / hide via IntersectionObserver ── */
+    /*
+     * Three states (mirrors MadeIn behaviour):
+     *   State A — static button BELOW viewport (initial load): sticky VISIBLE
+     *   State B — static button IN viewport (user scrolled to it): sticky HIDDEN
+     *   State C — static button ABOVE viewport (user scrolled past it): sticky VISIBLE + glare
+     */
     const observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
-          // Original ATC is visible — hide sticky bar
+          // State B: static ATC in viewport — hide sticky
           stickyBar.classList.remove('is-visible');
           stickyBar.setAttribute('aria-hidden', 'true');
         } else {
-          // Show sticky only when user has scrolled PAST the button (above viewport)
-          if (entry.boundingClientRect.bottom < 0) {
-            var wasHidden = !stickyBar.classList.contains('is-visible');
-            stickyBar.classList.add('is-visible');
-            stickyBar.setAttribute('aria-hidden', 'false');
-            // Glare once when bar first appears
-            if (wasHidden) {
-              setTimeout(triggerGlare, 350);
-            }
-          } else {
-            // Element is below the viewport — user hasn't reached it yet
-            stickyBar.classList.remove('is-visible');
-            stickyBar.setAttribute('aria-hidden', 'true');
+          // State A or C: static ATC not in viewport — show sticky
+          var wasHidden = !stickyBar.classList.contains('is-visible');
+          stickyBar.classList.add('is-visible');
+          stickyBar.setAttribute('aria-hidden', 'false');
+          // Glare only on State C (scrolled past, button is above viewport), not on State A
+          if (wasHidden && entry.boundingClientRect.top < 0) {
+            setTimeout(triggerGlare, 350);
           }
         }
       });
@@ -2070,19 +2139,27 @@
     /* ── Sync button state with original button ── */
     function syncButtonState() {
       stickyBtn.disabled = origBtn.disabled;
-      const origSpan = origBtn.querySelector('span');
-      const stickySpan = stickyBtn.querySelector('span');
+      // Mirror loading state: Dawn sets aria-disabled on origBtn while the cart request is in flight
+      if (origBtn.hasAttribute('aria-disabled')) {
+        stickyBtn.classList.add('loading');
+      } else {
+        stickyBtn.classList.remove('loading');
+      }
+      const origSpan = origBtn.querySelector('span:first-child');
+      const stickySpan = stickyBtn.querySelector('span:first-child');
       if (origSpan && stickySpan) {
         stickySpan.textContent = origSpan.textContent.trim();
       }
     }
 
-    // Observe mutations on the original button (variant changes update its state)
+    // Observe mutations on the original button (variant changes, loading state)
     const mutationObserver = new MutationObserver(syncButtonState);
     mutationObserver.observe(origBtn, { attributes: true, childList: true, subtree: true });
 
-    /* ── Sticky button click — delegate to original button ── */
+    /* ── Sticky button click — show spinner immediately, then delegate ── */
     stickyBtn.addEventListener('click', function() {
+      if (stickyBtn.disabled) return;
+      stickyBtn.classList.add('loading');
       origBtn.click();
     });
 

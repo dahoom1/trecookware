@@ -317,8 +317,14 @@
   }
 
   .cart__checkout-button {
+    --color-button: 192, 64, 1;
+    --color-button-text: 255, 255, 255;
+    --shadow-opacity: 0;
+    background-color: #c04001;
+    color: #ffffff;
     font-family: var(--font-body-family);
-    border: none;
+    border: 1px solid #c04001 !important;
+    border-radius: 2px;
     outline: none;
     box-shadow: none;
   }
@@ -347,10 +353,14 @@
     padding-top: 0.75rem;
   }
 
-  /* --- CHECKOUT BUTTON GLARE --- */
-  @keyframes drawer-glare {
-    from { transform: translateX(-100%); }
-    to   { transform: translateX(100%); }
+  /* --- CHECKOUT BUTTON GLARE (matches ATC button: 0.6s, hover-triggered, opacity snap-back) --- */
+  @keyframes drawer-glare-ltr {
+    from { left: -100%; opacity: 1; }
+    to   { left:  100%; opacity: 1; }
+  }
+  @keyframes drawer-glare-rtl {
+    from { right: -100%; opacity: 1; }
+    to   { right:  100%; opacity: 1; }
   }
 
   #CartDrawer-Checkout {
@@ -364,16 +374,33 @@
     width: 100%;
   }
 
-  #CartDrawer-Checkout:not([disabled]) span::before {
+  /* Parked off-screen and invisible by default */
+  #CartDrawer-Checkout span::before {
     content: '';
     position: absolute;
     top: -100%;
-    left: 0;
+    left: -100%;
     width: 100%;
     height: 300%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    opacity: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    z-index: 2;
     pointer-events: none;
-    animation: drawer-glare 3s linear infinite;
+  }
+
+  /* Fires on hover — opacity snaps back to 0 the instant animation ends */
+  #CartDrawer-Checkout:not([disabled]):hover span::before {
+    animation: drawer-glare-ltr 0.6s linear;
+  }
+
+  [dir="rtl"] #CartDrawer-Checkout span::before {
+    background: linear-gradient(-120deg, transparent, rgba(255,255,255,0.3), transparent);
+    left: auto;
+    right: -100%;
+  }
+
+  [dir="rtl"] #CartDrawer-Checkout:not([disabled]):hover span::before {
+    animation: drawer-glare-rtl 0.6s linear;
   }
 
   @media screen and (max-width: 750px) {
