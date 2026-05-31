@@ -268,6 +268,14 @@
 }
 {% endstyle %}
 
+{%- if section.settings.video_shopify != blank -%}
+  {%- assign _hero_src = section.settings.video_shopify.sources | where: 'format', 'mp4' | first -%}
+  {%- unless _hero_src -%}{%- assign _hero_src = section.settings.video_shopify.sources | first -%}{%- endunless -%}
+  {%- if _hero_src -%}
+    <link rel="preload" as="video" href="{{ _hero_src.url }}" type="{{ _hero_src.mime_type }}">
+  {%- endif -%}
+{%- endif -%}
+
 <div class="hero-video-banner">
 
   <!-- LEFT: Text panel — desktop only (1/3 width) -->
@@ -321,6 +329,7 @@
               loop: section.settings.video_loop,
               muted: section.settings.video_muted,
               controls: false,
+              playsinline: true,
               class: 'hero-video-banner__video',
               image_size: '1920x'
             }}
@@ -331,6 +340,7 @@
             loop: section.settings.video_loop,
             muted: section.settings.video_muted,
             controls: false,
+            playsinline: true,
             class: 'hero-video-banner__video',
             image_size: '1920x'
           }}
@@ -379,6 +389,31 @@
 
 <script>
   (function () {
+    function startPlay(v) {
+      // Both attributes required: playsinline for iOS 10+, webkit-playsinline for iOS < 10
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+
+      function tryPlay() {
+        if (!v.paused) return;
+        var p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+
+      tryPlay();
+      // Belt-and-suspenders: retry when video has enough data, in case it wasn't ready yet
+      if (v.readyState < 3) {
+        v.addEventListener('canplay', tryPlay, { once: true });
+      }
+    }
+
+    // Non-lazy path: video already in DOM
+    document.querySelectorAll('.hero-video-banner__video-wrapper:not([data-lazy-hero-video]) video').forEach(function (v) {
+      v.setAttribute('preload', 'auto');
+      startPlay(v);
+    });
+
+    // Lazy path
     var wrappers = document.querySelectorAll('[data-lazy-hero-video]');
     if (!wrappers.length) return;
 
@@ -390,26 +425,29 @@
       function loadVideo() {
         if (loaded) return;
         loaded = true;
+
         var clone = template.content.cloneNode(true);
         var videoEl = clone.querySelector('video');
         if (videoEl) {
+          videoEl.setAttribute('preload', 'auto');
+          videoEl.setAttribute('playsinline', '');
+          videoEl.setAttribute('webkit-playsinline', '');
           videoEl.addEventListener('playing', function () {
             wrapper.classList.add('is-video-ready');
           }, { once: true });
         }
         template.parentNode.insertBefore(clone, template);
         template.remove();
+
+        var inserted = wrapper.querySelector('video');
+        if (inserted) startPlay(inserted);
       }
 
       if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (entries) {
-          for (var i = 0; i < entries.length; i++) {
-            if (entries[i].isIntersecting) {
-              loadVideo();
-              io.disconnect();
-              return;
-            }
-          }
+        var io = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { loadVideo(); observer.disconnect(); }
+          });
         }, { rootMargin: '200px' });
         io.observe(wrapper);
       } else {
@@ -417,17 +455,30 @@
       }
     }
 
-    function start() {
-      wrappers.forEach(init);
+    function startVisible() {
+      wrappers.forEach(function (wrapper) {
+        var r = wrapper.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) init(wrapper);
+      });
     }
 
-    // Wait for window.load so critical above-the-fold paint (poster, text, buttons)
-    // is not competing with the video for bandwidth — especially helpful in
-    // Instagram/Snapchat in-app browsers.
-    if (document.readyState === 'complete') {
-      start();
+    function startOffscreen() {
+      wrappers.forEach(function (wrapper) {
+        var r = wrapper.getBoundingClientRect();
+        if (!(r.top < window.innerHeight && r.bottom > 0)) init(wrapper);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startVisible, { once: true });
     } else {
-      window.addEventListener('load', start, { once: true });
+      startVisible();
+    }
+
+    if (document.readyState === 'complete') {
+      startOffscreen();
+    } else {
+      window.addEventListener('load', startOffscreen, { once: true });
     }
   })();
 </script>

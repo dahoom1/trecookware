@@ -27,7 +27,8 @@
 /* Default font - Gestura Headline */
 @font-face {
   font-family: 'Gestura Headline';
-  src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/GesturaHeadlineTRIAL-Regular.otf?v=1759760958') format('opentype');
+  src: url('GesturaHeadlineTRIAL-Regular.woff2') format('woff2'),
+       url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/GesturaHeadlineTRIAL-Regular.otf?v=1759760958') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -35,7 +36,8 @@
 
 @font-face {
   font-family: 'AktivGrotesk_Rg-_2';
-  src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/AktivGrotesk_Rg-_2.otf?v=1771361321') format('opentype');
+  src: url('AktivGrotesk_Rg.woff2') format('woff2'),
+       url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/AktivGrotesk_Rg-_2.otf?v=1771361321') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -44,7 +46,8 @@
 /* Arabic font - Light weight */
 @font-face {
   font-family: 'HTBaybarsDisplay-bold';
-  src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/HTBaybarsDisplay-Light.otf?v=1765114181') format('opentype');
+  src: url('HTBaybarsDisplay-Light.woff2') format('woff2'),
+       url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/HTBaybarsDisplay-Light.otf?v=1765114181') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -53,7 +56,8 @@
 /* Arabic font - Bold weight */
 @font-face {
   font-family: 'HTBaybarsDisplay-Light';
-  src: url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/HTBaybarsDisplay-Bold.otf?v=1765114181') format('opentype');
+  src: url('HTBaybarsDisplay-Bold.woff2') format('woff2'),
+       url('https://cdn.shopify.com/s/files/1/0736/2048/8482/files/HTBaybarsDisplay-Bold.otf?v=1765114181') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -3399,6 +3403,14 @@ details-disclosure > details {
 
   .scroll-trigger.scroll-trigger--design-mode.animate--slide-in {
     transform: translateY(0);
+  }
+
+  /* Hero/first section must never start hidden — it's above the fold */
+  #MainContent > .shopify-section:first-child .scroll-trigger.animate--slide-in,
+  #MainContent > .shopify-section:first-child .scroll-trigger.animate--fade-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 
   @keyframes slideIn {

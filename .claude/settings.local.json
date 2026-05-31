@@ -16,7 +16,11 @@
       "Read(//private/tmp/copy-of-dawn/**)",
       "Read(//private/tmp/copy-of-dawn/locales/**)",
       "Bash(git -C \"/Users/abdulrahmanal-omrani/Desktop/E-commerce/TRE/Trecookware build v0.1\" diff --stat HEAD)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(python3 -c \"from fontTools.ttLib import TTFont; print\\('fonttools ready'\\)\")",
+      "Bash(python3 -c \"import brotli; print\\('brotli ready'\\)\")",
+      "Bash(ls \"/Users/abdulrahmanal-omrani/Desktop/E-commerce/TRE/04 - Branding & Design/fonts/\")",
+      "Read(//Users/abdulrahmanal-omrani/Desktop/E-commerce/TRE/04 - Branding & Design/fonts/**)"
     ]
   }
 }

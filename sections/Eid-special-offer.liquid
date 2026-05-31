@@ -1,0 +1,1229 @@
+{%- assign eso_product = section.settings.product -%}
+{%- assign eso_variant_id = '' -%}
+{%- if eso_product != blank -%}
+  {%- assign eso_variant_id = eso_product.selected_or_first_available_variant.id -%}
+{%- endif -%}
+{%- if eso_product != blank -%}
+  {%- assign eso_product_url = eso_product.url -%}
+{%- else -%}
+  {%- assign eso_product_url = '#' -%}
+{%- endif -%}
+{%- assign eso_img_sizes = '(min-width: 990px) ' | append: section.settings.card_max_width | append: 'px, 90vw' -%}
+{%- assign eso_overlay_alpha = section.settings.overlay_opacity | divided_by: 100.0 -%}
+{%- assign eso_img_overlay_alpha = section.settings.card_img_overlay_opacity | divided_by: 100.0 -%}
+
+<div class="eid-offer-section"
+     id="eid-offer-{{ section.id }}"
+     style="--eso-card-radius: {{ section.settings.card_radius }}px;
+            --eso-card-max-width: {{ section.settings.card_max_width }}px;
+            --eso-price-size: {{ section.settings.price_line_size }}px;
+            --eso-sale-size: {{ section.settings.sale_price_size }}px;
+            --eso-price-align: {{ section.settings.price_align }};
+            --eso-title-font-weight: {{ section.settings.title_font_weight }};
+            --eso-title-align: {{ section.settings.title_align }};
+            --eso-title-margin-bottom: {{ section.settings.title_margin_bottom }}px;
+            --eso-subtitle-font-size: {{ section.settings.subtitle_font_size }}px;
+            --eso-subtitle-align: {{ section.settings.subtitle_align }};
+            --eso-subtitle-margin-top: {{ section.settings.subtitle_margin_top }}px;
+            --eso-card-title-font-size: {{ section.settings.card_title_font_size }}px;
+            --eso-card-title-font-weight: {{ section.settings.card_title_font_weight }};
+            --eso-card-title-align: {{ section.settings.card_title_align }};
+            --eso-card-price-font-size: {{ section.settings.card_price_font_size }}px;
+            --eso-card-price-align: {{ section.settings.card_price_align }};
+            --eso-card-desc-font-size: {{ section.settings.card_desc_font_size }}px;
+            --eso-card-desc-font-weight: {{ section.settings.card_desc_font_weight }};
+            --eso-card-desc-align: {{ section.settings.card_desc_align }};
+            --eso-btn-font-size: {{ section.settings.btn_font_size }}px;
+            --eso-btn-font-weight: {{ section.settings.btn_font_weight }};
+            --eso-btn-padding-v: {{ section.settings.btn_padding_v }}px;
+            --eso-btn-padding-h: {{ section.settings.btn_padding_h }}px;
+            --eso-btn-radius: {{ section.settings.btn_radius }}px;
+            --eso-btn-margin-top: {{ section.settings.btn_margin_top }}px;
+            --eso-btn2-font-size: {{ section.settings.btn2_font_size }}px;
+            --eso-btn2-font-weight: {{ section.settings.btn2_font_weight }};
+            --eso-img-overlay: {{ section.settings.card_img_overlay_color | color_modify: 'alpha', eso_img_overlay_alpha }};
+            padding-top: {{ section.settings.padding_top }}px;
+            padding-bottom: {{ section.settings.padding_bottom }}px;
+            min-height: {{ section.settings.min_height }}px;">
+
+  {%- if section.settings.bg_image != blank -%}
+    <div class="eid-offer__bg" aria-hidden="true">
+      {{ section.settings.bg_image | image_url: width: 1920 | image_tag:
+           loading: 'eager',
+           widths: '750, 1100, 1500, 1920',
+           sizes: '100vw',
+           class: 'eid-offer__bg-img',
+           preload: true }}
+    </div>
+  {%- else -%}
+    <div class="eid-offer__bg eid-offer__bg--empty" aria-hidden="true"></div>
+  {%- endif -%}
+
+  <div class="eid-offer__overlay"
+       style="background: {{ section.settings.overlay_color | color_modify: 'alpha', eso_overlay_alpha }};"
+       aria-hidden="true"></div>
+
+  <div class="eid-offer__inner">
+
+    <div class="eid-offer__text">
+      {%- if section.settings.title != blank -%}
+        <h2 class="eid-offer__title {{ section.settings.title_size }}"
+            style="color: {{ section.settings.title_color }};">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.show_price_line -%}
+        <div class="eid-offer__price-line">
+          {%- if section.settings.pieces_text != blank -%}
+            <span class="eid-offer__pl-pieces" style="color: {{ section.settings.price_line_color }};">{{ section.settings.pieces_text }}</span>
+          {%- endif -%}
+          {%- if section.settings.compare_price_text != blank -%}
+            <span class="eid-offer__pl-compare" style="color: {{ section.settings.compare_price_color }};">{{ section.settings.compare_price_text }}</span>
+          {%- endif -%}
+          {%- if section.settings.sale_price_text != blank -%}
+            <span class="eid-offer__pl-sale" style="color: {{ section.settings.price_line_color }};">{{ section.settings.sale_price_text }}</span>
+          {%- endif -%}
+          {%- if section.settings.currency_text != blank -%}
+            <span class="eid-offer__pl-currency" style="color: {{ section.settings.price_line_color }};">{{ section.settings.currency_text }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="eid-offer__subtitle"
+           style="color: {{ section.settings.subtitle_color }}; font-weight: {% if section.settings.subtitle_bold %}700{% else %}400{% endif %};">
+          {{ section.settings.subtitle }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    <div class="eid-offer__card" style="background: {{ section.settings.card_bg_color }};">
+
+      <a href="{{ eso_product_url }}" class="eid-offer__img-link">
+        <div class="eid-offer__img-wrap" style="background: {{ section.settings.image_bg_color }};">
+          {%- if section.settings.card_image != blank -%}
+            {{ section.settings.card_image | image_url: width: 900 | image_tag:
+                 loading: 'eager',
+                 widths: '400, 600, 900',
+                 sizes: eso_img_sizes,
+                 class: 'eid-offer__img' }}
+          {%- elsif eso_product != blank and eso_product.featured_image -%}
+            {{ eso_product.featured_image | image_url: width: 900 | image_tag:
+                 loading: 'eager',
+                 widths: '400, 600, 900',
+                 sizes: eso_img_sizes,
+                 class: 'eid-offer__img' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg eid-offer__placeholder' }}
+          {%- endif -%}
+          <div class="eid-offer__img-overlay" aria-hidden="true"></div>
+        </div>
+      </a>
+
+      {%- if section.settings.show_card_info -%}
+        <div class="eid-offer__card-info">
+          {%- if section.settings.custom_title != blank or eso_product != blank -%}
+            <h3 class="eid-offer__card-title" style="color: {{ section.settings.card_title_color }};">
+              {%- if section.settings.custom_title != blank -%}
+                {{ section.settings.custom_title }}
+              {%- elsif eso_product != blank -%}
+                {{ eso_product.title }}
+              {%- endif -%}
+            </h3>
+          {%- endif -%}
+
+          {%- if section.settings.show_product_price and eso_product != blank -%}
+            <div class="eid-offer__card-price-row">
+              {%- if eso_product.compare_at_price > eso_product.price -%}
+                <span class="eid-offer__card-compare" style="color: {{ section.settings.card_compare_color }};">{{ eso_product.compare_at_price | money }}</span>
+              {%- endif -%}
+              <span class="eid-offer__card-price" style="color: {{ section.settings.card_price_color }};">{{ eso_product.price | money }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.card_description != blank -%}
+            <p class="eid-offer__card-desc" style="color: {{ section.settings.card_desc_color }};">{{ section.settings.card_description }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    <div class="eid-offer__btns">
+      <button
+        type="button"
+        class="eid-offer__btn eid-offer-add-to-cart"
+        data-variant-id="{{ eso_variant_id }}"
+        {% unless eso_variant_id %}disabled{% endunless %}
+        style="background: {{ section.settings.btn_bg_color }}; color: {{ section.settings.btn_text_color }}; border-color: {{ section.settings.btn_border_color }};">
+        <span class="eid-offer__btn-label">{{ section.settings.btn_text }}</span>
+        <span class="eid-offer-glare" aria-hidden="true"></span>
+      </button>
+
+      {%- if section.settings.show_btn_2 -%}
+        <button
+          type="button"
+          class="eid-offer__btn eid-offer__btn--secondary eid-offer-buy-now"
+          data-variant-id="{{ eso_variant_id }}"
+          {% unless eso_variant_id %}disabled{% endunless %}
+          style="background: {{ section.settings.btn2_bg_color }}; color: {{ section.settings.btn2_text_color }}; border-color: {{ section.settings.btn2_border_color }};">
+          <span class="eid-offer__btn-label">{{ section.settings.btn_2_text }}</span>
+        </button>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+<style>
+.eid-offer-section {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.eid-offer__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.eid-offer__bg--empty {
+  background-color: #3d3228;
+}
+
+.eid-offer__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.eid-offer__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.eid-offer__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--eso-card-max-width, 540px);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+}
+
+/* ── Text block ─────────────────────────────────── */
+.eid-offer__text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.eid-offer__title {
+  margin: 0 0 var(--eso-title-margin-bottom, 0px) 0;
+  line-height: 1.2;
+  font-family: var(--font-heading-family);
+  font-weight: var(--eso-title-font-weight, 700);
+  text-align: var(--eso-title-align, center);
+  width: 100%;
+}
+
+.eid-offer__title.h0 { font-size: clamp(2.5rem, 8vw, 4.5rem); }
+.eid-offer__title.h1 { font-size: clamp(2rem, 6vw, 3.5rem); }
+.eid-offer__title.h2 { font-size: clamp(1.5rem, 5vw, 2.5rem); }
+
+.eid-offer__price-line {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: var(--eso-price-align, center);
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  font-family: var(--font-heading-family);
+  width: 100%;
+}
+
+.eid-offer__pl-pieces,
+.eid-offer__pl-compare,
+.eid-offer__pl-currency {
+  font-size: var(--eso-price-size, 1.3rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.eid-offer__pl-compare {
+  text-decoration: line-through;
+  opacity: 0.9;
+}
+
+.eid-offer__pl-sale {
+  font-size: var(--eso-sale-size, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.eid-offer__subtitle {
+  margin: var(--eso-subtitle-margin-top, 0px) 0 0 0;
+  font-size: var(--eso-subtitle-font-size, 1.05rem);
+  line-height: 1.5;
+  font-family: var(--font-body-family);
+  text-align: var(--eso-subtitle-align, center);
+  width: 100%;
+}
+
+/* ── Card ───────────────────────────────────────── */
+.eid-offer__card {
+  width: 100%;
+  border-radius: var(--eso-card-radius, 16px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.eid-offer__img-link {
+  display: block;
+  text-decoration: none;
+}
+
+.eid-offer__img-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: 1.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.eid-offer__img-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--eso-img-overlay, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.eid-offer__img-link:hover .eid-offer__img-wrap {
+  opacity: 0.9;
+}
+
+.eid-offer__img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.eid-offer__placeholder {
+  width: 100%;
+  max-height: 280px;
+}
+
+.eid-offer__card-info {
+  padding: 1.25rem 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.eid-offer__card-title {
+  margin: 0;
+  font-size: var(--eso-card-title-font-size, 1.15rem);
+  font-weight: var(--eso-card-title-font-weight, 600);
+  font-family: var(--font-heading-family);
+  line-height: 1.3;
+  text-align: var(--eso-card-title-align, left);
+}
+
+.eid-offer__card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: var(--font-body-family);
+  justify-content: var(--eso-card-price-align, flex-start);
+}
+
+.eid-offer__card-compare {
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.eid-offer__card-price {
+  font-weight: 600;
+  font-size: var(--eso-card-price-font-size, 1rem);
+}
+
+.eid-offer__card-desc {
+  margin: 0;
+  font-size: var(--eso-card-desc-font-size, 0.875rem);
+  font-weight: var(--eso-card-desc-font-weight, 400);
+  line-height: 1.5;
+  font-family: var(--font-body-family);
+  text-align: var(--eso-card-desc-align, left);
+}
+
+/* ── Buttons — standalone below card ───────────── */
+.eid-offer__btns {
+  width: 100%;
+  margin-top: var(--eso-btn-margin-top, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.eid-offer__btn {
+  width: 100%;
+  padding: var(--eso-btn-padding-v, 18px) var(--eso-btn-padding-h, 24px);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: var(--eso-btn-font-size, 1.1rem);
+  font-weight: var(--eso-btn-font-weight, 600);
+  font-family: var(--font-body-family);
+  line-height: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+  border-radius: var(--eso-btn-radius, 12px);
+}
+
+.eid-offer__btn--secondary {
+  font-size: var(--eso-btn2-font-size, 1.1rem);
+  font-weight: var(--eso-btn2-font-weight, 600);
+}
+
+#eid-offer-{{ section.id }} .eid-offer__btn::before,
+#eid-offer-{{ section.id }} .eid-offer__btn::after {
+  box-shadow: none;
+}
+
+.eid-offer__btn-label {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.eid-offer__btn:hover:not(:disabled) { opacity: 0.85; }
+.eid-offer__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.eid-offer__btn.loading { pointer-events: none; }
+.eid-offer__btn.loading .eid-offer__btn-label,
+.eid-offer__btn.loading .eid-offer-glare { visibility: hidden; }
+.eid-offer__btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-right-color: transparent;
+  animation: eid-spinner 0.6s linear infinite;
+}
+
+@keyframes eid-spinner {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.eid-offer-glare {
+  position: absolute;
+  top: 0; left: -110%;
+  width: 55%; height: 100%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.3) 50%, transparent 80%);
+  transform: skewX(-18deg);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.eid-offer-glare--active {
+  animation: eid-glare 10s ease-in-out infinite;
+}
+
+@keyframes eid-glare {
+  0%    { transform: skewX(-18deg) translateX(0); }
+  14%   { transform: skewX(-18deg) translateX(500%); }
+  14.1% { transform: skewX(-18deg) translateX(0); }
+  100%  { transform: skewX(-18deg) translateX(0); }
+}
+
+@media screen and (min-width: 750px) {
+  .eid-offer__text { margin-bottom: 2.5rem; }
+  .eid-offer__img-wrap { min-height: 360px; padding: 2rem; }
+}
+
+html[lang="ar"] .eid-offer__btn,
+html[lang^="ar-"] .eid-offer__btn {
+  font-family: var(--font-body-family) !important;
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var section = document.getElementById('eid-offer-{{ section.id }}');
+    if (!section) return;
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setTimeout(function () {
+              section.querySelectorAll('.eid-offer-glare').forEach(function (el) {
+                el.classList.add('eid-offer-glare--active');
+              });
+            }, 2000);
+            obs.unobserve(section);
+          }
+        });
+      }, { threshold: 0.2 });
+      obs.observe(section);
+    }
+
+    var shopifyRoot = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root : '/';
+
+    section.querySelectorAll('.eid-offer-add-to-cart').forEach(function (btn) {
+      btn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        var variantId = this.dataset.variantId;
+        if (!variantId) return;
+
+        this.classList.add('loading');
+        this.disabled = true;
+
+        try {
+          var res = await fetch(shopifyRoot + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+          });
+
+          if (!res.ok) {
+            var err = await res.json().catch(function () { return {}; });
+            throw new Error(err.description || err.message || 'Unable to add item to cart');
+          }
+
+          var results = await Promise.all([
+            fetch(shopifyRoot + '?sections=cart-drawer,cart-icon-bubble'),
+            fetch(shopifyRoot + 'cart.js')
+          ]);
+
+          var sections = await results[0].json();
+          var cart = await results[1].json();
+
+          document.querySelectorAll('#cart-icon-bubble span').forEach(function (el) {
+            el.textContent = cart.item_count;
+          });
+
+          var cartDrawer = document.querySelector('cart-drawer');
+          if (cartDrawer && sections['cart-drawer']) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(sections['cart-drawer'], 'text/html');
+            var newInner = doc.querySelector('.drawer__inner');
+            var currentInner = cartDrawer.querySelector('.drawer__inner');
+            if (newInner && currentInner) currentInner.innerHTML = newInner.innerHTML;
+            cartDrawer.classList.remove('is-empty');
+            if (typeof cartDrawer.open === 'function') {
+              cartDrawer.open();
+            } else {
+              var drawer = cartDrawer.querySelector('#CartDrawer');
+              if (drawer) drawer.classList.add('active');
+              document.body.classList.add('overflow-hidden-tablet');
+            }
+          } else {
+            var cartIcon = document.querySelector('#cart-icon-bubble, summary[aria-controls="CartDrawer"]');
+            if (cartIcon) cartIcon.click();
+          }
+
+        } catch (error) {
+          console.error('Eid offer ATC error:', error);
+          alert(error.message || 'There was an error adding this item to your cart. Please try again.');
+        } finally {
+          this.classList.remove('loading');
+          this.disabled = false;
+        }
+      });
+    });
+
+    section.querySelectorAll('.eid-offer-buy-now').forEach(function (btn) {
+      btn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        var variantId = this.dataset.variantId;
+        if (!variantId) return;
+
+        this.classList.add('loading');
+        this.disabled = true;
+
+        try {
+          var res = await fetch(shopifyRoot + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+          });
+
+          if (!res.ok) {
+            var err = await res.json().catch(function () { return {}; });
+            throw new Error(err.description || err.message || 'Unable to add item');
+          }
+
+          await new Promise(function (r) { setTimeout(r, 200); });
+          window.location.href = shopifyRoot + 'checkout';
+
+        } catch (error) {
+          console.error('Eid offer buy-now error:', error);
+          alert(error.message || 'There was an error. Please try again.');
+          this.classList.remove('loading');
+          this.disabled = false;
+        }
+      });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Special Offer Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Min section height",
+      "default": 750
+    },
+    {
+      "type": "range",
+      "id": "card_max_width",
+      "min": 300,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Card max width",
+      "default": 540
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Hero Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Eid Al-Adha Collection"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra-bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "title_align",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Extra space below title",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Price Line"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_line",
+      "label": "Show price line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "pieces_text",
+      "label": "Pieces label",
+      "default": "4 Pieces",
+      "info": "e.g. \"4 Pieces\" — leave blank to hide"
+    },
+    {
+      "type": "text",
+      "id": "compare_price_text",
+      "label": "Compare price (struck through)",
+      "default": "1099"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#e07070"
+    },
+    {
+      "type": "text",
+      "id": "sale_price_text",
+      "label": "Sale price",
+      "default": "899"
+    },
+    {
+      "type": "text",
+      "id": "currency_text",
+      "label": "Currency label",
+      "default": "SAR"
+    },
+    {
+      "type": "color",
+      "id": "price_line_color",
+      "label": "Color (sale + currency + pieces)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "price_line_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Pieces / currency font size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "sale_price_size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Sale price font size",
+      "default": 52
+    },
+    {
+      "type": "select",
+      "id": "price_align",
+      "label": "Alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Special discount + elegant packaging and an extra gift"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 17
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color",
+      "default": "#8fa86e"
+    },
+    {
+      "type": "checkbox",
+      "id": "subtitle_bold",
+      "label": "Bold",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "subtitle_align",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_top",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Extra space above subtitle",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card Design"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#f5f0e8"
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Image area background",
+      "default": "#f5f0e8"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "card_img_overlay_color",
+      "label": "Image overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "card_img_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Custom card image",
+      "info": "Overrides the product image."
+    },
+    {
+      "type": "header",
+      "content": "Optional Card Info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_card_info",
+      "label": "Show title, price & description",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Custom title",
+      "info": "Leave blank to use product title"
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "card_title_font_weight",
+      "label": "Title font weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra-bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "select",
+      "id": "card_title_align",
+      "label": "Title alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_price",
+      "label": "Show product price",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_price_font_size",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Price font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_price_color",
+      "label": "Price color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "card_compare_color",
+      "label": "Compare price color",
+      "default": "#999999"
+    },
+    {
+      "type": "select",
+      "id": "card_price_align",
+      "label": "Price alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "textarea",
+      "id": "card_description",
+      "label": "Description"
+    },
+    {
+      "type": "range",
+      "id": "card_desc_font_size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Description font size",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "card_desc_font_weight",
+      "label": "Description font weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Description color",
+      "default": "#555555"
+    },
+    {
+      "type": "select",
+      "id": "card_desc_align",
+      "label": "Description alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Primary Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Background color",
+      "default": "#8fa86e"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_border_color",
+      "label": "Border color",
+      "default": "#8fa86e"
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "btn_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra-bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_v",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_h",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_margin_top",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space above button",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Secondary Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_btn_2",
+      "label": "Show second button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "btn_2_text",
+      "label": "Button text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "color",
+      "id": "btn2_bg_color",
+      "label": "Background color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "btn2_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn2_border_color",
+      "label": "Border color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "btn2_font_size",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "btn2_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra-bold" }
+      ],
+      "default": "600"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Special Offer Hero"
+    }
+  ]
+}
+{% endschema %}

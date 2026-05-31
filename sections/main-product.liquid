@@ -245,29 +245,33 @@
       box-shadow: none !important;
     }
 
-    /* ── Loading spinner ── */
-    @keyframes sticky-spin {
-      to { transform: translateY(-50%) rotate(360deg); }
+    /* ── Loading spinner — mirrors Dawn's .button.loading pattern exactly ── */
+    .sticky-atc__button.loading {
+      color: transparent;
     }
 
-    .sticky-atc__spinner {
+    .sticky-atc__button .sticky-atc__spinner {
       display: none;
       position: absolute;
-      right: 1.6rem;
       top: 50%;
-      transform: translateY(-50%);
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 1.8rem;
       height: 1.8rem;
+      align-items: center;
       pointer-events: none;
     }
 
     .sticky-atc__button.loading .sticky-atc__spinner {
-      display: block;
-      animation: sticky-spin 0.7s linear infinite;
+      display: flex;
     }
 
-    .sticky-atc__button.loading span {
-      opacity: 0.5;
+    .sticky-atc__button.loading .sticky-atc__spinner .spinner {
+      width: fit-content;
+    }
+
+    .sticky-atc__button .sticky-atc__spinner .path {
+      stroke: rgb(var(--color-button-text));
     }
 
     /* ── Glare effect on sticky button (mirrors original ATC flare) ── */
@@ -2063,9 +2067,8 @@
           {%- endif -%}
         </span>
         <div class="sticky-atc__spinner" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
-            <circle cx="10" cy="10" r="7" stroke="rgba(255,255,255,0.3)" stroke-width="2.5"/>
-            <path d="M10 3 A7 7 0 0 1 17 10" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <svg xmlns="http://www.w3.org/2000/svg" class="spinner" viewBox="0 0 66 66">
+            <circle stroke-width="6" cx="33" cy="33" r="30" fill="none" class="path"/>
           </svg>
         </div>
       </button>
