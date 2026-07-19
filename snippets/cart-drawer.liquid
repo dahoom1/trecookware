@@ -477,6 +477,89 @@
       padding: 0.4rem 0.6rem;
     }
   }
+
+  /* --- CART SUMMARY (Total / Shipping / You're saving) --- */
+  .cart-drawer__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+    font-family: var(--font-body-family);
+  }
+
+  .cart-drawer__summary-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--t-body);
+    line-height: 1.2;
+  }
+
+  .cart-drawer__summary-label {
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .cart-drawer__summary-value {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .cart-drawer__summary-row--total .cart-drawer__summary-label,
+  .cart-drawer__summary-row--total .cart-drawer__summary-value {
+    color: #000;
+  }
+
+  .cart-drawer__summary-row--savings .cart-drawer__summary-value {
+    color: #c04001;
+  }
+
+  [dir="rtl"] .cart-drawer__summary-row {
+    direction: rtl;
+  }
+
+  /* --- SECURE CHECKOUT BADGE --- */
+  .cart-drawer__secure-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: var(--font-body-family);
+  }
+
+  .cart-drawer__secure-badge svg {
+    height: 14px;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  /* --- PAYMENT ICONS --- */
+  .cart-drawer__payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.85rem 0 0.25rem;
+  }
+
+  .cart-drawer__payment-icon {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+  }
+
+  .cart-drawer__payment-icon svg {
+    height: 22px;
+    width: auto;
+    max-width: 42px;
+    border-radius: 3px;
+    display: block;
+  }
 </style>
 
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
@@ -929,9 +1012,37 @@
             {%- endif -%}
           </div>
 
-          <div class="totals" role="status">
-            <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+          {%- liquid
+            assign cart_savings = 0
+            for item in cart.items
+              if item.variant.compare_at_price > item.variant.price
+                assign line_saving = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity
+                assign cart_savings = cart_savings | plus: line_saving
+              endif
+            endfor
+            assign cart_savings = cart_savings | plus: cart.total_discount
+          -%}
+          <div class="cart-drawer__summary" role="status">
+            <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
+              <span class="cart-drawer__summary-label">{{ 'sections.cart.headings.total' | t }}</span>
+              <span class="cart-drawer__summary-value">{{ cart.total_price | money }}</span>
+            </div>
+            <div class="cart-drawer__summary-row">
+              <span class="cart-drawer__summary-label">{{ 'sections.cart.shipping' | t }}</span>
+              <span class="cart-drawer__summary-value">
+                {%- if cart.total_price >= 50000 -%}
+                  {{ 'sections.cart.shipping_free' | t }}
+                {%- else -%}
+                  {{ 'sections.cart.shipping_at_checkout' | t }}
+                {%- endif -%}
+              </span>
+            </div>
+            {%- if cart_savings > 0 -%}
+              <div class="cart-drawer__summary-row cart-drawer__summary-row--savings">
+                <span class="cart-drawer__summary-label">{{ 'sections.cart.savings' | t }}</span>
+                <span class="cart-drawer__summary-value">-{{ cart_savings | money }}</span>
+              </div>
+            {%- endif -%}
           </div>
 
         </div>
@@ -939,6 +1050,11 @@
         <!-- CTAs -->
 
         <div class="cart__ctas" {{ block.shopify_attributes }}>
+          <div class="cart-drawer__secure-badge">
+            <span class="svg-wrapper">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
+            <span>{{ 'sections.cart.secure_checkout' | t }}</span>
+          </div>
+
           <button
             type="submit"
             id="CartDrawer-Checkout"
@@ -951,7 +1067,23 @@
           >
             <span>{{ 'sections.cart.checkout' | t }}</span>
           </button>
-          
+
+          {%- comment -%}
+            Payment logos are inlined from /assets for instant render (no extra requests).
+            To add one: upload pay-NAME.svg to /assets and add it to both lists below.
+            Current: pay-applepay, pay-mada, pay-visa, pay-mastercard, pay-amex, pay-tabby, pay-tamara (.svg)
+          {%- endcomment -%}
+          {%- liquid
+            assign payment_icons = 'pay-applepay.svg,pay-mada.svg,pay-visa.svg,pay-mastercard.svg,pay-amex.svg,pay-tabby.svg,pay-tamara.svg' | split: ','
+            assign payment_labels = 'Apple Pay,Mada,Visa,Mastercard,American Express,Tabby,Tamara' | split: ','
+          -%}
+          <div class="cart-drawer__payment-icons">
+            {%- for icon in payment_icons -%}
+              <span class="cart-drawer__payment-icon" role="img" aria-label="{{ payment_labels[forloop.index0] }}">
+                {{- icon | inline_asset_content -}}
+              </span>
+            {%- endfor -%}
+          </div>
         </div>
       </div>
     </div>

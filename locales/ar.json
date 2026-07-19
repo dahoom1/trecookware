@@ -4356,6 +4356,11 @@
         "add_for_free_shipping": "    أضف طلباً بقيمة {{ amount }} للحصول على شحن مجاني",
         "free_shipping_unlocked": " أنت مؤهل للشحن المجاني! 🎉"
       },
+      "shipping": "الشحن",
+      "shipping_free": "مجاني",
+      "shipping_at_checkout": "يُحسب عند الدفع",
+      "savings": "أنت توفّر",
+      "secure_checkout": "دفع آمن",
       "estimated_total": "الإجمالي التقديري",
       "new_estimated_total": "الإجمالي التقديري الجديد",
       "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "شامل الرسوم والضرائب. تُحسب الخصومات <a href=\"{{ link }}\">والشحن</a> عند الدفع.",

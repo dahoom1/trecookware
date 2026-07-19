@@ -430,7 +430,12 @@
       "progress_bar": {
         "add_for_free_shipping": "Add {{ amount }} for free shipping",
         "free_shipping_unlocked": "🎉 You qualify for free shipping!"
-      }
+      },
+      "shipping": "Shipping",
+      "shipping_free": "Free",
+      "shipping_at_checkout": "Calculated at checkout",
+      "savings": "You're saving",
+      "secure_checkout": "Secure Checkout"
     },
     "footer": {
       "payment": "Payment methods"
