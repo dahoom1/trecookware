@@ -501,6 +501,11 @@
   "shopify": {
     "links": {
       "powered_by_shopify": " Inc"
+    },
+    "checkout": {
+      "contact": {
+        "address1_label": "Address / National Short Address for Saudis e.g (AAAA1111)"
+      }
     }
   },
   "templates": {

@@ -548,12 +548,6 @@
   }
 
   .cart-drawer__payment-icon {
-    display: inline-flex;
-    align-items: center;
-    min-height: 22px;
-  }
-
-  .cart-drawer__payment-icon svg {
     height: 22px;
     width: auto;
     max-width: 42px;
@@ -1069,7 +1063,7 @@
           </button>
 
           {%- comment -%}
-            Payment logos are inlined from /assets for instant render (no extra requests).
+            Payment logos live in /assets. Any file not present is hidden automatically (onerror).
             To add one: upload pay-NAME.svg to /assets and add it to both lists below.
             Current: pay-applepay, pay-mada, pay-visa, pay-mastercard, pay-amex, pay-tabby, pay-tamara (.svg)
           {%- endcomment -%}
@@ -1079,9 +1073,13 @@
           -%}
           <div class="cart-drawer__payment-icons">
             {%- for icon in payment_icons -%}
-              <span class="cart-drawer__payment-icon" role="img" aria-label="{{ payment_labels[forloop.index0] }}">
-                {{- icon | inline_asset_content -}}
-              </span>
+              <img
+                src="{{ icon | asset_url }}"
+                alt="{{ payment_labels[forloop.index0] }}"
+                class="cart-drawer__payment-icon"
+                loading="lazy"
+                onerror="this.remove()"
+              >
             {%- endfor -%}
           </div>
         </div>
