@@ -73,10 +73,17 @@
   margin-left: 0.5rem;
 }
 
+/* Sale price shown first, crossed-out compare-at after it */
 .price--on-sale .price__sale {
-  display: initial;
-  flex-direction: row;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: baseline;
   flex-wrap: wrap;
+  gap: 0 0.8rem;
+}
+
+.price--on-sale .price__sale .price-item {
+  margin: 0;
 }
 
 .price--center {
@@ -86,8 +93,14 @@
 
 .price--on-sale .price-item--regular {
   text-decoration: line-through;
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 0.55);
   font-size: 1.3rem;
+}
+
+/* New price in brand red when a compare-at price exists.
+   Products without a compare-at keep the default foreground (black). */
+.price--on-sale .price-item--sale {
+  color: #c04001;
 }
 
 

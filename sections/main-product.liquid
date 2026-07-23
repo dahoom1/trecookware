@@ -9,13 +9,12 @@
     data-zoom-on-hover
   {% endif %}
 >
-  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
-  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
-  {{ 'component-price.css' | asset_url | stylesheet_tag }}
-  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
-  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
-
+  {% comment %}
+    Section stylesheets (section-main-product, component-accordion/price/
+    slider/rating/deferred-media, custom-product-gallery) are loaded
+    render-blocking in the <head> via layout/theme.liquid for the product
+    template, so the page never paints unstyled on first visit.
+  {% endcomment %}
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
@@ -201,14 +200,14 @@
     /* Regular price (no compare-at) — full contrast */
     .sticky-atc__price .price-item--regular {
       font-size: 1.4rem;
-      font-weight: 600;
+      font-weight: 400;
       opacity: 1;
     }
 
     /* Sale price */
     .sticky-atc__price .price-item--sale {
       font-size: 1.4rem;
-      font-weight: 600;
+      font-weight: 400;
     }
 
     /* Compare-at (crossed-out) — only when .price--on-sale parent exists */
@@ -290,15 +289,21 @@
       overflow: hidden;
     }
 
-    .sticky-atc__button span {
+    .sticky-atc__button > span {
       position: relative;
       z-index: 3;
       display: block;
       width: 100%;
     }
 
+    /* Price shown inside the button: "Add to cart | 825.00 SAR" */
+    .sticky-atc__btn-sep {
+      opacity: 0.5;
+      margin: 0 0.8rem;
+    }
+
     /* Parked off-screen and invisible by default */
-    .sticky-atc__button span::before {
+    .sticky-atc__button > span::before {
       content: '';
       position: absolute;
       top: -100%;
@@ -317,11 +322,11 @@
     }
 
     /* No forwards — element returns to opacity:0 the instant animation finishes */
-    .sticky-atc__button.is-glaring span::before {
+    .sticky-atc__button.is-glaring > span::before {
       animation: sticky-glare-ltr 0.6s linear;
     }
 
-    [dir="rtl"] .sticky-atc__button span::before {
+    [dir="rtl"] .sticky-atc__button > span::before {
       background: linear-gradient(
         -120deg,
         transparent,
@@ -332,7 +337,7 @@
       right: -100%;
     }
 
-    [dir="rtl"] .sticky-atc__button.is-glaring span::before {
+    [dir="rtl"] .sticky-atc__button.is-glaring > span::before {
       animation: sticky-glare-rtl 0.6s linear;
     }
 
@@ -568,15 +573,6 @@
           {% render 'product-media-gallery-custom', variant_images: variant_images %}
         </div>
 
-        <style>
-          /* Critical inline CSS — applied before external stylesheet loads */
-          .desktop-gallery-wrapper { display: none; }
-          .mobile-gallery-wrapper { display: block; }
-          @media screen and (min-width: 750px) {
-            .desktop-gallery-wrapper { display: block; }
-            .mobile-gallery-wrapper { display: none; }
-          }
-        </style>
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -1172,7 +1168,7 @@
             <div class="product-video-item" data-video-index="{{ forloop.index0 }}" data-video-src="{{ video.sources[0].url }}" data-block-id="{{ block.id }}">
               <div class="product-video-thumbnail">
                 <!-- CHANGE: Removed static preview image, replaced with muted video that will autoplay -->
-                <video class="thumbnail-video" muted playsinline loop preload="auto">
+                <video class="thumbnail-video" muted playsinline loop preload="metadata">
                   <source src="{{ video.sources[0].url }}" type="video/mp4">
                 </video>
               </div>
@@ -1281,41 +1277,18 @@
         display: block;
       }
 
-      .product-video-play {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: transform 0.2s ease;
-        pointer-events: none;
-      }
-
-      /* CHANGE: Play button will be hidden after autoplay via JS, but keeping hover effect for manual replay scenarios */
-      .product-video-item:hover .product-video-play {
-        transform: translate(-50%, -50%) scale(1.1);
-      }
-
       .product-videos-modal {
         display: none;
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 99999;
+        inset: 0;
+        z-index: 2147483000;
+        /* Dim the whole page behind the video. Set on the modal root (not an
+           empty child) because Dawn's base.css hides empty divs via div:empty. */
+        background: rgba(0, 0, 0, 0.75);
       }
 
       .product-videos-modal.active {
         display: block;
-      }
-
-      .product-videos-modal-backdrop {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
       }
 
       .product-videos-modal-wrapper {
@@ -1351,121 +1324,83 @@
         display: block;
       }
 
-      .product-videos-modal-footer {
-        background: #fff;
-        padding: 16px;
-        text-align: center;
-      }
-
-      .product-videos-modal-button {
-        width: 100%;
-        padding: 14px;
-        background: #000;
-        color: #fff;
+      .product-videos-modal-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 44px;
+        height: 44px;
+        background: transparent;
         border: none;
-        font-size: var(--t-small);
-        font-family: var(--font-body-family);
-        font-weight: 500;
+        color: #fff;
         cursor: pointer;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.7));
         transition: opacity 0.2s;
       }
 
-      .product-videos-modal-button:hover {
-        opacity: 0.9;
-      }
-
-      .product-videos-modal-close {
-        position: absolute;
-        top: 16px;
-        left: 16px;
-        width: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.5);
-        border: none;
-        border-radius: 50%;
-        color: #fff;
-        cursor: pointer;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.2s;
-      }
-
       .product-videos-modal-close:hover {
-        background: rgba(0, 0, 0, 0.7);
+        opacity: 0.7;
       }
 
-      .product-videos-modal-fullscreen {
+      /* Custom play + mute controls, bottom-left of the video (Made In style) */
+      .product-videos-modal-controls {
         position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.5);
-        border: none;
+        left: 16px;
+        bottom: 16px;
+        display: flex;
+        gap: 12px;
+        z-index: 15;
+        direction: ltr; /* keep play-then-mute on the left, even in RTL (Arabic) */
+      }
+
+      .product-videos-modal-control {
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
+        background: #000;
+        border: none;
         color: #fff;
         cursor: pointer;
-        z-index: 10;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.2s;
+        transition: transform 0.15s ease, background 0.2s;
       }
 
-      .product-videos-modal-fullscreen:hover {
-        background: rgba(0, 0, 0, 0.7);
+      .product-videos-modal-control:hover {
+        background: #1a1a1a;
+        transform: scale(1.05);
       }
 
-      .product-videos-modal-content.fullscreen {
-        max-width: 100vw !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
+      .product-videos-modal-control svg {
+        width: 22px;
+        height: 22px;
       }
 
-      .product-videos-modal-content.fullscreen .product-videos-modal-player {
-        aspect-ratio: auto;
-        height: calc(100vh - 70px);
+      /* Icon toggles: default shows play + volume-on */
+      .product-videos-modal-control .icon-pause,
+      .product-videos-modal-control .icon-muted {
+        display: none;
       }
 
-      .product-videos-modal-content.fullscreen .product-videos-modal-player video {
-        object-fit: contain;
+      .product-videos-modal-play.is-playing .icon-play {
+        display: none;
       }
 
-      .product-videos-modal-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 48px;
-        height: 48px;
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.2s;
+      .product-videos-modal-play.is-playing .icon-pause {
+        display: block;
       }
 
-      .product-videos-modal-nav:hover {
-        background: #fff;
+      .product-videos-modal-mute.is-muted .icon-volume {
+        display: none;
       }
 
-      .product-videos-modal-nav:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-
-      .product-videos-modal-prev {
-        left: 20px;
-      }
-
-      .product-videos-modal-next {
-        right: 20px;
+      .product-videos-modal-mute.is-muted .icon-muted {
+        display: block;
       }
 
       @media (max-width: 768px) {
@@ -1496,24 +1431,6 @@
           width: 95%;
           max-width: var(--modal-width-mobile, 350px);
         }
-
-        .product-videos-modal-nav {
-          width: 40px;
-          height: 40px;
-        }
-
-        .product-videos-modal-prev {
-          left: 10px;
-        }
-
-        .product-videos-modal-next {
-          right: 10px;
-        }
-
-        .product-video-play svg {
-          width: 56px;
-          height: 56px;
-        }
       }
 
       @media (max-width: 480px) {
@@ -1523,11 +1440,6 @@
 
         .product-videos-modal-content {
           max-width: var(--modal-width-mobile, 320px);
-        }
-
-        .product-video-play svg {
-          width: 48px;
-          height: 48px;
         }
       }
     </style>
@@ -1555,37 +1467,28 @@
         const modalContentStyle = `max-width: ${modalWidthDesktop};`;
         
         modal.innerHTML = `
-          <div class="product-videos-modal-backdrop"></div>
           <div class="product-videos-modal-wrapper">
-            <button class="product-videos-modal-close" aria-label="Close video">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-            <button class="product-videos-modal-fullscreen" aria-label="Toggle fullscreen">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-              </svg>
-            </button>
             <div class="product-videos-modal-content" style="${modalContentStyle}">
+              <button class="product-videos-modal-close" aria-label="Close video">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
               <div class="product-videos-modal-player">
                 <!-- CHANGE: Modal player container - video element will be moved here from thumbnail -->
               </div>
-              <div class="product-videos-modal-footer">
-                <button class="product-videos-modal-button">Discover</button>
+              <div class="product-videos-modal-controls">
+                <button class="product-videos-modal-control product-videos-modal-play" aria-label="Play or pause video">
+                  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                </button>
+                <button class="product-videos-modal-control product-videos-modal-mute" aria-label="Mute or unmute video">
+                  <svg class="icon-volume" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2A4.5 4.5 0 0 0 14 7.97v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg>
+                  <svg class="icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3zm18.29-.71L19.88 8l-2.29 2.29L15.3 8l-1.41 1.41L16.17 12l-2.29 2.29L15.3 15.7l2.29-2.29L19.88 15.7l1.41-1.41L19 12z"/></svg>
+                </button>
               </div>
             </div>
-            <button class="product-videos-modal-nav product-videos-modal-prev" aria-label="Previous video">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-            <button class="product-videos-modal-nav product-videos-modal-next" aria-label="Next video">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
           </div>
         `;
         
@@ -1594,53 +1497,53 @@
         const modalContent = modal.querySelector('.product-videos-modal-content');
         const modalPlayer = modal.querySelector('.product-videos-modal-player');
         const closeBtn = modal.querySelector('.product-videos-modal-close');
-        const fullscreenBtn = modal.querySelector('.product-videos-modal-fullscreen');
-        const backdrop = modal.querySelector('.product-videos-modal-backdrop');
-        const prevBtn = modal.querySelector('.product-videos-modal-prev');
-        const nextBtn = modal.querySelector('.product-videos-modal-next');
+        const modalWrapper = modal.querySelector('.product-videos-modal-wrapper');
+        const playBtn = modal.querySelector('.product-videos-modal-play');
+        const muteBtn = modal.querySelector('.product-videos-modal-mute');
+
+        let currentIndex = 0;
+        let currentVideo = null; // CHANGE: Track currently active video element
+        const visibleThumbs = new Set(); // indexes of thumbnails currently on screen
+
+        // Keep the custom play/mute buttons in sync with the active video's state
+        function syncControls() {
+          if (!currentVideo) return;
+          playBtn.classList.toggle('is-playing', !currentVideo.paused);
+          muteBtn.classList.toggle('is-muted', currentVideo.muted);
+        }
 
         // CHANGE: Store references to thumbnail videos and their containers
         const thumbnailVideos = [];
         const thumbnailContainers = [];
-        
+
         videoItems.forEach(function(item) {
           const thumbnailVideo = item.querySelector('.thumbnail-video');
           const thumbnailContainer = item.querySelector('.product-video-thumbnail');
           thumbnailVideos.push(thumbnailVideo);
           thumbnailContainers.push(thumbnailContainer);
+          // Reflect play/pause and mute changes on the custom controls while this
+          // video is the one active in the modal.
+          thumbnailVideo.addEventListener('play', function() {
+            if (currentVideo === thumbnailVideo) playBtn.classList.add('is-playing');
+          });
+          thumbnailVideo.addEventListener('pause', function() {
+            if (currentVideo === thumbnailVideo) playBtn.classList.remove('is-playing');
+          });
+          thumbnailVideo.addEventListener('volumechange', function() {
+            if (currentVideo === thumbnailVideo) muteBtn.classList.toggle('is-muted', thumbnailVideo.muted);
+          });
         });
 
         function updateModalSize() {
-          if (!modalContent.classList.contains('fullscreen')) {
-            if (window.innerWidth <= 768) {
-              modalContent.style.maxWidth = modalWidthMobile;
-            } else {
-              modalContent.style.maxWidth = modalWidthDesktop;
-            }
+          if (window.innerWidth <= 768) {
+            modalContent.style.maxWidth = modalWidthMobile;
+          } else {
+            modalContent.style.maxWidth = modalWidthDesktop;
           }
         }
-        
+
         updateModalSize();
         window.addEventListener('resize', updateModalSize);
-
-        let isFullscreen = false;
-        fullscreenBtn.addEventListener('click', function() {
-          isFullscreen = !isFullscreen;
-          if (isFullscreen) {
-            modalContent.classList.add('fullscreen');
-          } else {
-            modalContent.classList.remove('fullscreen');
-            updateModalSize();
-          }
-        });
-
-        let currentIndex = 0;
-        let currentVideo = null; // CHANGE: Track currently active video element
-
-        function updateNavButtons() {
-          prevBtn.disabled = currentIndex === 0;
-          nextBtn.disabled = currentIndex === thumbnailVideos.length - 1;
-        }
 
         // CHANGE: New function to transfer video element between thumbnail and modal
         function showVideo(index) {
@@ -1652,7 +1555,6 @@
             if (currentVideo.parentNode !== previousContainer) {
               currentVideo.muted = true; // Ensure muted when returning to thumbnail
               currentVideo.loop = true;
-              currentVideo.removeAttribute('controls'); // Remove controls for thumbnail
               previousContainer.insertBefore(currentVideo, previousContainer.firstChild);
             }
           }
@@ -1662,25 +1564,21 @@
           
           // Move the video element from thumbnail to modal
           const currentTime = currentVideo.currentTime; // Preserve playback position
-          const wasPlaying = !currentVideo.paused;
-          
+
           currentVideo.loop = false; // Disable loop in modal
-          currentVideo.muted = false; // Unmute in modal
-          currentVideo.setAttribute('controls', ''); // Add controls in modal
-          
+          currentVideo.muted = false; // Unmute in modal (custom controls only)
+
           // Clear modal player and insert video
           modalPlayer.innerHTML = '';
           modalPlayer.appendChild(currentVideo);
-          
+
           // Resume playback at same position
           currentVideo.currentTime = currentTime;
-          if (wasPlaying) {
-            currentVideo.play().catch(function(e) {
-              console.log('Play prevented:', e);
-            });
-          }
-          
-          updateNavButtons();
+          currentVideo.play().catch(function(e) {
+            console.log('Play prevented:', e);
+          });
+
+          syncControls();
         }
 
         // CHANGE: Modified click handler to transfer video instead of creating new one
@@ -1688,25 +1586,11 @@
           item.addEventListener('click', function() {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            isFullscreen = false;
-            modalContent.classList.remove('fullscreen');
+
             updateModalSize();
-            
+
             showVideo(index);
           });
-        });
-
-        prevBtn.addEventListener('click', function() {
-          if (currentIndex > 0) {
-            showVideo(currentIndex - 1);
-          }
-        });
-
-        nextBtn.addEventListener('click', function() {
-          if (currentIndex < thumbnailVideos.length - 1) {
-            showVideo(currentIndex + 1);
-          }
         });
 
         // CHANGE: Modified close function to return video to thumbnail
@@ -1717,58 +1601,87 @@
             
             currentVideo.muted = true; // Re-mute for thumbnail
             currentVideo.loop = true; // Re-enable loop
-            currentVideo.removeAttribute('controls'); // Remove controls
-            
+
             // Move video back to thumbnail
             thumbnailContainer.insertBefore(currentVideo, thumbnailContainer.firstChild);
-            
-            // Keep playing in thumbnail
-            currentVideo.play().catch(function(e) {
-              console.log('Autoplay prevented on return:', e);
-            });
+
+            // Resume in the thumbnail only if it's on screen
+            if (visibleThumbs.has(currentIndex)) {
+              currentVideo.play().catch(function(e) {
+                console.log('Autoplay prevented on return:', e);
+              });
+            }
           }
           
           modal.classList.remove('active');
           document.body.style.overflow = '';
-          isFullscreen = false;
-          modalContent.classList.remove('fullscreen');
         }
 
         closeBtn.addEventListener('click', closeModal);
-        backdrop.addEventListener('click', closeModal);
+        // Click on the dimmed area outside the video closes the modal
+        modalWrapper.addEventListener('click', function(e) {
+          if (e.target === modalWrapper) closeModal();
+        });
 
-        document.addEventListener('keydown', function(e) {
-          if (!modal.classList.contains('active')) return;
-          
-          if (e.key === 'Escape') {
-            closeModal();
-          } else if (e.key === 'ArrowLeft') {
-            if (currentIndex > 0) showVideo(currentIndex - 1);
-          } else if (e.key === 'ArrowRight') {
-            if (currentIndex < thumbnailVideos.length - 1) showVideo(currentIndex + 1);
-          } else if (e.key === 'f' || e.key === 'F') {
-            fullscreenBtn.click();
+        // Custom play/pause control
+        playBtn.addEventListener('click', function() {
+          if (!currentVideo) return;
+          if (currentVideo.paused) {
+            currentVideo.play().catch(function() {});
+          } else {
+            currentVideo.pause();
           }
         });
 
-        // Start thumbnail autoplay immediately without blocking the main thread
-        function startAutoplay() {
-          thumbnailVideos.forEach(function(video, index) {
-            const playButton = videoItems[index].querySelector('.product-video-play');
-            video.play().then(function() {
-              if (playButton) playButton.style.display = 'none';
-            }).catch(function() {
-              // Autoplay blocked by browser policy; play button stays visible
-            });
-          });
-        }
+        // Custom mute/unmute control
+        muteBtn.addEventListener('click', function() {
+          if (!currentVideo) return;
+          currentVideo.muted = !currentVideo.muted;
+        });
 
-        // Use requestIdleCallback so autoplay runs during browser idle time
-        // without delaying any rendering or interaction
-        if (typeof requestIdleCallback === 'function') {
-          requestIdleCallback(startAutoplay, { timeout: 1000 });
+        // Tapping the video toggles play/pause
+        modalPlayer.addEventListener('click', function() {
+          playBtn.click();
+        });
+
+        document.addEventListener('keydown', function(e) {
+          if (!modal.classList.contains('active')) return;
+
+          if (e.key === 'Escape') {
+            closeModal();
+          }
+        });
+
+        // Play thumbnails only while they're on screen. Combined with
+        // preload="metadata" this avoids downloading every video up front.
+        if ('IntersectionObserver' in window) {
+          const thumbObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              const index = parseInt(entry.target.dataset.videoIndex, 10);
+              const video = thumbnailVideos[index];
+              if (!video) return;
+
+              if (entry.isIntersecting) visibleThumbs.add(index);
+              else visibleThumbs.delete(index);
+
+              // Leave the video alone while it's playing in the modal
+              if (modal.classList.contains('active') && video === currentVideo) return;
+
+              if (entry.isIntersecting) {
+                video.play().catch(function() {});
+              } else {
+                video.pause();
+              }
+            });
+          }, { threshold: 0.25 });
+
+          videoItems.forEach(function(item) { thumbObserver.observe(item); });
         } else {
-          setTimeout(startAutoplay, 0);
+          // Fallback: no IntersectionObserver, keep the old always-play behavior
+          thumbnailVideos.forEach(function(video, index) {
+            visibleThumbs.add(index);
+            video.play().catch(function() {});
+          });
         }
       })();
     </script>
@@ -2058,12 +1971,18 @@
         {% endif %}
       >
         <span>
-          {%- if product.selected_or_first_available_variant == null -%}
-            {{ 'products.product.unavailable' | t }}
-          {%- elsif product.selected_or_first_available_variant.available == false -%}
-            {{ 'products.product.sold_out' | t }}
-          {%- else -%}
-            {{ sticky_btn_label }}
+          <span class="sticky-atc__btn-label">
+            {%- if product.selected_or_first_available_variant == null -%}
+              {{ 'products.product.unavailable' | t }}
+            {%- elsif product.selected_or_first_available_variant.available == false -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- else -%}
+              {{ sticky_btn_label }}
+            {%- endif -%}
+          </span>
+          {%- if product.selected_or_first_available_variant.available -%}
+            <span class="sticky-atc__btn-sep" aria-hidden="true">|</span>
+            <span class="sticky-atc__btn-price">{{ product.selected_or_first_available_variant.price | money_with_currency }}</span>
           {%- endif -%}
         </span>
         <div class="sticky-atc__spinner" aria-hidden="true">
@@ -2149,7 +2068,7 @@
         stickyBtn.classList.remove('loading');
       }
       const origSpan = origBtn.querySelector('span:first-child');
-      const stickySpan = stickyBtn.querySelector('span:first-child');
+      const stickySpan = stickyBtn.querySelector('.sticky-atc__btn-label');
       if (origSpan && stickySpan) {
         stickySpan.textContent = origSpan.textContent.trim();
       }
@@ -2713,7 +2632,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "📹 Displays all videos from product metafield with carousel lightbox and fullscreen option."
+      "content": "📹 Displays all videos from product metafield. Tapping a thumbnail opens the video in a lightbox with play and volume controls; close it to view another."
     },
     {
       "type": "header",
@@ -2806,7 +2725,7 @@
       "step": 50,
       "unit": "px",
       "label": "Modal Width (Desktop)",
-      "default": 600,
+      "default": 700,
       "info": "Maximum width of video modal on desktop"
     },
     {
@@ -2817,7 +2736,7 @@
       "step": 25,
       "unit": "px",
       "label": "Modal Width (Mobile)",
-      "default": 350,
+      "default": 425,
       "info": "Maximum width of video modal on mobile devices"
     }
   ]

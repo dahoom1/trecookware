@@ -539,6 +539,25 @@ a.product__text {
   }
 }
 
+/* Original Shopify gallery on desktop, custom slider gallery on mobile */
+.desktop-gallery-wrapper {
+  display: none;
+}
+
+.mobile-gallery-wrapper {
+  display: block;
+}
+
+@media screen and (min-width: 750px) {
+  .desktop-gallery-wrapper {
+    display: block;
+  }
+
+  .mobile-gallery-wrapper {
+    display: none;
+  }
+}
+
 .product__media-icon .icon {
   width: 1.2rem;
   height: 1.4rem;
@@ -579,8 +598,10 @@ a.product__text {
     width: 100%;
   }
 
+  /* 0.6rem = half the custom 1.2rem column-gap set on the media list above,
+     so two items still fit side by side on one row */
   .product--columns .product__media-item:not(.product__media-item--single):not(:only-child) {
-    max-width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: calc(50% - 0.6rem);
   }
 
   .product--large.product--columns .product__media-item--full .deferred-media__poster-button {
@@ -610,8 +631,10 @@ a.product__text {
 }
 
 @media screen and (min-width: 990px) {
+  /* 0.6rem = half the custom 1.2rem column-gap set on the media list,
+     so two items still fit side by side on one row */
   .product--stacked .product__media-item {
-    max-width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: calc(50% - 0.6rem);
   }
 
   .product:not(.product--columns) .product__media-list .product__media-item:first-child,

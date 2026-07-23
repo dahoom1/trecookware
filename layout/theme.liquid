@@ -270,6 +270,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    {%- if template.name == 'product' -%}
+      {%- comment -%}
+        Product-page styles must be render-blocking in the head: Safari paints
+        body content before body stylesheets load, which flashed an unstyled
+        gallery (zoom icons, oversized images) on first uncached visits.
+      {%- endcomment -%}
+      {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+      {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+      {{ 'component-price.css' | asset_url | stylesheet_tag }}
+      {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+      {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+      {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+      {{ 'custom-product-gallery.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
     <link rel="stylesheet" href="{{ 'judgeme-custom.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 

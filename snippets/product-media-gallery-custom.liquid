@@ -6,7 +6,7 @@
   - Swipe support for mobile
 {% endcomment %}
 
-{{ 'custom-product-gallery.css' | asset_url | stylesheet_tag }}
+{% comment %} custom-product-gallery.css is render-blocking in the <head> (layout/theme.liquid) {% endcomment %}
 
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
