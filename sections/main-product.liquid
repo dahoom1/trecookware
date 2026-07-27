@@ -1167,8 +1167,15 @@
           {% if video.media_type == 'video' %}
             <div class="product-video-item" data-video-index="{{ forloop.index0 }}" data-video-src="{{ video.sources[0].url }}" data-block-id="{{ block.id }}">
               <div class="product-video-thumbnail">
-                <!-- CHANGE: Removed static preview image, replaced with muted video that will autoplay -->
-                <video class="thumbnail-video" muted playsinline loop preload="metadata">
+                <!-- Poster fills the space instantly; the video itself loads/plays only when scrolled into view -->
+                <video
+                  class="thumbnail-video"
+                  muted
+                  playsinline
+                  loop
+                  preload="metadata"
+                  {% if video.preview_image %}poster="{{ video.preview_image | image_url: width: 800 }}"{% endif %}
+                >
                   <source src="{{ video.sources[0].url }}" type="video/mp4">
                 </video>
               </div>
