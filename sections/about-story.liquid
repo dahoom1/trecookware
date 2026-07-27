@@ -1,0 +1,158 @@
+{% comment %}
+  Section: About — Story Block
+  Single centered narrative column: eyebrow + heading + rich text (brand origin / mission).
+  Self-contained styles; supports color schemes and configurable width.
+{% endcomment %}
+
+{%- style -%}
+  .abs-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  .abs-{{ section.id }}__inner {
+    max-width: {{ section.settings.content_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: {{ section.settings.alignment }};
+  }
+
+  .abs-{{ section.id }}__eyebrow {
+    display: block;
+    margin: 0 0 16px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .abs-{{ section.id }}__heading {
+    margin: 0 0 24px;
+    font-family: var(--font-heading-family);
+    line-height: 1.2;
+  }
+
+  .abs-{{ section.id }}__rte {
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    line-height: 1.75;
+  }
+  .abs-{{ section.id }}__rte p { margin: 0 0 18px; }
+  .abs-{{ section.id }}__rte p:last-child { margin: 0; }
+
+  @media screen and (min-width: 750px) {
+    .abs-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="abs-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="abs-{{ section.id }}__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="abs-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="abs-{{ section.id }}__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="abs-{{ section.id }}__rte rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About — Story",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "OUR STORY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Kitchen essentials you can truly trust"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>TRE began with a simple question: what are we really cooking with? As we looked for ways to make our homes healthier, we realized the biggest difference often comes from the smallest, most invisible choices — the materials that touch our food every day.</p><p>From that sense of responsibility, TRE was born: a brand built around clean, safe, and natural materials, crafted to the highest standards and designed to last for years. We believe conscious choices shouldn't be complicated, and that every home deserves essentials worth keeping.</p>"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 560,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width",
+      "default": 760
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    { "name": "About — Story" }
+  ]
+}
+{% endschema %}

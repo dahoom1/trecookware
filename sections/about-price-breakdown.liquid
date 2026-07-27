@@ -1,0 +1,458 @@
+{% comment %}
+  Section: About — Price Breakdown
+  Cost-transparency comparison: our itemised price (blocks) vs. a traditional retail price.
+  Amounts are entered in USD; a SAR value is shown beneath each headline price using the rate setting.
+{% endcomment %}
+
+{%- liquid
+  assign rate = section.settings.sar_rate | default: 3.75
+  assign usd = section.settings.usd_symbol | default: '$'
+  assign sar = section.settings.sar_label | default: 'SAR'
+
+  assign our_total_cents = 0
+  for block in section.blocks
+    assign amount_cents = block.settings.amount | times: 100 | round
+    assign our_total_cents = our_total_cents | plus: amount_cents
+  endfor
+  assign our_total_sar_cents = our_total_cents | times: rate | round
+
+  assign theirs_cents = section.settings.theirs_amount | times: 100 | round
+  assign theirs_sar_cents = theirs_cents | times: rate | round
+-%}
+
+{%- style -%}
+  .abp-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  .abp-{{ section.id }}__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .abp-{{ section.id }}__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 44px;
+  }
+  .abp-{{ section.id }}__title {
+    margin: 0 0 12px;
+    font-family: var(--font-heading-family);
+    line-height: 1.2;
+  }
+  .abp-{{ section.id }}__subtitle {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  .abp-{{ section.id }}__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .abp-{{ section.id }}__panel {
+    border: 1px solid rgba(var(--color-foreground), 0.25);
+    border-radius: 10px;
+    padding: 32px 28px;
+    background: rgb(var(--color-background));
+  }
+  .abp-{{ section.id }}__panel--ours {
+    border-color: rgb(var(--color-foreground));
+  }
+  .abp-{{ section.id }}__panel--theirs {
+    opacity: 0.9;
+    border-style: dashed;
+  }
+
+  .abp-{{ section.id }}__panel-label {
+    display: block;
+    margin: 0 0 4px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .abp-{{ section.id }}__panel-name {
+    margin: 0 0 24px;
+    font-family: var(--font-heading-family);
+    font-size: var(--t-subtitle);
+  }
+
+  .abp-{{ section.id }}__lines {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+  }
+  .abp-{{ section.id }}__line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+  }
+  .abp-{{ section.id }}__line-label { opacity: 0.85; }
+  .abp-{{ section.id }}__line-amount { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .abp-{{ section.id }}__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    padding-top: 18px;
+    font-family: var(--font-heading-family);
+  }
+  .abp-{{ section.id }}__total-label {
+    font-size: var(--t-body);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: 4px;
+  }
+  .abp-{{ section.id }}__total-amounts { text-align: right; }
+  .abp-{{ section.id }}__total-amount {
+    display: block;
+    font-size: var(--t-h2);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+  .abp-{{ section.id }}__amount-sar {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    font-variant-numeric: tabular-nums;
+    text-transform: lowercase;
+    opacity: 0.6;
+  }
+
+  .abp-{{ section.id }}__theirs-price {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: var(--t-display);
+    line-height: 1;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    opacity: 0.5;
+  }
+  .abp-{{ section.id }}__theirs-price-sar {
+    margin: 4px 0 8px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    font-variant-numeric: tabular-nums;
+    text-transform: lowercase;
+    text-decoration: line-through;
+    opacity: 0.45;
+  }
+  .abp-{{ section.id }}__theirs-note {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+  .abp-{{ section.id }}__theirs-tags {
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+  }
+  .abp-{{ section.id }}__theirs-tags li {
+    padding: 8px 0;
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    opacity: 0.75;
+    border-bottom: 1px dashed rgba(var(--color-foreground), 0.2);
+  }
+  .abp-{{ section.id }}__theirs-tags li::before { content: "+ "; opacity: 0.6; }
+
+  .abp-{{ section.id }}__footnote {
+    margin: 28px auto 0;
+    max-width: 620px;
+    text-align: center;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    line-height: 1.6;
+    opacity: 0.6;
+  }
+
+  @media screen and (min-width: 750px) {
+    .abp-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    .abp-{{ section.id }}__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="abp-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="abp-{{ section.id }}__inner">
+      {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+        <div class="abp-{{ section.id }}__header">
+          {%- if section.settings.title != blank -%}
+            <h2 class="abp-{{ section.id }}__title {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtitle != blank -%}
+            <p class="abp-{{ section.id }}__subtitle">{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="abp-{{ section.id }}__grid">
+        <!-- Our price -->
+        <div class="abp-{{ section.id }}__panel abp-{{ section.id }}__panel--ours">
+          <span class="abp-{{ section.id }}__panel-label">{{ section.settings.ours_label }}</span>
+          <h3 class="abp-{{ section.id }}__panel-name">{{ section.settings.ours_name }}</h3>
+
+          <ul class="abp-{{ section.id }}__lines">
+            {%- for block in section.blocks -%}
+              <li class="abp-{{ section.id }}__line" {{ block.shopify_attributes }}>
+                <span class="abp-{{ section.id }}__line-label">{{ block.settings.label }}</span>
+                <span class="abp-{{ section.id }}__line-amount">
+                  {{- usd }}{{ block.settings.amount | times: 100 | money_without_currency -}}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          <div class="abp-{{ section.id }}__total">
+            <span class="abp-{{ section.id }}__total-label">{{ section.settings.total_label }}</span>
+            <span class="abp-{{ section.id }}__total-amounts">
+              <span class="abp-{{ section.id }}__total-amount">{{ usd }}{{ our_total_cents | money_without_currency }}</span>
+              <span class="abp-{{ section.id }}__amount-sar">{{ our_total_sar_cents | money_without_currency }} {{ sar }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Traditional price -->
+        <div class="abp-{{ section.id }}__panel abp-{{ section.id }}__panel--theirs">
+          <span class="abp-{{ section.id }}__panel-label">{{ section.settings.theirs_label }}</span>
+          <h3 class="abp-{{ section.id }}__panel-name">{{ section.settings.theirs_name }}</h3>
+
+          {%- if theirs_cents > 0 -%}
+            <p class="abp-{{ section.id }}__theirs-price">{{ usd }}{{ theirs_cents | money_without_currency }}</p>
+            <p class="abp-{{ section.id }}__theirs-price-sar">{{ theirs_sar_cents | money_without_currency }} {{ sar }}</p>
+          {%- endif -%}
+          {%- if section.settings.theirs_note != blank -%}
+            <p class="abp-{{ section.id }}__theirs-note">{{ section.settings.theirs_note }}</p>
+          {%- endif -%}
+
+          {%- if section.settings.theirs_tags != blank -%}
+            <ul class="abp-{{ section.id }}__theirs-tags">
+              {%- assign tags = section.settings.theirs_tags | split: ',' -%}
+              {%- for tag in tags -%}
+                <li>{{ tag | strip }}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.settings.footnote != blank -%}
+        <p class="abp-{{ section.id }}__footnote">{{ section.settings.footnote }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About — Price Breakdown",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Where your money actually goes"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "The same quality pan, without the traditional markup."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "header",
+      "content": "Currency"
+    },
+    {
+      "type": "paragraph",
+      "content": "Amounts are entered in USD. A SAR value is shown beneath each headline price using the rate below."
+    },
+    {
+      "type": "text",
+      "id": "usd_symbol",
+      "label": "USD symbol",
+      "default": "$"
+    },
+    {
+      "type": "text",
+      "id": "sar_label",
+      "label": "SAR label",
+      "default": "SAR"
+    },
+    {
+      "type": "text",
+      "id": "sar_rate",
+      "label": "SAR per 1 USD",
+      "info": "Exchange rate used to convert. Update when rates change.",
+      "default": "3.75"
+    },
+    {
+      "type": "header",
+      "content": "Our price panel"
+    },
+    {
+      "type": "text",
+      "id": "ours_label",
+      "label": "Eyebrow",
+      "default": "THE TRE PRICE"
+    },
+    {
+      "type": "text",
+      "id": "ours_name",
+      "label": "Panel name",
+      "default": "What it really costs to make"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "You pay"
+    },
+    {
+      "type": "header",
+      "content": "Traditional price panel"
+    },
+    {
+      "type": "text",
+      "id": "theirs_label",
+      "label": "Eyebrow",
+      "default": "TRADITIONAL RETAIL"
+    },
+    {
+      "type": "text",
+      "id": "theirs_name",
+      "label": "Panel name",
+      "default": "The same pan, elsewhere"
+    },
+    {
+      "type": "text",
+      "id": "theirs_amount",
+      "label": "Retail price (USD)",
+      "info": "Number only, e.g. 110. Shown crossed out with a SAR value beneath.",
+      "default": "110.00"
+    },
+    {
+      "type": "richtext",
+      "id": "theirs_note",
+      "label": "Note",
+      "default": "<p>The extra cost isn't better cookware — it's everyone in the middle taking a cut.</p>"
+    },
+    {
+      "type": "text",
+      "id": "theirs_tags",
+      "label": "Markup items",
+      "info": "Comma-separated. Each becomes a line item.",
+      "default": "Brand markup, Wholesaler margin, Department store margin, Traditional advertising"
+    },
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "textarea",
+      "id": "footnote",
+      "label": "Footnote",
+      "default": "Figures shown are illustrative and for comparison only."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "cost",
+      "name": "Cost line",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Materials"
+        },
+        {
+          "type": "text",
+          "id": "amount",
+          "label": "Amount",
+          "info": "Number only, in your store currency (e.g. 12.50).",
+          "default": "18.00"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About — Price Breakdown",
+      "blocks": [
+        { "type": "cost", "settings": { "label": "Food-grade stainless steel", "amount": "18.00" } },
+        { "type": "cost", "settings": { "label": "Skilled craftsmanship", "amount": "14.00" } },
+        { "type": "cost", "settings": { "label": "Quality testing", "amount": "5.00" } },
+        { "type": "cost", "settings": { "label": "Shipping to you", "amount": "8.00" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

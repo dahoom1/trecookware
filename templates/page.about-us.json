@@ -1,0 +1,272 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "hero": {
+      "type": "about-hero-belief",
+      "settings": {
+        "image": "shopify://shop_images/Screenshot_2026-07-26_at_2.35.04_PM.png",
+        "video_loop": true,
+        "subheading": "OUR PHILOSOPHY",
+        "heading": "We believe good cookware should last a lifetime",
+        "text": "<p>.</p>",
+        "subheading_color": "#ffffff",
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "show_button": false,
+        "button_label": "Shop the collection",
+        "button_link": "",
+        "button_bg": "#ffffff",
+        "button_text_color": "#1a1a1a",
+        "content_position": "center",
+        "content_alignment": "center",
+        "overlay_opacity": 35,
+        "height_mobile": 460,
+        "height_desktop": 620
+      }
+    },
+    "story": {
+      "type": "about-story",
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "A Timeless Raw Essential. Nothing more, nothing less.",
+        "heading_size": "h1",
+        "text": "<p>TRE began with a simple question: what are we really cooking with? As we looked for ways to make our homes healthier, we realized the biggest difference often comes from the smallest, most invisible choices  the materials that touch our food every day.</p><p>From that sense of responsibility, TRE was born: a brand built around clean, safe, and natural materials, crafted to the highest standards and designed to last for years. We believe conscious choices shouldn't be complicated, and that every home deserves essentials worth keeping.</p>",
+        "content_width": 760,
+        "alignment": "center",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 48
+      }
+    },
+    "values": {
+      "type": "about-values",
+      "blocks": {
+        "v1": {
+          "type": "value",
+          "settings": {
+            "icon": "leaf",
+            "image": "shopify://shop_images/sustainable.svg",
+            "heading": "Clean materials",
+            "text": "<p>Food-grade stainless steel and natural materials nothing that leaches, nothing to worry about.</p>"
+          }
+        },
+        "v2": {
+          "type": "value",
+          "settings": {
+            "icon": "star",
+            "image": "shopify://shop_images/5ply.svg",
+            "heading": "Built to last",
+            "text": "<p>Crafted to rigorous standards so each piece stays a daily essential for years, not seasons.</p>"
+          }
+        },
+        "v3": {
+          "type": "value",
+          "settings": {
+            "icon": "serving-dish",
+            "heading": "Backed by warranty",
+            "text": "<p>We stand behind what we make, with a warranty and a commitment to your satisfaction. </p>"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "title": "What we stand for",
+        "subtitle": "Three promises behind every piece we make.",
+        "heading_size": "h1",
+        "column_alignment": "center",
+        "color_scheme": "scheme-4",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "transparency": {
+      "type": "about-transparency",
+      "blocks": {
+        "img1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/DSC2303_1.jpg",
+            "caption": ""
+          }
+        },
+        "img2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/DSC2305.jpg",
+            "caption": ""
+          }
+        },
+        "img3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/DSC2521.jpg",
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "img1",
+        "img2",
+        "img3"
+      ],
+      "disabled": true,
+      "settings": {
+        "eyebrow": "NOTHING TO HIDE",
+        "heading": "The difference is clear",
+        "heading_size": "h0",
+        "text": "<p>We tell you what our cookware is made of, where it's made, and what it really costs to make. No mystery alloys, no inflated markups  just honest essentials you can feel good about using every day.</p>",
+        "button_label": "Explore our materials",
+        "button_link": "",
+        "image_side": "right",
+        "image_ratio": "3 / 4",
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "price_breakdown": {
+      "type": "about-price-breakdown",
+      "blocks": {
+        "c1": {
+          "type": "cost",
+          "settings": {
+            "label": "Food-grade stainless steel",
+            "amount": "18.00"
+          }
+        },
+        "c2": {
+          "type": "cost",
+          "settings": {
+            "label": "Skilled craftsmanship",
+            "amount": "14.00"
+          }
+        },
+        "c3": {
+          "type": "cost",
+          "settings": {
+            "label": "Quality testing",
+            "amount": "5.00"
+          }
+        },
+        "c4": {
+          "type": "cost",
+          "settings": {
+            "label": "Shipping to you",
+            "amount": "8.00"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "Where your money actually goes",
+        "subtitle": "The same quality pan, without the traditional markup.",
+        "heading_size": "h1",
+        "usd_symbol": "$",
+        "sar_label": "SAR",
+        "sar_rate": "3.75",
+        "ours_label": "THE TRE PRICE",
+        "ours_name": "What it really costs to make",
+        "total_label": "You pay",
+        "theirs_label": "TRADITIONAL RETAIL",
+        "theirs_name": "The same pan, elsewhere",
+        "theirs_amount": "110.00",
+        "theirs_note": "<p>The extra cost isn't better cookware — it's everyone in the middle taking a cut.</p>",
+        "theirs_tags": "Brand markup, Wholesaler margin, Department store margin, Traditional advertising",
+        "footnote": "Figures shown are illustrative and for comparison only.",
+        "color_scheme": "scheme-2",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "process": {
+      "type": "about-process-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-26_at_1.58.05_AM_b8a16bd6-8af8-4139-a6d0-58c1367fa825.png",
+            "heading": "Design",
+            "text": "<p>Every shape starts with how it's used — balanced handles, even bases, details that earn their place.</p>"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "heading": "Materials",
+            "text": "<p>We source food-grade stainless steel and natural materials chosen to be safe for years of daily cooking.</p>"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "heading": "Manufacturing",
+            "text": "<p>Skilled makers craft each piece to rigorous standards, then test it before it ever earns the TRE name.</p>"
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Artboard_212.png",
+            "heading": "Pack & Ship",
+            "text": "<p>Protected in minimal, recyclable packaging and sent straight to your door — nothing wasteful in between.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "From raw steel to your kitchen",
+        "subtitle": "Every piece passes through the same careful hands.",
+        "heading_size": "h1",
+        "columns": 4,
+        "image_ratio": "4 / 3",
+        "show_step_number": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 64,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hero",
+    "story",
+    "values",
+    "transparency",
+    "price_breakdown",
+    "process"
+  ]
+}

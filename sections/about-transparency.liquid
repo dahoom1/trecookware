@@ -1,0 +1,430 @@
+{% comment %}
+  Section: About — Transparency Callout
+  A large statement (heading + text + optional CTA) beside an autoplaying image carousel.
+  Add as many images as you like via blocks; the carousel auto-advances on mobile and desktop.
+{% endcomment %}
+
+{%- style -%}
+  .abt-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  .abt-{{ section.id }}__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .abt-{{ section.id }}__text {
+    max-width: 520px;
+  }
+  .abt-{{ section.id }}__eyebrow {
+    display: block;
+    margin: 0 0 16px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .abt-{{ section.id }}__heading {
+    margin: 0 0 20px;
+    font-family: var(--font-heading-family);
+    line-height: 1.15;
+  }
+  .abt-{{ section.id }}__rte {
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    line-height: 1.7;
+    opacity: 0.9;
+  }
+  .abt-{{ section.id }}__rte p { margin: 0 0 16px; }
+  .abt-{{ section.id }}__rte p:last-child { margin: 0; }
+
+  .abt-{{ section.id }}__cta {
+    display: inline-block;
+    margin-top: 26px;
+    padding: 13px 32px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-body);
+    text-decoration: none;
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    border: 1px solid rgb(var(--color-button));
+    transition: opacity 0.25s ease;
+  }
+  .abt-{{ section.id }}__cta:hover { opacity: 0.85; }
+
+  /* Carousel */
+  .abt-{{ section.id }}__carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    background: rgba(var(--color-foreground), 0.05);
+  }
+  .abt-{{ section.id }}__track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  .abt-{{ section.id }}__slide {
+    position: relative;
+    flex: 0 0 100%;
+    aspect-ratio: {{ section.settings.image_ratio }};
+  }
+  .abt-{{ section.id }}__slide img,
+  .abt-{{ section.id }}__slide svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .abt-{{ section.id }}__caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 16px 18px;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    color: #fff;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+  }
+
+  .abt-{{ section.id }}__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 2;
+  }
+  .abt-{{ section.id }}__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: background 0.25s ease, width 0.25s ease;
+  }
+  .abt-{{ section.id }}__dot.is-active {
+    background: #fff;
+    width: 22px;
+  }
+
+  .abt-{{ section.id }}__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.25s ease, background 0.25s ease;
+  }
+  .abt-{{ section.id }}__carousel:hover .abt-{{ section.id }}__arrow { opacity: 1; }
+  .abt-{{ section.id }}__arrow:hover { background: rgba(0, 0, 0, 0.55); }
+  .abt-{{ section.id }}__arrow--prev { left: 12px; }
+  .abt-{{ section.id }}__arrow--next { right: 12px; }
+
+  @media (hover: none) {
+    .abt-{{ section.id }}__arrow { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .abt-{{ section.id }}__track { transition: none; }
+  }
+
+  @media screen and (min-width: 750px) {
+    .abt-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    .abt-{{ section.id }}__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+    }
+    {% if section.settings.image_side == 'left' %}
+      .abt-{{ section.id }}__carousel { order: 0; }
+      .abt-{{ section.id }}__text { order: 1; }
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="abt-{{ section.id }}-padding">
+    <div class="abt-{{ section.id }}__inner{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="abt-{{ section.id }}__text">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="abt-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="abt-{{ section.id }}__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="abt-{{ section.id }}__rte rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a href="{{ section.settings.button_link | default: '#' }}" class="abt-{{ section.id }}__cta">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div
+          class="abt-{{ section.id }}__carousel"
+          id="abt-carousel-{{ section.id }}"
+          data-autoplay="{{ section.settings.autoplay }}"
+          data-interval="{{ section.settings.autoplay_speed | times: 1000 }}"
+        >
+          <div class="abt-{{ section.id }}__track">
+            {%- for block in section.blocks -%}
+              <div class="abt-{{ section.id }}__slide" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', widths: '400, 700, 1000, 1200', alt: block.settings.caption }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag }}
+                {%- endif -%}
+                {%- if block.settings.caption != blank -%}
+                  <span class="abt-{{ section.id }}__caption">{{ block.settings.caption }}</span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if section.blocks.size > 1 -%}
+            <button type="button" class="abt-{{ section.id }}__arrow abt-{{ section.id }}__arrow--prev" data-abt-prev aria-label="Previous image">&#8249;</button>
+            <button type="button" class="abt-{{ section.id }}__arrow abt-{{ section.id }}__arrow--next" data-abt-next aria-label="Next image">&#8250;</button>
+            <div class="abt-{{ section.id }}__dots" role="tablist">
+              {%- for block in section.blocks -%}
+                <button
+                  type="button"
+                  class="abt-{{ section.id }}__dot{% if forloop.first %} is-active{% endif %}"
+                  data-abt-dot="{{ forloop.index0 }}"
+                  aria-label="Go to image {{ forloop.index }}"
+                ></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if section.blocks.size > 1 -%}
+  <script>
+    (function () {
+      var root = document.getElementById('abt-carousel-{{ section.id }}');
+      if (!root) return;
+      var track = root.querySelector('.abt-{{ section.id }}__track');
+      var dots = Array.prototype.slice.call(root.querySelectorAll('[data-abt-dot]'));
+      var count = {{ section.blocks.size }};
+      var index = 0;
+      var timer = null;
+      var autoplay = root.dataset.autoplay === 'true';
+      var interval = parseInt(root.dataset.interval, 10) || 5000;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function go(i) {
+        index = (i + count) % count;
+        track.style.transform = 'translateX(' + (-index * 100) + '%)';
+        dots.forEach(function (d, di) { d.classList.toggle('is-active', di === index); });
+      }
+      function next() { go(index + 1); }
+      function prev() { go(index - 1); }
+      function start() {
+        if (!autoplay || reduce) return;
+        stop();
+        timer = setInterval(next, interval);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+      dots.forEach(function (d) {
+        d.addEventListener('click', function () { go(parseInt(d.dataset.abtDot, 10)); start(); });
+      });
+      var nextBtn = root.querySelector('[data-abt-next]');
+      var prevBtn = root.querySelector('[data-abt-prev]');
+      if (nextBtn) nextBtn.addEventListener('click', function () { next(); start(); });
+      if (prevBtn) prevBtn.addEventListener('click', function () { prev(); start(); });
+
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { stop(); } else { start(); }
+      });
+
+      start();
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About — Transparency",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "NOTHING TO HIDE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The difference is clear"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We tell you what our cookware is made of, where it's made, and what it really costs to make. No mystery alloys, no inflated markups — just honest essentials you can feel good about using every day.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore our materials"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "select",
+      "id": "image_side",
+      "label": "Image side (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" }
+      ],
+      "default": "3 / 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate images",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change image every",
+      "default": 5
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "info": "Optional. Shown over the bottom of the image."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About — Transparency",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}
