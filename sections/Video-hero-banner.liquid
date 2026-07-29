@@ -6,28 +6,27 @@
 {% endcomment %}
 
 {% style %}
-/* Hero Video Banner Styles */
-/* Mobile:  video on top | colored content below  */
-/* Desktop: 1/3 text panel (left) | 2/3 video (right) */
+/* Hero Video Banner — overlay layout: full-bleed media with content sitting on top */
 
 .hero-video-banner {
+  position: relative;
   width: 100%;
+  min-height: {{ section.settings.min_height_mobile }}px;
+  display: flex;
   overflow: hidden;
-  display: block;
+  isolation: isolate;
 }
 
-/* === VIDEO PANEL === */
-.hero-video-banner__video-panel {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: {{ section.settings.min_height_mobile }}px;
+/* === MEDIA (fills the whole frame) === */
+.hero-video-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .hero-video-banner__video-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
@@ -42,105 +41,97 @@
 /* Lazy-load poster: stays visible until the real video can play */
 .hero-video-banner__video--poster {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   transition: opacity 0.3s ease;
 }
 .hero-video-banner__video-wrapper.is-video-ready .hero-video-banner__video--poster {
   opacity: 0;
 }
 
+/* Gradient scrim — fades up from the bottom so text stays legible over the video */
+.hero-video-banner__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.80) 0%,
+    rgba(0, 0, 0, 0.45) 28%,
+    rgba(0, 0, 0, 0.12) 55%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* Optional flat colour overlay (from settings) */
 .hero-video-banner__overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
-/* === DESKTOP TEXT PANEL (left 1/3, desktop only) === */
-.hero-video-banner__text-panel {
-  display: none;
-  background-color: {{ section.settings.mobile_content_bg_color | default: '#8B4513' }};
-  padding: {{ section.settings.mobile_content_padding_vertical | default: 40 }}px {{ section.settings.mobile_content_padding_horizontal | default: 20 }}px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  flex-shrink: 0;
+/* === CONTENT (overlaid, mobile-first) === */
+.hero-video-banner__content {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  width: 100%;
+  display: flex;
   box-sizing: border-box;
+  align-items: {{ section.settings.content_alignment_vertical_mobile | default: 'flex-end' }};
+  justify-content: {{ section.settings.content_alignment_horizontal_mobile | default: 'flex-start' }};
+  padding: {{ section.settings.padding_top_mobile | default: 60 }}px {{ section.settings.padding_horizontal_mobile | default: 24 }}px {{ section.settings.padding_bottom_mobile | default: 56 }}px;
 }
 
-.hero-video-banner__text-panel-inner {
+{%- comment -%} Logical alignment so it auto-mirrors in RTL (Arabic): left→start, right→end {%- endcomment -%}
+{% assign ta_m_raw = section.settings.text_alignment_mobile | default: 'left' %}
+{% if ta_m_raw == 'left' %}{% assign ta_m_logical = 'start' %}{% elsif ta_m_raw == 'right' %}{% assign ta_m_logical = 'end' %}{% else %}{% assign ta_m_logical = 'center' %}{% endif %}
+.hero-video-banner__content-inner {
   width: 100%;
+  max-width: {{ section.settings.content_max_width | default: 800 }}px;
+  text-align: {{ ta_m_logical }};
 }
 
-/* === MOBILE / SHARED CONTENT STYLES === */
-.hero-video-banner__mobile-content {
-  display: none;
-  background-color: {{ section.settings.mobile_content_bg_color | default: '#8B4513' }};
-  padding: {{ section.settings.mobile_content_padding_vertical | default: 40 }}px {{ section.settings.mobile_content_padding_horizontal | default: 20 }}px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.hero-video-banner__mobile-content-inner {
-  max-width: {{ section.settings.content_max_width }}px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.hero-video-banner__mobile-heading-wrapper {
-  display: block;
-  width: 100%;
-  text-align: {{ section.settings.mobile_text_alignment | default: 'center' | replace: 'left', 'start' | replace: 'right', 'end' }};
-}
-
+/* === HEADING === */
 .hero-video-banner__mobile-heading {
   margin: 0 0 {{ section.settings.mobile_heading_margin_bottom | default: 16 }}px;
-  line-height: 1.15;
-  font-size: var(--t-display);
-  font-weight: {{ section.settings.heading_font_weight }};
-  color: {{ section.settings.mobile_heading_color | default: '#FFFFFF' }};
-  text-align: inherit;
-  display: inline-block;
-  max-width: 100%;
   font-family: var(--font-heading-family);
+  font-weight: {{ section.settings.heading_font_weight }};
+  font-size: clamp(32px, 8.5vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: {{ section.settings.mobile_heading_color | default: section.settings.heading_color | default: '#FFFFFF' }};
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.22);
 }
 
-.hero-video-banner__mobile-subheading-wrapper {
-  display: block;
-  width: 100%;
-  text-align: {{ section.settings.mobile_text_alignment | default: 'center' | replace: 'left', 'start' | replace: 'right', 'end' }};
-}
-
+/* === SUBHEADING === */
 .hero-video-banner__mobile-subheading {
-  margin: 0 0 {{ section.settings.mobile_subheading_margin_bottom | default: 24 }}px;
-  line-height: 1.5;
-  font-size: var(--t-subtitle);
-  font-weight: {{ section.settings.subheading_font_weight }};
-  color: {{ section.settings.mobile_subheading_color | default: '#FFFFFF' }};
-  text-align: inherit;
-  display: inline-block;
-  max-width: 100%;
+  margin: 0 0 {{ section.settings.mobile_subheading_margin_bottom | default: 28 }}px;
   font-family: var(--font-body-family);
+  font-weight: {{ section.settings.subheading_font_weight }};
+  font-size: 15px;
+  line-height: 1.6;
+  color: {{ section.settings.mobile_subheading_color | default: '#FFFFFF' }};
+  opacity: 0.92;
 }
 
+/* === BUTTONS === */
+{% assign btn_dir = section.settings.button_layout | default: 'row' %}
+{% assign ta_m = section.settings.text_alignment_mobile | default: 'left' %}
+{% if ta_m == 'center' %}{% assign align_m = 'center' %}{% elsif ta_m == 'right' %}{% assign align_m = 'flex-end' %}{% else %}{% assign align_m = 'flex-start' %}{% endif %}
 .hero-video-banner__mobile-button-wrapper {
   display: flex;
-  gap: 16px;
-  flex-wrap: nowrap;
-  {% assign alignment = section.settings.mobile_button_alignment | default: 'center' %}
-  {% if alignment == 'left' %}
-    justify-content: flex-start;
-  {% elsif alignment == 'right' %}
-    justify-content: flex-end;
-  {% elsif alignment == 'flex-start' %}
-    justify-content: flex-start;
-  {% elsif alignment == 'flex-end' %}
-    justify-content: flex-end;
+  flex-direction: {{ btn_dir }};
+  gap: 18px;
+  flex-wrap: {% if btn_dir == 'column' %}nowrap{% else %}wrap{% endif %};
+  margin-top: 4px;
+  {% if btn_dir == 'column' %}
+  align-items: {{ align_m }};
   {% else %}
-    justify-content: center;
+  align-items: center;
+  justify-content: {{ align_m }};
   {% endif %}
 }
 
@@ -148,115 +139,124 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  min-width: 0;
-  padding: {{ section.settings.mobile_button_padding_vertical | default: 12 }}px {{ section.settings.mobile_button_padding_horizontal | default: 24 }}px;
+  flex: 0 0 auto;
+  padding: {{ section.settings.mobile_button_padding_vertical | default: 15 }}px {{ section.settings.mobile_button_padding_horizontal | default: 34 }}px;
+  font-family: var(--font-body-family);
   font-size: var(--t-small);
   font-weight: {{ section.settings.button_font_weight }};
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
   border-radius: {{ section.settings.button_border_radius }}px;
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
   cursor: pointer;
-  font-family: var(--font-body-family);
-  text-align: center;
 }
 
 .hero-video-banner__mobile-button--primary {
-  background-color: {{ section.settings.mobile_button_bg_color | default: '#000000' }};
-  color: {{ section.settings.mobile_button_text_color | default: '#FFFFFF' }};
-  border: {{ section.settings.button_border_width }}px solid {{ section.settings.mobile_button_border_color | default: '#000000' }};
+  background-color: {{ section.settings.mobile_button_bg_color | default: '#FFFFFF' }};
+  color: {{ section.settings.mobile_button_text_color | default: '#1a1a1a' }};
+  border: {{ section.settings.button_border_width }}px solid {{ section.settings.mobile_button_border_color | default: '#FFFFFF' }};
 }
-
 .hero-video-banner__mobile-button--primary:hover {
-  background-color: {{ section.settings.mobile_button_bg_color_hover | default: '#333333' }};
-  color: {{ section.settings.mobile_button_text_color_hover | default: '#FFFFFF' }};
-  border-color: {{ section.settings.mobile_button_border_color_hover | default: '#333333' }};
+  transform: translateY(-2px);
+  background-color: {{ section.settings.mobile_button_bg_color_hover | default: '#f1ece5' }};
+  color: {{ section.settings.mobile_button_text_color_hover | default: '#1a1a1a' }};
+  border-color: {{ section.settings.mobile_button_border_color_hover | default: '#f1ece5' }};
 }
 
 .hero-video-banner__mobile-button--secondary {
   background-color: {{ section.settings.mobile_button_secondary_bg_color | default: 'rgba(0,0,0,0)' }};
   color: {{ section.settings.mobile_button_secondary_text_color | default: '#FFFFFF' }};
-  border: {{ section.settings.button_border_width | default: 1 }}px solid {{ section.settings.mobile_button_secondary_border_color | default: '#FFFFFF' }};
+  border: {{ section.settings.button_border_width | default: 1 }}px solid {{ section.settings.mobile_button_secondary_border_color | default: 'rgba(255,255,255,0.55)' }};
 }
-
 .hero-video-banner__mobile-button--secondary:hover {
+  transform: translateY(-2px);
   background-color: {{ section.settings.mobile_button_secondary_bg_color_hover | default: '#FFFFFF' }};
-  color: {{ section.settings.mobile_button_secondary_text_color_hover | default: '#000000' }};
+  color: {{ section.settings.mobile_button_secondary_text_color_hover | default: '#1a1a1a' }};
   border-color: {{ section.settings.mobile_button_secondary_border_color_hover | default: '#FFFFFF' }};
 }
 
-/* === MOBILE BREAKPOINT (749px and below) === */
-@media screen and (max-width: 749px) {
+/* Animated arrow on the secondary CTA (matches the reference design) */
+{% if section.settings.secondary_button_arrow %}
+.hero-video-banner__mobile-button--secondary {
+  gap: 8px;
+}
+/* Arrow points the reading-forward direction and nudges gently ~3px */
+.hero-video-banner__mobile-button--secondary::after {
+  content: '\2192'; /* → */
+  display: inline-block;
+  line-height: 1;
+  animation: hero-arrow-nudge 1.6s ease-in-out infinite;
+}
+@keyframes hero-arrow-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+/* RTL (Arabic): forward direction is leftward, so flip the glyph and the nudge */
+[dir="rtl"] .hero-video-banner__mobile-button--secondary::after {
+  content: '\2190'; /* ← */
+  animation-name: hero-arrow-nudge-rtl;
+}
+@keyframes hero-arrow-nudge-rtl {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-3px); }
+}
+
+/* Respect users who prefer less motion — hold the arrow still */
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-banner__mobile-button--secondary::after {
+    animation: none;
+  }
+}
+{% endif %}
+
+/* === DESKTOP (750px and above) === */
+@media screen and (min-width: 750px) {
   .hero-video-banner {
-    display: flex;
-    flex-direction: column;
-    height: calc(100svh - var(--initial-header-offset, 100px));
+    min-height: {{ section.settings.min_height_desktop }}px;
   }
 
-  .hero-video-banner__video-panel {
-    flex: 1 1 0;
-    min-height: 150px;
-    height: 0;
+  .hero-video-banner__content {
+    align-items: {{ section.settings.content_alignment_vertical_desktop | default: 'flex-end' }};
+    justify-content: {{ section.settings.content_alignment_horizontal_desktop | default: 'flex-start' }};
+    padding: {{ section.settings.padding_top_desktop | default: 80 }}px {{ section.settings.padding_horizontal_desktop | default: 64 }}px {{ section.settings.padding_bottom_desktop | default: 72 }}px;
   }
 
-  .hero-video-banner__mobile-content {
-    display: block !important;
-    flex-shrink: 0;
-    margin-top: -1px;
+  {% assign ta_d = section.settings.text_alignment_desktop | default: 'left' %}
+  {% if ta_d == 'left' %}{% assign ta_d_logical = 'start' %}{% elsif ta_d == 'right' %}{% assign ta_d_logical = 'end' %}{% else %}{% assign ta_d_logical = 'center' %}{% endif %}
+  .hero-video-banner__content-inner {
+    text-align: {{ ta_d_logical }};
   }
 
   .hero-video-banner__mobile-heading {
-    font-size: 24px;
+    font-size: clamp(40px, 5vw, 66px);
+    line-height: 1.02;
   }
 
   .hero-video-banner__mobile-subheading {
-    font-size: 14px;
+    font-size: var(--t-subtitle);
+    max-width: 48ch;
+    {% if ta_d == 'center' %}margin-inline: auto;{% elsif ta_d == 'right' %}margin-inline-start: auto;{% endif %}
   }
 
-  .hero-video-banner__text-panel {
-    display: none !important;
-  }
-}
-
-/* === DESKTOP (750px and above): side-by-side split layout === */
-@media screen and (min-width: 750px) {
-  .hero-video-banner {
-    display: flex;
-    flex-direction: row;
-    min-height: {{ section.settings.min_height_desktop }}px;
-  }
-
-  /* Left text panel — 1/3 width */
-  .hero-video-banner__text-panel {
-    display: flex;
-    width: 33.333%;
-    min-height: {{ section.settings.min_height_desktop }}px;
-    position: relative;
-  }
-
-  /* Right video panel — 2/3 width */
-  .hero-video-banner__video-panel {
-    flex: 1;
-    height: auto;
-    min-height: {{ section.settings.min_height_desktop }}px;
-  }
-
-  .hero-video-banner__mobile-content {
-    display: none !important;
-  }
-
-  /* Button pinned to bottom of text panel on desktop */
-  .hero-video-banner__text-panel .hero-video-banner__mobile-button-wrapper {
-    position: absolute;
-    bottom: {{ section.settings.mobile_content_padding_vertical | default: 40 }}px;
-    left: {{ section.settings.mobile_content_padding_horizontal | default: 20 }}px;
-    right: {{ section.settings.mobile_content_padding_horizontal | default: 20 }}px;
+  {% if ta_d == 'center' %}{% assign align_d = 'center' %}{% elsif ta_d == 'right' %}{% assign align_d = 'flex-end' %}{% else %}{% assign align_d = 'flex-start' %}{% endif %}
+  .hero-video-banner__mobile-button-wrapper {
+    gap: {% if btn_dir == 'column' %}14px{% else %}22px{% endif %};
+    {% if btn_dir == 'column' %}
+    align-items: {{ align_d }};
+    {% else %}
+    align-items: center;
+    justify-content: {{ align_d }};
+    {% endif %}
   }
 }
 
 /* Focus states for accessibility */
 .hero-video-banner__mobile-button:focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid #ffffff;
   outline-offset: 4px;
 }
 
@@ -268,7 +268,16 @@
 }
 {% endstyle %}
 
-{%- if section.settings.video_shopify != blank -%}
+{%- comment -%} Resolve content from the mobile_* fields, falling back to the desktop-named fields {%- endcomment -%}
+{%- assign hero_heading = section.settings.mobile_heading | default: section.settings.heading -%}
+{%- assign hero_subheading = section.settings.mobile_subheading | default: section.settings.subheading -%}
+{%- assign hero_btn_text = section.settings.mobile_button_text -%}
+{%- assign hero_btn_link = section.settings.mobile_button_link -%}
+{%- assign hero_btn2_text = section.settings.mobile_button_secondary_text -%}
+{%- assign hero_btn2_link = section.settings.mobile_button_secondary_link -%}
+{%- assign hero_poster = section.settings.video_poster | default: section.settings.video_shopify.preview_image -%}
+
+{%- if section.settings.video_shopify != blank and section.settings.video_lazy_load == false -%}
   {%- assign _hero_src = section.settings.video_shopify.sources | where: 'format', 'mp4' | first -%}
   {%- unless _hero_src -%}{%- assign _hero_src = section.settings.video_shopify.sources | first -%}{%- endunless -%}
   {%- if _hero_src -%}
@@ -278,44 +287,12 @@
 
 <div class="hero-video-banner">
 
-  <!-- LEFT: Text panel — desktop only (1/3 width) -->
-  <div class="hero-video-banner__text-panel">
-    <div class="hero-video-banner__text-panel-inner">
-      {% if section.settings.mobile_heading != blank %}
-        <div class="hero-video-banner__mobile-heading-wrapper">
-          <h2 class="hero-video-banner__mobile-heading">{{ section.settings.mobile_heading }}</h2>
-        </div>
-      {% endif %}
-
-      {% if section.settings.mobile_subheading != blank %}
-        <div class="hero-video-banner__mobile-subheading-wrapper">
-          <p class="hero-video-banner__mobile-subheading">{{ section.settings.mobile_subheading }}</p>
-        </div>
-      {% endif %}
-
-      {% if section.settings.mobile_button_text != blank or section.settings.mobile_button_secondary_text != blank %}
-        <div class="hero-video-banner__mobile-button-wrapper">
-          {% if section.settings.mobile_button_text != blank %}
-            <a href="{{ section.settings.mobile_button_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--primary">
-              {{ section.settings.mobile_button_text }}
-            </a>
-          {% endif %}
-          {% if section.settings.mobile_button_secondary_text != blank %}
-            <a href="{{ section.settings.mobile_button_secondary_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--secondary">
-              {{ section.settings.mobile_button_secondary_text }}
-            </a>
-          {% endif %}
-        </div>
-      {% endif %}
-    </div>
-  </div>
-
-  <!-- RIGHT: Video panel — full width on mobile (top), 2/3 on desktop -->
-  <div class="hero-video-banner__video-panel">
-    {% if section.settings.video_shopify != blank %}
+  <!-- Full-bleed media -->
+  <div class="hero-video-banner__media">
+    {%- if section.settings.video_shopify != blank -%}
       <div class="hero-video-banner__video-wrapper"{% if section.settings.video_lazy_load %} data-lazy-hero-video{% endif %}>
-        {% if section.settings.video_lazy_load and section.settings.video_shopify.preview_image != blank %}
-          {{ section.settings.video_shopify.preview_image | image_url: width: 1920 | image_tag:
+        {%- if section.settings.video_lazy_load and hero_poster != blank -%}
+          {{ hero_poster | image_url: width: 1920 | image_tag:
             class: 'hero-video-banner__video hero-video-banner__video--poster',
             loading: 'eager',
             fetchpriority: 'high',
@@ -334,7 +311,7 @@
               image_size: '1920x'
             }}
           </template>
-        {% else %}
+        {%- else -%}
           {{ section.settings.video_shopify | video_tag:
             autoplay: section.settings.video_autoplay,
             loop: section.settings.video_loop,
@@ -344,44 +321,47 @@
             class: 'hero-video-banner__video',
             image_size: '1920x'
           }}
-        {% endif %}
+        {%- endif -%}
       </div>
-    {% endif %}
+    {%- elsif hero_poster != blank -%}
+      {{ hero_poster | image_url: width: 1920 | image_tag:
+        class: 'hero-video-banner__video',
+        loading: 'eager',
+        fetchpriority: 'high',
+        sizes: '100vw',
+        widths: '375, 750, 1100, 1500, 1920',
+        alt: ''
+      }}
+    {%- endif -%}
 
-    {% if section.settings.enable_overlay %}
+    <div class="hero-video-banner__scrim"></div>
+
+    {%- if section.settings.enable_overlay -%}
       <div class="hero-video-banner__overlay" style="background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
-    {% endif %}
+    {%- endif -%}
   </div>
 
-  <!-- BOTTOM: Mobile-only colored content section (below video) -->
-  <div class="hero-video-banner__mobile-content">
-    <div class="hero-video-banner__mobile-content-inner">
-      {% if section.settings.mobile_heading != blank %}
-        <div class="hero-video-banner__mobile-heading-wrapper">
-          <h2 class="hero-video-banner__mobile-heading">{{ section.settings.mobile_heading }}</h2>
-        </div>
-      {% endif %}
+  <!-- Overlaid content -->
+  <div class="hero-video-banner__content">
+    <div class="hero-video-banner__content-inner">
+      {%- if hero_heading != blank -%}
+        <h2 class="hero-video-banner__mobile-heading">{{ hero_heading }}</h2>
+      {%- endif -%}
 
-      {% if section.settings.mobile_subheading != blank %}
-        <div class="hero-video-banner__mobile-subheading-wrapper">
-          <p class="hero-video-banner__mobile-subheading">{{ section.settings.mobile_subheading }}</p>
-        </div>
-      {% endif %}
+      {%- if hero_subheading != blank -%}
+        <p class="hero-video-banner__mobile-subheading">{{ hero_subheading }}</p>
+      {%- endif -%}
 
-      {% if section.settings.mobile_button_text != blank or section.settings.mobile_button_secondary_text != blank %}
+      {%- if hero_btn_text != blank or hero_btn2_text != blank -%}
         <div class="hero-video-banner__mobile-button-wrapper">
-          {% if section.settings.mobile_button_text != blank %}
-            <a href="{{ section.settings.mobile_button_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--primary">
-              {{ section.settings.mobile_button_text }}
-            </a>
-          {% endif %}
-          {% if section.settings.mobile_button_secondary_text != blank %}
-            <a href="{{ section.settings.mobile_button_secondary_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--secondary">
-              {{ section.settings.mobile_button_secondary_text }}
-            </a>
-          {% endif %}
+          {%- if hero_btn_text != blank -%}
+            <a href="{{ hero_btn_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--primary">{{ hero_btn_text }}</a>
+          {%- endif -%}
+          {%- if hero_btn2_text != blank -%}
+            <a href="{{ hero_btn2_link }}" class="hero-video-banner__mobile-button hero-video-banner__mobile-button--secondary">{{ hero_btn2_text }}</a>
+          {%- endif -%}
         </div>
-      {% endif %}
+      {%- endif -%}
     </div>
   </div>
 
@@ -594,7 +574,7 @@
         { "value": "center", "label": "Center" },
         { "value": "flex-end", "label": "Bottom" }
       ],
-      "default": "center"
+      "default": "flex-end"
     },
     {
       "type": "select",
@@ -631,7 +611,7 @@
         { "value": "center", "label": "Center" },
         { "value": "flex-end", "label": "Bottom" }
       ],
-      "default": "center"
+      "default": "flex-end"
     },
     {
       "type": "select",
@@ -896,23 +876,22 @@
     },
     {
       "type": "header",
-      "content": "Primary Button"
+      "content": "Button Styling (applies to both buttons)"
     },
     {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Text",
-      "default": "Shop All"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link"
+      "type": "select",
+      "id": "button_layout",
+      "label": "Button layout",
+      "options": [
+        { "value": "row", "label": "Side by side" },
+        { "value": "column", "label": "Stacked (vertical)" }
+      ],
+      "default": "row"
     },
     {
       "type": "select",
       "id": "button_font_weight",
-      "label": "Button Font Weight",
+      "label": "Font Weight",
       "options": [
         { "value": "400", "label": "Normal (400)" },
         { "value": "500", "label": "Medium (500)" },
@@ -922,32 +901,14 @@
       "default": "600"
     },
     {
-      "type": "color",
-      "id": "button_bg_color",
-      "label": "Button Background",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Button Text Color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "button_border_color",
-      "label": "Button Border Color",
-      "default": "#FFFFFF"
-    },
-    {
       "type": "range",
       "id": "button_border_width",
       "min": 0,
       "max": 5,
       "step": 1,
       "unit": "px",
-      "label": "Button Border Width",
-      "default": 2
+      "label": "Border Width",
+      "default": 1
     },
     {
       "type": "range",
@@ -956,145 +917,134 @@
       "max": 50,
       "step": 2,
       "unit": "px",
-      "label": "Button Border Radius",
-      "default": 4
+      "label": "Border Radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_padding_vertical",
+      "min": 8,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Vertical",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_padding_horizontal",
+      "min": 16,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Horizontal",
+      "default": 34
+    },
+    {
+      "type": "header",
+      "content": "Primary Button"
+    },
+    {
+      "type": "text",
+      "id": "mobile_button_text",
+      "label": "Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "mobile_button_link",
+      "label": "Link"
     },
     {
       "type": "color",
-      "id": "button_bg_color_hover",
-      "label": "Button Background (Hover)",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color_hover",
-      "label": "Button Text Color (Hover)",
+      "id": "mobile_button_bg_color",
+      "label": "Background",
       "default": "#FFFFFF"
     },
     {
       "type": "color",
-      "id": "button_border_color_hover",
-      "label": "Button Border Color (Hover)",
-      "default": "#000000"
+      "id": "mobile_button_text_color",
+      "label": "Text Color",
+      "default": "#1a1a1a"
     },
     {
-      "type": "range",
-      "id": "button_text_size_desktop",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "Button Text Size (Desktop)",
-      "default": 16
+      "type": "color",
+      "id": "mobile_button_border_color",
+      "label": "Border Color",
+      "default": "#FFFFFF"
     },
     {
-      "type": "range",
-      "id": "button_text_size_mobile",
-      "min": 12,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "label": "Button Text Size (Mobile)",
-      "default": 14
+      "type": "color",
+      "id": "mobile_button_bg_color_hover",
+      "label": "Background (Hover)",
+      "default": "#f1ece5"
     },
     {
-      "type": "range",
-      "id": "button_padding_vertical_desktop",
-      "min": 8,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "label": "Button Padding Vertical (Desktop)",
-      "default": 16
+      "type": "color",
+      "id": "mobile_button_text_color_hover",
+      "label": "Text Color (Hover)",
+      "default": "#1a1a1a"
     },
     {
-      "type": "range",
-      "id": "button_padding_horizontal_desktop",
-      "min": 16,
-      "max": 80,
-      "step": 4,
-      "unit": "px",
-      "label": "Button Padding Horizontal (Desktop)",
-      "default": 40
-    },
-    {
-      "type": "range",
-      "id": "button_padding_vertical_mobile",
-      "min": 8,
-      "max": 24,
-      "step": 2,
-      "unit": "px",
-      "label": "Button Padding Vertical (Mobile)",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "button_padding_horizontal_mobile",
-      "min": 16,
-      "max": 60,
-      "step": 4,
-      "unit": "px",
-      "label": "Button Padding Horizontal (Mobile)",
-      "default": 32
+      "type": "color",
+      "id": "mobile_button_border_color_hover",
+      "label": "Border Color (Hover)",
+      "default": "#f1ece5"
     },
     {
       "type": "header",
       "content": "Secondary Button"
     },
     {
+      "type": "checkbox",
+      "id": "secondary_button_arrow",
+      "label": "Show arrow on secondary button",
+      "default": true
+    },
+    {
       "type": "text",
-      "id": "button_secondary_text",
-      "label": "Secondary Button Text"
+      "id": "mobile_button_secondary_text",
+      "label": "Text"
     },
     {
       "type": "url",
-      "id": "button_secondary_link",
-      "label": "Secondary Button Link"
+      "id": "mobile_button_secondary_link",
+      "label": "Link"
     },
     {
       "type": "color",
-      "id": "button_secondary_bg_color",
-      "label": "Secondary Button Background",
+      "id": "mobile_button_secondary_bg_color",
+      "label": "Background",
       "default": "rgba(0,0,0,0)"
     },
     {
       "type": "color",
-      "id": "button_secondary_text_color",
-      "label": "Secondary Button Text Color",
+      "id": "mobile_button_secondary_text_color",
+      "label": "Text Color",
       "default": "#FFFFFF"
     },
     {
       "type": "color",
-      "id": "button_secondary_border_color",
-      "label": "Secondary Button Border Color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "range",
-      "id": "button_secondary_border_width",
-      "min": 0,
-      "max": 5,
-      "step": 1,
-      "unit": "px",
-      "label": "Secondary Button Border Width",
-      "default": 2
+      "id": "mobile_button_secondary_border_color",
+      "label": "Border Color",
+      "default": "rgba(255,255,255,0.55)"
     },
     {
       "type": "color",
-      "id": "button_secondary_bg_color_hover",
-      "label": "Secondary Button Background (Hover)",
+      "id": "mobile_button_secondary_bg_color_hover",
+      "label": "Background (Hover)",
       "default": "#FFFFFF"
     },
     {
       "type": "color",
-      "id": "button_secondary_text_color_hover",
-      "label": "Secondary Button Text Color (Hover)",
-      "default": "#000000"
+      "id": "mobile_button_secondary_text_color_hover",
+      "label": "Text Color (Hover)",
+      "default": "#1a1a1a"
     },
     {
       "type": "color",
-      "id": "button_secondary_border_color_hover",
-      "label": "Secondary Button Border Color (Hover)",
+      "id": "mobile_button_secondary_border_color_hover",
+      "label": "Border Color (Hover)",
       "default": "#FFFFFF"
     },
     {
@@ -1203,146 +1153,8 @@
       "default": 24
     },
     {
-      "type": "header",
-      "content": "Mobile Button Settings"
-    },
-    {
-      "type": "text",
-      "id": "mobile_button_text",
-      "label": "Mobile Button Text",
-      "default": "Shop Now"
-    },
-    {
-      "type": "url",
-      "id": "mobile_button_link",
-      "label": "Mobile Button Link"
-    },
-    {
-      "type": "text",
-      "id": "mobile_button_secondary_text",
-      "label": "Mobile Secondary Button Text"
-    },
-    {
-      "type": "url",
-      "id": "mobile_button_secondary_link",
-      "label": "Mobile Secondary Button Link"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_bg_color",
-      "label": "Mobile Secondary Button Background",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_text_color",
-      "label": "Mobile Secondary Button Text Color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_border_color",
-      "label": "Mobile Secondary Button Border Color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_bg_color_hover",
-      "label": "Mobile Secondary Button Background (Hover)",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_text_color_hover",
-      "label": "Mobile Secondary Button Text Color (Hover)",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_secondary_border_color_hover",
-      "label": "Mobile Secondary Button Border Color (Hover)",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "select",
-      "id": "mobile_button_alignment",
-      "label": "Mobile Button Alignment",
-      "options": [
-        { "value": "flex-start", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "flex-end", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_bg_color",
-      "label": "Mobile Button Background",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_text_color",
-      "label": "Mobile Button Text Color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_border_color",
-      "label": "Mobile Button Border Color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_bg_color_hover",
-      "label": "Mobile Button Background (Hover)",
-      "default": "#333333"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_text_color_hover",
-      "label": "Mobile Button Text Color (Hover)",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_border_color_hover",
-      "label": "Mobile Button Border Color (Hover)",
-      "default": "#333333"
-    },
-    {
-      "type": "range",
-      "id": "mobile_button_text_size",
-      "min": 12,
-      "max": 18,
-      "step": 1,
-      "unit": "px",
-      "label": "Mobile Button Text Size",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "mobile_button_padding_vertical",
-      "min": 8,
-      "max": 20,
-      "step": 2,
-      "unit": "px",
-      "label": "Mobile Button Padding Vertical",
-      "default": 12
-    },
-    {
-      "type": "range",
-      "id": "mobile_button_padding_horizontal",
-      "min": 16,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "label": "Mobile Button Padding Horizontal",
-      "default": 24
-    },
-    {
       "type": "paragraph",
-      "content": "✅ v2.0: Now uses global fonts from base.css for consistent English/Arabic typography. Separate mobile/desktop content preserved."
+      "content": "Buttons are now unified — one Primary and one Secondary button, applied to both mobile and desktop."
     }
   ],
   "presets": [
