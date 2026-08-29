@@ -15,7 +15,7 @@
         "product_tags_xeKAhF": {
           "type": "product_tags",
           "settings": {
-            "tag_1_text": "جاهز للشحن",
+            "tag_1_text": "Ready To Ship",
             "tag_1_bg_color": "#f3f3ee",
             "tag_1_text_color": "#26231e",
             "tag_1_show_dot": true,
@@ -23,7 +23,7 @@
             "tag_1_enable_info": false,
             "tag_1_info_heading": "",
             "tag_1_info_body": "",
-            "tag_2_text": "خمس طبقات",
+            "tag_2_text": "5-PLY",
             "tag_2_bg_color": "#f3f3ee",
             "tag_2_text_color": "#26231e",
             "tag_2_show_dot": false,
@@ -74,25 +74,25 @@
             "enable_marquee": false,
             "marquee_speed": 20,
             "icon_1_image": "shopify://shop_images/5ply.svg",
-            "icon_1_label": "هيكل خماسي الطبقات كامل",
+            "icon_1_label": "5-Ply Construction",
             "icon_1_description": "",
             "icon_2_image": "shopify://shop_images/oven.svg",
-            "icon_2_label": "آمن للفرن حتى 295 درجة مئوية",
+            "icon_2_label": "Oven-safe up to 295°C",
             "icon_2_description": "",
             "icon_3_image": "shopify://shop_images/tools.svg",
-            "icon_3_label": "مقاوم للخدش",
+            "icon_3_label": "Scratch-resistant",
             "icon_3_description": "",
             "icon_4_image": "shopify://shop_images/dishwasher.svg",
-            "icon_4_label": "آمن لغسالة الأطباق",
+            "icon_4_label": "Dishwasher-safe",
             "icon_4_description": "",
             "icon_5_image": "shopify://shop_images/delivery.svg",
-            "icon_5_label": "توصيل سريع",
+            "icon_5_label": "Fast delivery",
             "icon_5_description": "",
             "icon_6_image": "shopify://shop_images/heat.svg",
-            "icon_6_label": "توزيع متساوي للحرارة",
+            "icon_6_label": "Even heat distribution",
             "icon_6_description": "",
             "icon_7_image": "shopify://shop_images/sustainable.svg",
-            "icon_7_label": "صديق للبيئة",
+            "icon_7_label": "Eco-friendly",
             "icon_7_description": "",
             "icon_8_label": "",
             "icon_8_description": ""
@@ -107,7 +107,28 @@
         },
         "judge_me_reviews_review_snippet_widget_VTeTtY": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
+          "settings": {
+            "reviews_selection": "all",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "min_star_rating": "inherit",
+            "show_review_media": true,
+            "max_reviews": 30,
+            "review_length": "medium",
+            "text_size": "medium",
+            "max_width": 1100,
+            "max_image_size": "small",
+            "arrows_visibility": "always_shown",
+            "transition_speed": 4,
+            "corner_styling": "inherit",
+            "text_color": "",
+            "card_color": "",
+            "stars_color": "",
+            "arrows_color": "",
+            "arrows_background_color": ""
+          }
         },
         "inventory_QmjwaK": {
           "type": "inventory",
@@ -126,7 +147,7 @@
         "collapsible_tab_aCPnVf": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "وصف المنتج",
+            "heading": "Product Description",
             "icon": "none",
             "content": "{{ product.metafields.custom.collapsable_row_1 | metafield_tag }}",
             "page": ""
@@ -135,7 +156,7 @@
         "collapsible_tab_nN7mVt": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "تعليمات العناية",
+            "heading": "Care Instructions",
             "icon": "none",
             "content": "{{ product.metafields.custom.collapsable_row_2 | metafield_tag }}",
             "page": ""
@@ -144,7 +165,7 @@
         "collapsible_tab_XfEKfq": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "التوصيل والاستلام",
+            "heading": "Shipping & Delivery",
             "icon": "none",
             "content": "{{ product.metafields.custom.collapsable_row_3 | metafield_tag }}",
             "page": ""
@@ -155,9 +176,9 @@
           "settings": {
             "videos_namespace": "custom",
             "videos_key": "product_videos",
-            "heading_text": "كيفية استخدام أواني طهي الستانلس ستيل",
-            "link_text": "اكتشف أكثر",
-            "link_url": "#",
+            "heading_text": "How To Use Stainless Steel Cookware?",
+            "link_text": "Learn More",
+            "link_url": "shopify://pages/our-materials",
             "thumbnail_width": 210,
             "thumbnail_width_mobile": 150,
             "thumbnail_radius": 0,
@@ -202,7 +223,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "اكتشف المزيد لمطبخ مكتمل",
+        "heading": "People Also Checked:",
         "heading_size": "h1",
         "products_to_show": 4,
         "columns_desktop": 4,
@@ -223,14 +244,14 @@
         "heading_VzUEC7": {
           "type": "heading",
           "settings": {
-            "heading": "أكلك صحي ونظيف، لكن هل أدوات طبخك كذلك؟",
+            "heading": "<strong>Your Food Is Healthy And Clean, But Are Your Cooking Tools The Same?</strong>",
             "heading_size": "h2"
           }
         },
         "text_BXxKtm": {
           "type": "text",
           "settings": {
-            "text": "<p>الملايين من أواني الطهي \"غير اللاصقة\" تنتهي في مكبات النفايات كل عام، لأنها عندما تتلف طبقاتها الكيميائية وتتقشر، تتحول مباشرة إلى أواني لاصقة، وأسوء من هذا، تصبح سامة وتطلق جزيئات مايكروبلاستيكية تدخل إلى أكلك وجسدك، وتخل بتوازك الهرموني وصحتك على المدى البعيد.</p><p>في تري، نؤمن أن مطبخك وصحتك يستحقان أفضل من ذلك. لهذا اخترنا الستانلس ستيل الذي يدوم معك مدى الحياة، لا يتلف بسهولة، لا يستبدل كل موسم، والأهم، لا يؤثر على جسدك وتوازنك الهرموني.</p>"
+            "text": "<p>Millions of \"non-stick\" cookware items end up in landfills every year. Once their chemical coatings get damaged and start to peel, they instantly turn into sticky pans or worse, they become toxic, releasing microplastic particles right into your food and body. Over time, this disrupts your hormonal balance and long-term health.</p>"
           }
         }
       },
@@ -257,9 +278,12 @@
             "show_sample_reviews": false,
             "review_selection": "all",
             "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
             "show_media_only": false,
             "display_order": "media_first",
-            "card_grouping": "per_media",
+            "card_grouping": "per_review",
             "columns_desktop": 3,
             "rows_desktop": 3,
             "columns_mobile": "2",
@@ -378,6 +402,7 @@
         "feature_46dnjM",
         "feature_D3TXgz"
       ],
+      "disabled": true,
       "name": "Why Stainless Steel",
       "settings": {
         "background_color": "#f5f5f5",
@@ -441,7 +466,7 @@
         "column_7NnyMb"
       ],
       "settings": {
-        "title": "مميزات أواني الستانلس ستيل",
+        "title": "Features And Benefits of 5-Ply Stainless Steel",
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
@@ -501,7 +526,7 @@
       ],
       "name": "FAQ",
       "settings": {
-        "heading": "الاسئلة الشائعة",
+        "heading": "Frequently Asked Questions",
         "color_scheme": "",
         "open_first_collapsible_row": false,
         "padding_top": 36,

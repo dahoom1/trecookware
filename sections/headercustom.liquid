@@ -51,21 +51,30 @@
      Z-INDEX HIERARCHY
   =========================== */
   :root {
+    /* Listed high to low. These only order elements *within* the header section;
+       the announcement bar is ordered against it by base.css, not from here. */
     --z-cart-drawer: 9999;
-    --z-announcement: 3000;
-    --z-header: 2850;
     --z-mega-menu: 2900;
     --z-language-dropdown: 2880;
+    --z-header: 2850;
     --z-mobile-drawer: 2700;
     --z-overlay: 2600;
   }
 
-  /* Ensure announcement bar stays below cart drawer */
+  /* Deliberately NO z-index here. base.css already stacks these correctly:
+     .shopify-section-group-header-group is z-index 4 and .announcement-bar-section
+     is pulled back to 1, so the header group wins. Setting a z-index on the
+     announcement bar raises its entire section wrapper above the header's, and
+     because every header child (drawer 2700, header 2850, mega menu 2900) is
+     confined to the header group's stacking context, none of them can paint above
+     it - the announcement bar ends up covering the drawer's close button.
+     position: relative is kept only so absolutely-positioned children inside the
+     bar still resolve against it; without a z-index it creates no stacking
+     context, so plain DOM order puts the header on top. */
   .announcement-bar-section,
   .utility-bar,
   .shopify-section--announcement-bar {
     position: relative;
-    z-index: var(--z-announcement) !important;
   }
 
   /* ===========================
@@ -826,17 +835,25 @@
   /* ===========================
      MOBILE DRAWER/SIDEBAR - ALWAYS SLIDES FROM RIGHT
   =========================== */
+  /* `top` is set from JS to the header's bottom edge; `bottom: 0` pins the drawer
+     to the real viewport floor, so it cannot fall short of it the way a calc()
+     against 100dvh does when Safari's toolbar resizes the viewport. The slide
+     runs on transform so it composites on the GPU rather than forcing a layout
+     pass every frame. `left` is unset so the desktop max-width anchors right.
+     No box-shadow here: a blurred shadow with no vertical offset bleeds above the
+     top edge and draws a grey line across the join with the header. The drawer is
+     full-bleed on mobile, so it only needs a shadow at desktop widths. */
   .custom-header__drawer {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
+    bottom: 0;
     width: 100%;
     max-width: 100vw;
-    height: 100vh;
-    height: 100dvh;
     background-color: {{ section.settings.drawer_bg_color }};
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    will-change: transform;
     z-index: var(--z-mobile-drawer);
     display: flex;
     flex-direction: column;
@@ -845,18 +862,15 @@
   }
 
   .custom-header__drawer.is-open {
-    right: 0;
+    transform: translateX(0);
   }
 
   .custom-header__overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    width: 100vw;
-    height: 100%;
-    height: 100vh;
-    height: 100dvh;
+    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
@@ -903,6 +917,8 @@
   @media (min-width: 768px) {
     .custom-header__drawer {
       max-width: 400px;
+      /* Only a side panel needs a shadow, and here it cannot reach the join. */
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -1969,6 +1985,16 @@
 (function() {
   'use strict';
 
+  // Distance from the top of the viewport to the header's bottom edge.
+  // getBoundingClientRect() is viewport-relative and sub-pixel accurate, so one
+  // reading stays correct while the announcement bar scrolls away and once the
+  // header goes fixed - no branching on scroll position, and no rounding seam
+  // between the header and anything opening beneath it.
+  function headerBottom() {
+    const header = document.getElementById('customHeader');
+    return header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+  }
+
   // ===========================
   // SCROLL-BASED STICKY HEADER
   // ===========================
@@ -2017,47 +2043,38 @@
 
     measureAnnouncementBar() {
       const announcementBar = document.querySelector('.announcement-bar-section, .utility-bar, .shopify-section--announcement-bar');
-      this.announcementHeight = announcementBar ? announcementBar.offsetHeight : 0;
+      this.announcementHeight = announcementBar ? announcementBar.getBoundingClientRect().height : 0;
     }
 
     setHeaderHeight() {
-      const height = this.header ? this.header.offsetHeight : 0;
+      const height = this.header ? this.header.getBoundingClientRect().height : 0;
       document.documentElement.style.setProperty('--header-height', `${height}px`);
       if (this.spacer) {
         this.spacer.style.height = `${height}px`;
       }
-      // Also update cart drawer offset
-      this.updateCartDrawerOffset();
+      this.publishHeaderBottom();
     }
 
     setInitialHeaderOffset() {
       // Stable variable: announcement bar + header height as measured on load/resize.
       // Hero banner height calc uses this so it does NOT change while scrolling.
-      const height = this.header ? this.header.offsetHeight : 0;
+      const height = this.header ? this.header.getBoundingClientRect().height : 0;
       document.documentElement.style.setProperty(
         '--initial-header-offset',
         `${this.announcementHeight + height}px`
       );
     }
 
-    updateCartDrawerOffset() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const headerHeight = this.header ? this.header.offsetHeight : 0;
-
-      // If at top of page, include announcement bar height
-      // If scrolled past announcement bar, use only header height
-      const offset = scrollTop > this.announcementHeight
-        ? headerHeight
-        : this.announcementHeight + headerHeight;
-
-      document.documentElement.style.setProperty('--cart-drawer-offset', `${offset}px`);
+    // Publishes the header's live bottom edge for anything that opens beneath it.
+    publishHeaderBottom() {
+      document.documentElement.style.setProperty('--header-bottom', `${headerBottom()}px`);
     }
 
     createSpacer() {
       if (!this.spacer) {
         this.spacer = document.createElement('div');
         this.spacer.style.display = 'none';
-        this.spacer.style.height = `${this.header.offsetHeight}px`;
+        this.spacer.style.height = `${this.header.getBoundingClientRect().height}px`;
         this.parentNode.insertBefore(this.spacer, this.nextSibling);
       }
     }
@@ -2070,8 +2087,10 @@
       // Accumulate scroll delta for smoother detection
       this.scrollDelta += scrollDifference;
 
-      // MODE: STATIC ('none') - Do nothing, header scrolls away naturally
+      // MODE: STATIC ('none') - header scrolls away naturally, but the offset
+      // still has to follow it so the drawer opens flush against it.
       if (this.stickyType === 'none') {
+        this.publishHeaderBottom();
         return;
       }
 
@@ -2083,8 +2102,6 @@
         if (!this.classList.contains('is-fixed')) {
           this.classList.add('is-fixed');
           if (this.spacer) this.spacer.style.display = 'block';
-          // Update cart drawer offset when header becomes fixed
-          this.updateCartDrawerOffset();
         }
 
         // MODE: ALWAYS STICKY/FIXED ('always') - Always show header, never hide
@@ -2111,9 +2128,11 @@
         this.classList.remove('is-fixed', 'is-hidden');
         if (this.spacer) this.spacer.style.display = 'none';
         this.scrollDelta = 0;
-        // Update cart drawer offset when back at top
-        this.updateCartDrawerOffset();
       }
+
+      // Read after the fixed/hidden classes settle, so it reflects where the
+      // header actually is this frame.
+      this.publishHeaderBottom();
 
       this.lastScrollTop = scrollTop;
     }
@@ -2267,6 +2286,15 @@
   const drawer = document.getElementById('headerDrawer');
   const overlay = document.getElementById('headerOverlay');
 
+  // Sits the drawer and its overlay flush against the header's bottom edge. The
+  // bottom edge is handled by CSS, so this only owns the top.
+  function positionDrawer() {
+    const topPosition = `${headerBottom()}px`;
+
+    drawer.style.top = topPosition;
+    overlay.style.top = topPosition;
+  }
+
   function openDrawer() {
     // Reset all accordion states
     drawer.querySelectorAll('.custom-header__drawer-accordion').forEach(acc => {
@@ -2286,18 +2314,8 @@
       }
     });
 
-    // Use the same offset as cart drawer (accounts for announcement bar + header)
-    const cartDrawerOffset = getComputedStyle(document.documentElement)
-      .getPropertyValue('--cart-drawer-offset').trim();
-
-    const topPosition = cartDrawerOffset || '0px';
-
-    // Position drawer and overlay below the header (and announcement bar if visible)
-    drawer.style.top = topPosition;
-    drawer.style.height = 'calc(100dvh - ' + topPosition + ')';
-
-    overlay.style.top = topPosition;
-    overlay.style.height = 'calc(100dvh - ' + topPosition + ')';
+    // Measured live, so it lines up with the header wherever it currently sits.
+    positionDrawer();
 
     requestAnimationFrame(() => {
       drawer.classList.add('is-open');
@@ -2324,6 +2342,11 @@
 
   hamburger.addEventListener('click', toggleDrawer);
   overlay.addEventListener('click', closeDrawer);
+
+  // Re-align if the viewport changes (rotation, browser chrome) while open.
+  window.addEventListener('resize', function() {
+    if (drawer.classList.contains('is-open')) positionDrawer();
+  }, { passive: true });
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && drawer.classList.contains('is-open')) {

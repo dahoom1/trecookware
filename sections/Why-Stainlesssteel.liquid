@@ -82,69 +82,88 @@
   overflow: hidden;
 }
 
+/* Swipeable track — same carousel on mobile and desktop */
 .wss-features {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-/* Mobile Carousel Styles */
+.wss-features::-webkit-scrollbar {
+  display: none;
+}
+
+.wss-feature-card {
+  flex: 0 0 85%;
+  max-width: 400px;
+  scroll-snap-align: start;
+}
+
+/* Drag to swipe with a mouse; touch devices keep native scrolling */
+@media (hover: hover) and (pointer: fine) {
+  .wss-features.is-draggable {
+    cursor: grab;
+  }
+
+  .wss-features.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    user-select: none;
+  }
+}
+
+.wss-features img,
+.wss-features video {
+  -webkit-user-drag: none;
+}
+
+/* Carousel dots — only shown when the track actually overflows */
+.wss-carousel-dots {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  margin-top: 20px;
+  background-color: transparent;
+}
+
+.wss-features-wrapper.is-swipeable .wss-carousel-dots {
+  display: flex;
+}
+
+.wss-carousel-dot {
+  width: 20px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: rgba(200, 200, 200, 0.6);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.wss-carousel-dot:hover {
+  background-color: rgba(150, 150, 150, 0.8);
+}
+
+.wss-carousel-dot.active {
+  background-color: rgba(80, 80, 80, 0.9);
+}
+
+.wss-carousel-dot:focus {
+  outline: 2px solid rgba(0, 0, 0, 0.3);
+  outline-offset: 2px;
+}
+
 @media screen and (max-width: 749px) {
   .wss-features {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 16px;
     padding-bottom: 16px;
-  }
-
-  .wss-features::-webkit-scrollbar {
-    display: none;
-  }
-
-  .wss-feature-card {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
-    max-width: 400px;
-  }
-
-  .wss-carousel-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    margin-top: 20px;
-    background-color: transparent;
-  }
-
-  .wss-carousel-dot {
-    width: 20px;
-    height: 2px;
-    border-radius: 1px;
-    background-color: rgba(200, 200, 200, 0.6);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-
-  .wss-carousel-dot:hover {
-    background-color: rgba(150, 150, 150, 0.8);
-  }
-
-  .wss-carousel-dot.active {
-    background-color: rgba(80, 80, 80, 0.9);
-    width: 20px;
-    height: 2px;
-  }
-
-  .wss-carousel-dot:focus {
-    outline: 2px solid rgba(0, 0, 0, 0.3);
-    outline-offset: 2px;
   }
 }
 
@@ -366,8 +385,17 @@
   }
 
   .wss-features {
-    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+  }
+
+  /* Three cards fill the row; with more blocks the next one peeks in */
+  .wss-feature-card {
+    flex-basis: calc((100% - 40px) / 3);
+    max-width: none;
+  }
+
+  .wss-features--peek .wss-feature-card {
+    flex-basis: calc((100% - 40px) / 3 - 26px);
   }
 
   .wss-feature-icon {
@@ -379,10 +407,6 @@
 
   .wss-feature-content-banner {
     padding: 20px;
-  }
-
-  .wss-carousel-dots {
-    display: none;
   }
 }
 
@@ -471,7 +495,7 @@
     </div>
 
     <div class="wss-features-wrapper">
-      <div class="wss-features" id="wss-features-{{ section.id }}">
+      <div class="wss-features{% if section.blocks.size > 3 %} wss-features--peek{% endif %}" id="wss-features-{{ section.id }}">
         {% for block in section.blocks %}
           <div class="wss-feature-card" data-block-id="{{ block.id }}" data-reveal-delay="{{ block.settings.reveal_delay | times: 1000 }}" {{ block.shopify_attributes }}>
             {% comment %} Check if video exists, otherwise use image {% endcomment %}
@@ -693,20 +717,100 @@
     }
   });
 
-  /* ── mobile carousel (< 750px): expand active card on swipe ── */
-  if (window.innerWidth < 750 && dots.length > 0) {
-    let activeIndex = -1;
+  /* ── carousel plumbing (all breakpoints) ── */
+  const wrapper  = carousel.closest('.wss-features-wrapper');
+  const isMobile = window.innerWidth < 750;
 
-    function getMostVisible() {
-      const cr = carousel.getBoundingClientRect();
-      let max = -1, idx = 0;
-      cards.forEach((c, i) => {
-        const r = c.getBoundingClientRect();
-        const w = Math.max(0, Math.min(r.right, cr.right) - Math.max(r.left, cr.left));
-        if (w > max) { max = w; idx = i; }
-      });
-      return idx;
+  function overflows() {
+    return carousel.scrollWidth - carousel.clientWidth > 4;
+  }
+
+  // Dots and drag only make sense while the track has somewhere to scroll
+  function syncSwipeable() {
+    const on = overflows();
+    if (wrapper) wrapper.classList.toggle('is-swipeable', on);
+    carousel.classList.toggle('is-draggable', on);
+  }
+
+  syncSwipeable();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncSwipeable, 150);
+  });
+
+  function getMostVisible() {
+    const cr = carousel.getBoundingClientRect();
+    let max = -1, idx = 0;
+    cards.forEach((c, i) => {
+      const r = c.getBoundingClientRect();
+      const w = Math.max(0, Math.min(r.right, cr.right) - Math.max(r.left, cr.left));
+      if (w > max) { max = w; idx = i; }
+    });
+    return idx;
+  }
+
+  function setActiveDot(i) {
+    dots.forEach((d, k) => d.classList.toggle('active', k === i));
+  }
+
+  function scrollToCard(i) {
+    const card = cards[i];
+    if (!card) return;
+    const delta = card.getBoundingClientRect().left - carousel.getBoundingClientRect().left;
+    carousel.scrollTo({ left: carousel.scrollLeft + delta, behavior: 'smooth' });
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => scrollToCard(i)));
+
+  /* ── drag to swipe with a mouse (touch keeps native scrolling) ── */
+  let dragging = false, dragged = false, dragStartX = 0, dragStartScroll = 0;
+
+  carousel.addEventListener('pointerdown', e => {
+    dragged = false; // cleared up front so a stale drag never eats a later click
+    if (e.pointerType !== 'mouse' || e.button !== 0 || !overflows()) return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartScroll = carousel.scrollLeft;
+  });
+
+  // Tracked on the document so the drag survives the cursor leaving the track.
+  // Pointer capture would do the same but retargets the click that follows,
+  // which stops the overlay close button from ever receiving it.
+  document.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartX;
+    if (!dragged && Math.abs(dx) > 4) {
+      dragged = true;
+      carousel.classList.add('is-dragging');
     }
+    if (dragged) {
+      e.preventDefault();
+      carousel.scrollLeft = dragStartScroll - dx;
+    }
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    carousel.classList.remove('is-dragging');
+  }
+
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
+
+  // Swallow the click that ends a drag so the card doesn't open its overlay
+  carousel.addEventListener('click', e => {
+    if (!dragged || e.detail === 0) return;
+    dragged = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+
+  /* ── mobile (< 750px): only the card in view expands ── */
+  if (isMobile && dots.length > 0) {
+    let activeIndex = -1;
 
     function updateActive() {
       const next = getMostVisible();
@@ -719,19 +823,13 @@
       }
 
       activeIndex = next;
-      dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+      setActiveDot(activeIndex);
 
       const mobileDelay = parseInt(cards[activeIndex].dataset.revealDelay, 10) || 3000;
       scheduleOpen(cards[activeIndex], mobileDelay);
     }
 
     carousel.addEventListener('scroll', updateActive, { passive: true });
-
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => {
-        cards[i] && cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      });
-    });
 
     // Kick off the first card when the section scrolls into view
     const sectionEl = carousel.closest('.why-stainless-steel') || carousel;
@@ -744,7 +842,12 @@
     sectionIO.observe(sectionEl);
 
   } else {
-    /* ── desktop grid (≥ 750px): expand cards after section enters the viewport ── */
+    /* ── desktop (≥ 750px): dots follow the swipe, every card expands on entry ── */
+    if (dots.length > 0) {
+      setActiveDot(0);
+      carousel.addEventListener('scroll', () => setActiveDot(getMostVisible()), { passive: true });
+    }
+
     const desktopSectionEl = carousel.closest('.why-stainless-steel') || carousel;
     const desktopSectionIO = new IntersectionObserver(entries => {
       if (!entries[0].isIntersecting) return;

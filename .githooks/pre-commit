@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Blocks Arabic text in the primary-language layer.
+
+Arabic belongs in Translate & Adapt, never in templates/sections/config JSON.
+If this fires, a theme pull picked up Arabic that was typed into the English
+layer in the customizer. Bypass once with: git commit --no-verify
+"""
+import re, subprocess, sys
+
+ALLOW = {"sections/footer-group.json"}  # Saudi CR/VAT captions, Arabic on purpose
+ARABIC = re.compile(r"[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]")
+TARGET = re.compile(r"^(templates|sections|config)/.*\.json$")
+
+def sh(*a):
+    return subprocess.run(a, capture_output=True, text=True).stdout
+
+staged = [f for f in sh("git", "diff", "--cached", "--name-only",
+                        "--diff-filter=ACM").splitlines()
+          if TARGET.match(f) and f not in ALLOW]
+
+bad = {}
+for f in staged:
+    hits = [(i, ln.strip()[:90]) for i, ln in
+            enumerate(sh("git", "show", f":{f}").splitlines(), 1)
+            if ARABIC.search(ln)]
+    if hits:
+        bad[f] = hits
+
+if not bad:
+    sys.exit(0)
+
+print("\nArabic found in primary-language files:\n")
+for f, hits in bad.items():
+    print(f"  {f}  ({len(hits)} lines)")
+    for i, ln in hits[:5]:
+        print(f"      {i}: {ln}")
+    if len(hits) > 5:
+        print(f"      ... and {len(hits) - 5} more")
+print("""
+Someone typed Arabic into the English layer in the theme customizer.
+Restore the English first, then re-enter the Arabic in Translate & Adapt.
+
+  git diff <file>            see what changed
+  git checkout -- <file>     discard the pull for that file
+  git commit --no-verify     commit anyway (intentional Arabic)
+""")
+sys.exit(1)

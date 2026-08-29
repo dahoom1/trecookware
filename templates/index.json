@@ -21,8 +21,8 @@
         "enable_overlay": false,
         "overlay_color": "#334fb4",
         "overlay_opacity": 55,
-        "min_height_desktop": 550,
-        "min_height_mobile": 600,
+        "min_height_desktop": 650,
+        "min_height_mobile": 550,
         "content_alignment_vertical_desktop": "flex-end",
         "content_alignment_horizontal_desktop": "flex-start",
         "text_alignment_desktop": "left",
@@ -57,35 +57,35 @@
         "button_border_width": 0,
         "button_border_radius": 0,
         "mobile_button_padding_vertical": 10,
-        "mobile_button_padding_horizontal": 24,
-        "mobile_button_text": "Collection",
+        "mobile_button_padding_horizontal": 16,
+        "mobile_button_text": "Collections",
         "mobile_button_link": "shopify://collections/shop-by-collection",
-        "mobile_button_bg_color": "#C8D5B9",
-        "mobile_button_text_color": "#26231E",
+        "mobile_button_bg_color": "#c8d5b9",
+        "mobile_button_text_color": "#26231e",
         "mobile_button_border_color": "#ffffff",
-        "mobile_button_bg_color_hover": "#C8D5B9",
-        "mobile_button_text_color_hover": "#26231E",
+        "mobile_button_bg_color_hover": "#c8d5b9",
+        "mobile_button_text_color_hover": "#26231e",
         "mobile_button_border_color_hover": "#333333",
         "secondary_button_arrow": true,
-        "mobile_button_secondary_text": "SHOP ALL PRODUCTS",
+        "mobile_button_secondary_text": "SHOP PRODUCTS",
         "mobile_button_secondary_link": "shopify://collections/all",
         "mobile_button_secondary_bg_color": "rgba(0,0,0,0)",
-        "mobile_button_secondary_text_color": "#FFFFFF",
+        "mobile_button_secondary_text_color": "#ffffff",
         "mobile_button_secondary_border_color": "rgba(0,0,0,0)",
-        "mobile_button_secondary_bg_color_hover": "#C0DDEA",
+        "mobile_button_secondary_bg_color_hover": "#c0ddea",
         "mobile_button_secondary_text_color_hover": "#000000",
         "mobile_button_secondary_border_color_hover": "#ffffff",
         "mobile_heading": "5-Ply Premium Cookware for Every Kitchen.",
-        "mobile_subheading": "Discover our collection designed for sustainable kitchens",
+        "mobile_subheading": "Restaurant grade essentials for serious home cooks;\nthe same calibre of tools used in professional kitchens",
         "mobile_content_bg_color": "#27231e",
         "mobile_content_padding_vertical": 45,
         "mobile_content_padding_horizontal": 20,
         "mobile_text_alignment": "left",
         "mobile_heading_color": "#ffffff",
-        "mobile_heading_size": 32,
+        "mobile_heading_size": 28,
         "mobile_heading_margin_bottom": 16,
         "mobile_subheading_color": "#ffffff",
-        "mobile_subheading_size": 16,
+        "mobile_subheading_size": 12,
         "mobile_subheading_margin_bottom": 24
       }
     },
@@ -124,23 +124,23 @@
         "feature_AqY6RR": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.08.40_AM_570cb863-88e5-44e7-b981-6506d4a6a264.png",
+            "feature_image": "shopify://shop_images/20251214_C1873.00_00_20_12.Still001.jpg",
             "banner_background_color": "#c8d5b9",
             "enable_expand": true,
             "reveal_delay": 10,
-            "feature_title": "What does 5 Ply (Layers) in cookware mean?",
+            "feature_title": "What does 5 Ply mean",
             "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
+            "feature_title_font_weight": "300",
             "feature_title_font_style": "normal",
             "feature_title_size_desktop": 24,
             "feature_title_size_mobile": 20,
-            "feature_subtitle": "In short: Performance",
+            "feature_subtitle": "Professional Performance",
             "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_weight": "300",
             "feature_subtitle_font_style": "normal",
             "feature_subtitle_size_desktop": 16,
             "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>Cookware designed from 5 Ply (Layers) is a stable tool in every professional kitchen.<br/>Simply due to the fact Stainless steel when combined with Aluminum provides the highest level of durability and functionality a resturnat will ever need. Regardless how many hours it is used in the kitchen!</p>",
+            "feature_description": "<p>The ultimate choice for lasting quality. Built with a 3-layer aluminum core sandwiched between stainless steel, this robust construction heats evenly and efficiently for years of exceptional cooking.  </p>",
             "feature_description_color": "#333333",
             "feature_desc_font_weight": "400",
             "feature_desc_font_style": "normal",
@@ -148,26 +148,53 @@
             "feature_description_size_mobile": 14
           }
         },
+        "feature_bT4DMT": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/Artboard_12_5fd68f54-4cc4-481f-9ca8-0a5c3d454f20.webp",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
+            "feature_title": "Attention to Detail",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "300",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "From Rims to Handles",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "400",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "<ul><li><strong>Sealed Rims:</strong> No exposed aluminum edges to trap moisture.</li><li><strong>18/10 Stainless Steel:</strong> Optimal nickel and chromium ratio that resists rust and detergents.</li><li><strong>5-Ply Construction:</strong> No welded base to loosen over time.</li><li><strong>Backed by Tre Warranty.</strong></li></ul>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "400",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
+        },
         "feature_JLJKiL": {
           "type": "feature",
           "settings": {
-            "feature_video": "shopify://files/videos/20251214_C1860 3.mov",
+            "feature_image": "shopify://shop_images/IMG_1440-Edit_copy_Medium_a83b3016-d0e9-448c-b093-650c2f08fa67.jpg",
             "banner_background_color": "#c8d5b9",
             "enable_expand": false,
             "reveal_delay": 3,
-            "feature_title": "Your Health Is Not A Trend",
+            "feature_title": "Built for Everything",
             "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
+            "feature_title_font_weight": "300",
             "feature_title_font_style": "normal",
             "feature_title_size_desktop": 24,
             "feature_title_size_mobile": 20,
-            "feature_subtitle": "Keep It Simple With Premium 5-Ply Stainless Steel",
+            "feature_subtitle": "All cooktops, Dishwasher safe",
             "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_weight": "300",
             "feature_subtitle_font_style": "normal",
             "feature_subtitle_size_desktop": 16,
             "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>Forever</p>",
+            "feature_description": "<p>Dishwasher-safe, oven-safe, and suitable for all heat sources, including induction.</p>",
             "feature_description_color": "#333333",
             "feature_desc_font_weight": "400",
             "feature_desc_font_style": "normal",
@@ -178,19 +205,19 @@
         "feature_NiGqKQ": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Screenshot_2026-02-04_at_1.12.07_AM.png",
+            "feature_image": "shopify://shop_images/DSC02529-Edit.webp",
             "banner_background_color": "#c8d5b9",
             "enable_expand": true,
             "reveal_delay": 4,
             "feature_title": "Toxin-Free Surface",
             "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
+            "feature_title_font_weight": "300",
             "feature_title_font_style": "normal",
             "feature_title_size_desktop": 24,
             "feature_title_size_mobile": 20,
             "feature_subtitle": "Zero Coating, Zero Degradation",
             "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
+            "feature_subtitle_font_weight": "300",
             "feature_subtitle_font_style": "normal",
             "feature_subtitle_size_desktop": 16,
             "feature_subtitle_size_mobile": 14,
@@ -201,23 +228,52 @@
             "feature_description_size_desktop": 16,
             "feature_description_size_mobile": 14
           }
+        },
+        "feature_d3WTfX": {
+          "type": "feature",
+          "settings": {
+            "feature_image": "shopify://shop_images/IMG_1339_copy.jpg",
+            "banner_background_color": "#c8d5b9",
+            "enable_expand": true,
+            "reveal_delay": 3,
+            "feature_title": "No Instructions Required",
+            "feature_title_color": "#000000",
+            "feature_title_font_weight": "300",
+            "feature_title_font_style": "normal",
+            "feature_title_size_desktop": 20,
+            "feature_title_size_mobile": 18,
+            "feature_subtitle": "Low Maintenance",
+            "feature_subtitle_color": "#000000",
+            "feature_subtitle_font_weight": "400",
+            "feature_subtitle_font_style": "normal",
+            "feature_subtitle_size_desktop": 14,
+            "feature_subtitle_size_mobile": 13,
+            "feature_description": "<p>Use whatever utensils you like: metal, wood, or silicone. Tre stainless steel cookware won't peel and requires zero delicate maintenance.</p>",
+            "feature_description_color": "#333333",
+            "feature_desc_font_weight": "300",
+            "feature_desc_font_style": "normal",
+            "feature_description_size_desktop": 14,
+            "feature_description_size_mobile": 13
+          }
         }
       },
       "block_order": [
         "feature_AqY6RR",
+        "feature_bT4DMT",
         "feature_JLJKiL",
-        "feature_NiGqKQ"
+        "feature_NiGqKQ",
+        "feature_d3WTfX"
       ],
       "name": "Why Stainless Steel",
       "settings": {
         "background_color": "#f8f8f8",
         "padding_top": 20,
         "padding_bottom": 24,
-        "title": "5-Ply Stainless Steel?",
+        "title": "Why Tre Cookware",
         "title_font_weight": "300",
         "title_font_style": "normal",
         "title_color": "#121212",
-        "title_size_desktop": 20,
+        "title_size_desktop": 30,
         "title_size_mobile": 32,
         "description": "<p><strong>Highest international standards and maximum safety.</strong><br/>Non-reactive materials that withstand high temperatures. Our <strong>5-ply stainless steel</strong> features a <strong>triple-layer aluminum core</strong> for perfect heat distribution, encased in high-quality <strong>18/10 stainless steel</strong>. Designed with <strong>sealed edges</strong> to protect the internal layers, ensuring it lasts for decades.</p>",
         "description_font_weight": "400",
@@ -400,6 +456,49 @@
         "bg_color": "#ffffff"
       }
     },
+    "1778194869019864dc": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_reviews_grid_widget_zgmwf9": {
+          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": false,
+            "review_selection": "product_reviews",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "show_media_only": false,
+            "display_order": "media_first",
+            "card_grouping": "per_review",
+            "columns_desktop": 3,
+            "rows_desktop": 3,
+            "columns_mobile": "2",
+            "rows_mobile": 6,
+            "show_stars": false,
+            "show_reviewer_name": false,
+            "show_review_title_on_hover_desktop": true,
+            "max_width": 1100,
+            "corner_styling": "square",
+            "card_spacing": "small",
+            "header_text_color": "#26231e",
+            "star_and_reviewer_name_color": "#c8d5b9",
+            "drop_shadow_color": "#000000",
+            "overlay_and_background_color": "#c8d5b9",
+            "content_color": "#f9f9f9",
+            "header_text": "From our customers",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_reviews_grid_widget_zgmwf9"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
     "faq_custom_wyTcTx": {
       "type": "FAQ-custom",
       "blocks": {
@@ -450,46 +549,6 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "1778194869019864dc": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_reviews_grid_widget_zgmwf9": {
-          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": false,
-            "review_selection": "product_reviews",
-            "products": [],
-            "show_media_only": false,
-            "display_order": "most_recent",
-            "card_grouping": "per_media",
-            "columns_desktop": 3,
-            "rows_desktop": 3,
-            "columns_mobile": "2",
-            "rows_mobile": 6,
-            "show_stars": false,
-            "show_reviewer_name": false,
-            "show_review_title_on_hover_desktop": true,
-            "max_width": 1100,
-            "corner_styling": "square",
-            "card_spacing": "small",
-            "header_text_color": "#26231e",
-            "star_and_reviewer_name_color": "#c8d5b9",
-            "drop_shadow_color": "#000000",
-            "overlay_and_background_color": "#c8d5b9",
-            "content_color": "#f9f9f9",
-            "header_text": "From our customers",
-            "show_average_rating": true,
-            "rating_display": "default"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_reviews_grid_widget_zgmwf9"
-      ],
-      "settings": {
-        "include_margins": true
-      }
     }
   },
   "order": [
@@ -500,7 +559,7 @@
     "1777541418ae6d3196",
     "product_set_selector_8iF49y",
     "video_carosle_3iKgF7",
-    "faq_custom_wyTcTx",
-    "1778194869019864dc"
+    "1778194869019864dc",
+    "faq_custom_wyTcTx"
   ]
 }

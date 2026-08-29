@@ -2802,7 +2802,8 @@
         "print_shipping_label": "طباعة ملصق الشحن",
         "tracking_number": "رقم التتبع:",
         "ineligible_return_message": "لا توجد منتجات في هذا الطلب مؤهلة للإرجاع.",
-        "ineligible_return_message_when_returned": "لا توجد منتجات إضافية في هذا الطلب مؤهلة للإرجاع."
+        "ineligible_return_message_when_returned": "لا توجد منتجات إضافية في هذا الطلب مؤهلة للإرجاع.",
+        "return_and_refund_modal_header": "سياسة الإرجاع"
       },
       "shipping": {
         "address": "عنوان الشحن",
@@ -4013,6 +4014,14 @@
       "expand_label": "توسيع شريط الإعلانات",
       "collapse_label": "طي شريط الإعلانات",
       "close_label": "إغلاق شريط الإعلانات"
+    },
+    "account_menu": {
+      "signed_out_state": {
+        "profile_button": "الملف الشخصي"
+      },
+      "signed_in_state": {
+        "profile_button": "الملف الشخصي"
+      }
     }
   },
   "general": {

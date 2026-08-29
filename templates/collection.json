@@ -23,7 +23,7 @@
         "enable_autoplay": true,
         "slide_interval": 7,
         "transition_duration": 1000,
-        "carousel_image_1": "shopify://shop_images/PHOTO-2025-11-23-15-19-06.webp",
+        "carousel_image_1": "shopify://shop_images/DSC2521.jpg",
         "show_features": true,
         "feature_1": "5 Ply construction",
         "feature_2": "All heat sources",
@@ -69,12 +69,12 @@
             "review_selection": "all",
             "products": [],
             "show_media_only": false,
-            "display_order": "media_first",
-            "card_grouping": "per_media",
+            "display_order": "most_recent",
+            "card_grouping": "per_review",
             "columns_desktop": 3,
             "rows_desktop": 3,
             "columns_mobile": "2",
-            "rows_mobile": 6,
+            "rows_mobile": 5,
             "show_stars": false,
             "show_reviewer_name": false,
             "show_review_title_on_hover_desktop": true,
@@ -87,7 +87,8 @@
             "overlay_and_background_color": "#c8d5b9",
             "content_color": "#f9f9f9",
             "header_text": "From our customers",
-            "show_average_rating": true
+            "show_average_rating": true,
+            "rating_display": "default"
           }
         }
       },
@@ -145,7 +146,7 @@
         "columns_desktop": 3,
         "column_alignment": "left",
         "background_style": "primary",
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,
