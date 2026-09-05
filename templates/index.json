@@ -346,6 +346,7 @@
         "product_set_hXAHVE",
         "product_set_mYDzEQ"
       ],
+      "disabled": true,
       "name": "Product Set Selector",
       "settings": {
         "section_bg_color": "#ffffff",
@@ -391,6 +392,30 @@
         "button_2_bg_color": "rgba(0,0,0,0)",
         "button_2_text_color": "#ffffff",
         "button_2_border_color": "#ffffff"
+      }
+    },
+    "email_signup_minimal_83Fmyn": {
+      "type": "email-signup-minimal",
+      "name": "Email signup (minimal)",
+      "settings": {
+        "eyebrow": "MASTER THE KITCHEN",
+        "heading": "Upgrade Your Everyday Cooking",
+        "text": "<p>Get weekly chef-approved techniques, non-toxic cookware care guides, and secret recipes delivered straight to your inbox.</p>",
+        "placeholder": "Enter your email",
+        "heading_font": "heading",
+        "heading_font_weight": "300",
+        "heading_size_mobile": 29,
+        "heading_size_desktop": 34,
+        "form_width": 480,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "background_color": "#F8F7F6",
+        "heading_color": "#1A1A1A",
+        "eyebrow_color": "#1A1A1A",
+        "text_color": "#3D3D3D",
+        "placeholder_color": "#8A8A85",
+        "line_color": "#B8B8B2",
+        "arrow_color": "#1A1A1A"
       }
     },
     "video_carosle_3iKgF7": {
@@ -533,13 +558,31 @@
             "row_content": "<p>Completely. The stainless steel cooking surface is non-toxic and won't react with acidic foods. Unlike some non-stick pans, there's no risk of harmful chemicals flaking into your food, even at high heat. It's a safe, reliable choice for healthy cooking.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_pygt99": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "My pan turned brown after cooking. Is it ruined?",
+            "row_content": "<p>Not at all. That brown layer is cooked oil sitting on top of the steel, not damage to it. There's no coating on a Tre pan to burn or peel.</p><p>It usually means the heat was higher than the pan needed. 5-ply heats faster than the thin pans most people are used to, so medium does the work high used to do.</p><p>To remove it, pour hot water into the pan while it's still warm, simmer for a minute, and scrape with a wooden spoon. For anything stubborn, use baking soda paste or a stainless steel cleaner. Scrub as hard as you like. There's nothing to damage.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_KFe4RR": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Which TRE set should I buy first?",
+            "row_content": "<p>We recommend smart choices when it comes to your set selection. In the collection page different options exists for different family sizes. From someone living alone to a full family of +5 members! Explore our collection page to learn more about TRE offers!</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_UakJ7C",
         "collapsible_row_bLfiCV",
         "collapsible_row_B3XwFW",
-        "collapsible_row_Mwhc6d"
+        "collapsible_row_Mwhc6d",
+        "collapsible_row_pygt99",
+        "collapsible_row_KFe4RR"
       ],
       "name": "FAQ",
       "settings": {
@@ -548,6 +591,67 @@
         "open_first_collapsible_row": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "1788383679f2992078": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "main_blog_carousel_XAxUig": {
+      "type": "main-blog-carousel",
+      "disabled": true,
+      "name": "Blog posts carousel",
+      "settings": {
+        "blog": "news",
+        "max_articles": 11,
+        "use_blog_title": false,
+        "title": "Featured Blogs",
+        "title_font_weight": "400",
+        "title_font_style": "normal",
+        "title_color": "#26231E",
+        "description": "",
+        "description_font_weight": "400",
+        "description_color": "#000000",
+        "cta_text": "",
+        "cta_link": "",
+        "cta_font_weight": "400",
+        "cta_color": "#000000",
+        "cards_per_view_desktop": "4",
+        "image_ratio": "square",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_excerpt": true,
+        "excerpt_lines": 1,
+        "show_tag": false,
+        "read_more_text": "Read more",
+        "card_corner_radius": 2,
+        "card_background": "#FFFFFF",
+        "card_title_font_weight": "600",
+        "card_title_color": "#000000",
+        "meta_color": "#6B6B6B",
+        "excerpt_color": "#3D3D3D",
+        "read_more_color": "#000000",
+        "tag_background": "#FFFFFF",
+        "tag_color": "#000000",
+        "show_arrows": false,
+        "arrow_style": "square",
+        "arrow_size": 40,
+        "arrow_border_width": 1,
+        "arrow_color": "#000000",
+        "arrow_background": "rgba(0,0,0,0)",
+        "arrow_border_color": "#D6D6D6",
+        "arrow_hover_color": "#FFFFFF",
+        "arrow_hover_background": "#000000",
+        "arrow_hover_border_color": "#000000",
+        "show_dashes": true,
+        "dash_color": "#C8C8C8",
+        "dash_active_color": "#505050",
+        "background_color": "#FFFFFF",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     }
   },
@@ -558,8 +662,11 @@
     "176253019774d27060",
     "1777541418ae6d3196",
     "product_set_selector_8iF49y",
+    "email_signup_minimal_83Fmyn",
     "video_carosle_3iKgF7",
     "1778194869019864dc",
-    "faq_custom_wyTcTx"
+    "faq_custom_wyTcTx",
+    "1788383679f2992078",
+    "main_blog_carousel_XAxUig"
   ]
 }

@@ -1,0 +1,1120 @@
+{% comment %}
+  Section: Blog Posts Carousel
+  Description: Drop-in replacement for main-blog. Renders every article of a blog in a single
+               swipeable row (mobile + desktop, never wraps to a second row) using the same
+               carousel mechanics as the "Why Stainless Steel" section — scroll-snap track,
+               mouse drag-to-swipe, dash indicators — plus styleable prev/next arrow buttons.
+  Note: Uses global fonts + type scale from base.css (works in both English and Arabic/RTL).
+{% endcomment %}
+
+{%- liquid
+  assign target_blog = blog
+  if section.settings.blog != blank
+    assign target_blog = blogs[section.settings.blog]
+  endif
+  assign articles = target_blog.articles
+  assign article_count = articles.size
+  if article_count > section.settings.max_articles
+    assign article_count = section.settings.max_articles
+  endif
+
+  case section.settings.image_ratio
+    when 'portrait'
+      assign media_ratio = '3 / 4'
+    when 'landscape'
+      assign media_ratio = '4 / 3'
+    else
+      assign media_ratio = '1 / 1'
+  endcase
+
+  assign per_view = section.settings.cards_per_view_desktop | plus: 0
+  assign heading_tag = 'h2'
+  if section.settings.use_blog_title and template.name == 'blog'
+    assign heading_tag = 'h1'
+  endif
+-%}
+
+<style>
+/* ── Blog Carousel — section {{ section.id }} ── */
+.blog-carousel-{{ section.id }} {
+  width: 100%;
+  isolation: isolate; /* keep card stacking away from the fixed header */
+  background-color: {{ section.settings.background_color }};
+  padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+  padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+.blog-carousel .page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.bc-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.bc-title {
+  margin: 0;
+  line-height: 1.2;
+  font-family: var(--font-heading-family);
+  font-size: var(--t-h1);
+}
+
+.bc-description {
+  margin: 0;
+  line-height: 1.6;
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
+}
+
+.bc-description p { margin: 0; }
+
+.bc-cta {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
+}
+
+.bc-cta:hover { opacity: 0.7; }
+
+.bc-cta:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Track */
+.bc-carousel {
+  position: relative;
+}
+
+.bc-track {
+  display: flex;
+  flex-wrap: nowrap;          /* single row at every breakpoint — never a second row */
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.bc-track::-webkit-scrollbar { display: none; }
+
+.bc-card {
+  flex: 0 0 85%;
+  max-width: 400px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: {{ section.settings.card_background }};
+  border-radius: {{ section.settings.card_corner_radius }}px;
+}
+
+/* Drag to swipe with a mouse; touch keeps native scrolling */
+@media (hover: hover) and (pointer: fine) {
+  .bc-track.is-draggable { cursor: grab; }
+
+  .bc-track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    user-select: none;
+  }
+}
+
+.bc-track img { -webkit-user-drag: none; }
+
+/* Card */
+.bc-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bc-card__media {
+  width: 100%;
+  aspect-ratio: {{ media_ratio }};
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.bc-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.bc-card__link:hover .bc-card__media img { transform: scale(1.04); }
+
+.bc-card__media--placeholder svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.bc-card__tag {
+  position: absolute;
+  bottom: 12px;
+  inset-inline-start: 12px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
+  line-height: 1.2;
+  background-color: {{ section.settings.tag_background }};
+  color: {{ section.settings.tag_color }};
+}
+
+.bc-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  min-height: 110px;
+}
+
+.bc-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  line-height: 1.3;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
+  color: {{ section.settings.meta_color }};
+}
+
+.bc-card__meta > * + *::before {
+  content: "·";
+  margin-inline-end: 8px;
+}
+
+.bc-card__title {
+  margin: 0;
+  line-height: 1.25;
+  font-family: var(--font-heading-family);
+  font-size: var(--t-h3);
+  font-weight: {{ section.settings.card_title_font_weight }};
+  color: {{ section.settings.card_title_color }};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bc-card__excerpt {
+  margin: 0;
+  line-height: 1.5;
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
+  color: {{ section.settings.excerpt_color }};
+  display: -webkit-box;
+  -webkit-line-clamp: {{ section.settings.excerpt_lines }};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bc-card__more {
+  margin-top: auto;
+  padding-top: 10px;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
+  color: {{ section.settings.read_more_color }};
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.bc-card__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+/* ── Controls row: [prev] [dashes] [next] ── */
+.bc-controls {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.bc-carousel.is-swipeable .bc-controls { display: flex; }
+
+.bc-dashes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.bc-dash {
+  width: 20px;
+  height: 2px;
+  border-radius: 1px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: {{ section.settings.dash_color }};
+  transition: background-color 0.25s ease, width 0.25s ease;
+}
+
+.bc-dash:hover { background-color: {{ section.settings.dash_active_color }}; opacity: 0.7; }
+
+.bc-dash.active {
+  background-color: {{ section.settings.dash_active_color }};
+  width: 28px;
+}
+
+.bc-dash:focus-visible {
+  outline: 2px solid {{ section.settings.dash_active_color }};
+  outline-offset: 3px;
+}
+
+{%- if section.settings.show_dashes == false -%}
+.bc-dashes { display: none; }
+{%- endif -%}
+
+/* Prev / next arrow buttons — appearance driven by section settings */
+.bc-arrow {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: {{ section.settings.arrow_size }}px;
+  height: {{ section.settings.arrow_size }}px;
+  padding: 0;
+  cursor: pointer;
+  background-color: {{ section.settings.arrow_background }};
+  color: {{ section.settings.arrow_color }};
+  border: {{ section.settings.arrow_border_width }}px solid {{ section.settings.arrow_border_color }};
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+{%- case section.settings.arrow_style -%}
+  {%- when 'circle' -%}
+.bc-arrow { border-radius: 50%; }
+  {%- when 'square' -%}
+.bc-arrow { border-radius: 4px; }
+  {%- when 'pill' -%}
+.bc-arrow { border-radius: 999px; width: {{ section.settings.arrow_size | times: 1.6 | round: 0 }}px; }
+  {%- when 'bare' -%}
+.bc-arrow { border-radius: 0; border-color: transparent; background-color: transparent; }
+{%- endcase -%}
+
+.bc-arrow svg {
+  width: {{ section.settings.arrow_size | times: 0.42 | round: 0 }}px;
+  height: {{ section.settings.arrow_size | times: 0.42 | round: 0 }}px;
+  display: block;
+  pointer-events: none;
+}
+
+.bc-arrow:hover:not([disabled]) {
+  background-color: {{ section.settings.arrow_hover_background }};
+  color: {{ section.settings.arrow_hover_color }};
+  border-color: {{ section.settings.arrow_hover_border_color }};
+}
+
+.bc-arrow:active:not([disabled]) { transform: scale(0.94); }
+
+.bc-arrow[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.bc-arrow:focus-visible {
+  outline: 2px solid {{ section.settings.arrow_color }};
+  outline-offset: 3px;
+}
+
+/* Arrows point the reading direction, so flip them under RTL */
+[dir="rtl"] .bc-arrow svg { transform: scaleX(-1); }
+
+{%- if section.settings.show_arrows == false -%}
+.bc-arrow { display: none; }
+{%- endif -%}
+
+/* Empty state */
+.bc-empty {
+  margin: 0;
+  padding: 32px 0;
+  font-family: var(--font-body-family);
+  font-size: var(--t-body);
+  color: {{ section.settings.meta_color }};
+}
+
+/* Smooth font rendering */
+.bc-title,
+.bc-description,
+.bc-cta,
+.bc-card__title,
+.bc-card__meta,
+.bc-card__excerpt {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media screen and (max-width: 749px) {
+  .bc-track { padding-bottom: 8px; }
+}
+
+/* Tablet */
+@media screen and (min-width: 750px) {
+  .blog-carousel-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .blog-carousel .page-width {
+    max-width: var(--page-width);
+    padding: 0 40px;
+  }
+
+  .bc-header--split {
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .bc-header { margin-bottom: 40px; }
+
+  .bc-cta-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+
+  .bc-track { gap: 20px; }
+
+  /* {{ per_view }} cards fill the row; anything beyond that peeks in from the edge */
+  .bc-card {
+    flex-basis: calc((100% - {{ per_view | minus: 1 | times: 20 }}px) / {{ per_view }});
+    max-width: none;
+  }
+
+  .bc-track--peek .bc-card {
+    flex-basis: calc((100% - {{ per_view | minus: 1 | times: 20 }}px) / {{ per_view }} - 26px);
+  }
+
+  .bc-card__body { padding: 20px; }
+}
+
+/* Desktop */
+@media screen and (min-width: 990px) {
+  .blog-carousel .page-width {
+    max-width: var(--page-width);
+    padding: 0 60px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .blog-carousel .page-width {
+    max-width: var(--page-width);
+    padding: 0 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-track { scroll-behavior: auto; }
+  .bc-card__media img { transition: none; }
+}
+</style>
+
+<div class="blog-carousel blog-carousel-{{ section.id }}">
+  <div class="page-width">
+    <div class="bc-header{% if section.settings.description != blank or section.settings.cta_text != blank %} bc-header--split{% endif %}">
+      <div class="bc-title-wrapper">
+        {%- liquid
+          assign heading = section.settings.title
+          if section.settings.use_blog_title and target_blog.title != blank
+            assign heading = target_blog.title
+          endif
+        -%}
+        {% if heading != blank %}
+          <{{ heading_tag }} class="bc-title" style="
+            color: {{ section.settings.title_color }};
+            font-weight: {{ section.settings.title_font_weight }};
+            font-style: {{ section.settings.title_font_style }};
+          ">{{ heading | escape }}</{{ heading_tag }}>
+        {% endif %}
+      </div>
+
+      <div class="bc-content-wrapper">
+        {% if section.settings.description != blank %}
+          <div class="bc-description" style="
+            color: {{ section.settings.description_color }};
+            font-weight: {{ section.settings.description_font_weight }};
+          ">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="bc-cta-wrapper">
+        {% if section.settings.cta_text != blank %}
+          <a href="{{ section.settings.cta_link | default: target_blog.url }}" class="bc-cta" style="
+            color: {{ section.settings.cta_color }};
+            font-weight: {{ section.settings.cta_font_weight }};
+          ">{{ section.settings.cta_text | escape }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {%- if article_count > 0 -%}
+      <div class="bc-carousel" id="bc-carousel-{{ section.id }}">
+        <div
+          class="bc-track{% if article_count > per_view %} bc-track--peek{% endif %}"
+          id="bc-track-{{ section.id }}"
+          role="list"
+        >
+          {%- for article in articles limit: section.settings.max_articles -%}
+            <article class="bc-card" role="listitem">
+              <a href="{{ article.url }}" class="bc-card__link" aria-label="{{ article.title | escape }}">
+                {%- if section.settings.show_image -%}
+                  <div class="bc-card__media{% unless article.image %} bc-card__media--placeholder{% endunless %}">
+                    {%- if article.image -%}
+                      <img
+                        src="{{ article.image | image_url: width: 800 }}"
+                        srcset="{{ article.image | image_url: width: 400 }} 400w,
+                                {{ article.image | image_url: width: 600 }} 600w,
+                                {{ article.image | image_url: width: 800 }} 800w,
+                                {{ article.image | image_url: width: 1000 }} 1000w"
+                        sizes="(max-width: 749px) 85vw, (max-width: 989px) 40vw, {{ 100 | divided_by: per_view }}vw"
+                        alt="{{ article.image.alt | default: article.title | escape }}"
+                        width="{{ article.image.width }}"
+                        height="{{ article.image.height }}"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      {{ 'image' | placeholder_svg_tag }}
+                    {%- endif -%}
+
+                    {%- if section.settings.show_tag and article.tags.size > 0 -%}
+                      <span class="bc-card__tag">{{ article.tags.first }}</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+
+                <div class="bc-card__body">
+                  {%- if section.settings.show_date or section.settings.show_author -%}
+                    <div class="bc-card__meta">
+                      {%- if section.settings.show_date -%}
+                        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+                      {%- endif -%}
+                      {%- if section.settings.show_author -%}
+                        <span>{{ article.author }}</span>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  <h3 class="bc-card__title">{{ article.title | escape }}</h3>
+
+                  {%- if section.settings.show_excerpt -%}
+                    {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+                      <p class="bc-card__excerpt">
+                        {%- if article.excerpt.size > 0 -%}
+                          {{ article.excerpt | strip_html | truncatewords: 30 }}
+                        {%- else -%}
+                          {{ article.content | strip_html | truncatewords: 30 }}
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- if section.settings.read_more_text != blank -%}
+                    <span class="bc-card__more">{{ section.settings.read_more_text | escape }}</span>
+                  {%- endif -%}
+                </div>
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        <div class="bc-controls">
+          <button
+            type="button"
+            class="bc-arrow bc-arrow--prev"
+            data-bc-prev
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+            aria-controls="bc-track-{{ section.id }}"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M15 5 8 12l7 7" />
+            </svg>
+          </button>
+
+          <div class="bc-dashes" id="bc-dashes-{{ section.id }}">
+            {%- for article in articles limit: section.settings.max_articles -%}
+              <button
+                type="button"
+                class="bc-dash{% if forloop.first %} active{% endif %}"
+                data-index="{{ forloop.index0 }}"
+                aria-label="Go to post {{ forloop.index }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+
+          <button
+            type="button"
+            class="bc-arrow bc-arrow--next"
+            data-bc-next
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+            aria-controls="bc-track-{{ section.id }}"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="m9 5 7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="bc-empty">This blog has no posts yet. Add a post to see the carousel.</p>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+(function () {
+  var sectionId = '{{ section.id }}';
+  var track = document.getElementById('bc-track-' + sectionId);
+  if (!track) return;
+
+  var carousel  = document.getElementById('bc-carousel-' + sectionId);
+  var dashWrap  = document.getElementById('bc-dashes-' + sectionId);
+  var dashes    = dashWrap ? Array.prototype.slice.call(dashWrap.querySelectorAll('.bc-dash')) : [];
+  var cards     = Array.prototype.slice.call(track.querySelectorAll('.bc-card'));
+  var prevBtn   = carousel.querySelector('[data-bc-prev]');
+  var nextBtn   = carousel.querySelector('[data-bc-next]');
+
+  function overflows() {
+    return track.scrollWidth - track.clientWidth > 4;
+  }
+
+  // Controls only make sense while the track has somewhere to scroll
+  function syncSwipeable() {
+    var on = overflows();
+    carousel.classList.toggle('is-swipeable', on);
+    track.classList.toggle('is-draggable', on);
+    syncArrows();
+  }
+
+  // scrollLeft runs negative under RTL, so measure everything in absolute terms
+  function scrolled() { return Math.abs(track.scrollLeft); }
+
+  function syncArrows() {
+    if (!prevBtn || !nextBtn) return;
+    var max = track.scrollWidth - track.clientWidth;
+    prevBtn.disabled = scrolled() <= 4;
+    nextBtn.disabled = scrolled() >= max - 4;
+  }
+
+  function getMostVisible() {
+    var tr = track.getBoundingClientRect();
+    var max = -1, idx = 0;
+    cards.forEach(function (c, i) {
+      var r = c.getBoundingClientRect();
+      var w = Math.max(0, Math.min(r.right, tr.right) - Math.max(r.left, tr.left));
+      if (w > max) { max = w; idx = i; }
+    });
+    return idx;
+  }
+
+  function setActiveDash(i) {
+    dashes.forEach(function (d, k) { d.classList.toggle('active', k === i); });
+  }
+
+  // Relative delta keeps this correct in both LTR and RTL
+  function scrollToCard(i) {
+    var card = cards[i];
+    if (!card) return;
+    var delta = card.getBoundingClientRect().left - track.getBoundingClientRect().left;
+    track.scrollTo({ left: track.scrollLeft + delta, behavior: 'smooth' });
+  }
+
+  dashes.forEach(function (dash, i) {
+    dash.addEventListener('click', function () { scrollToCard(i); });
+  });
+
+  // Arrows step by index, so "next" always means forward in reading order
+  if (prevBtn) prevBtn.addEventListener('click', function () { scrollToCard(getMostVisible() - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { scrollToCard(getMostVisible() + 1); });
+
+  track.addEventListener('scroll', function () {
+    setActiveDash(getMostVisible());
+    syncArrows();
+  }, { passive: true });
+
+  /* ── drag to swipe with a mouse (touch keeps native scrolling) ── */
+  var dragging = false, dragged = false, dragStartX = 0, dragStartScroll = 0;
+
+  track.addEventListener('pointerdown', function (e) {
+    dragged = false; // cleared up front so a stale drag never eats a later click
+    if (e.pointerType !== 'mouse' || e.button !== 0 || !overflows()) return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartScroll = track.scrollLeft;
+  });
+
+  // Tracked on the document so the drag survives the cursor leaving the track
+  document.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - dragStartX;
+    if (!dragged && Math.abs(dx) > 4) {
+      dragged = true;
+      track.classList.add('is-dragging');
+    }
+    if (dragged) {
+      e.preventDefault();
+      track.scrollLeft = dragStartScroll - dx;
+    }
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+  }
+
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
+
+  // Swallow the click that ends a drag so it doesn't open the article
+  track.addEventListener('click', function (e) {
+    if (!dragged || e.detail === 0) return;
+    dragged = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+
+  syncSwipeable();
+  setActiveDash(0);
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncSwipeable, 150);
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Blog posts carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Leave empty on a blog template to use the current blog."
+    },
+    {
+      "type": "range",
+      "id": "max_articles",
+      "min": 3,
+      "max": 50,
+      "step": 1,
+      "label": "Maximum posts",
+      "default": 50,
+      "info": "All of them stay in one swipeable row. Shopify caps a blog at 50 posts per page."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_blog_title",
+      "default": true,
+      "label": "Use the blog's own title as the heading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Custom heading",
+      "default": "Journal",
+      "info": "Used when the option above is off."
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Heading weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "title_font_style",
+      "label": "Heading style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "description_font_weight",
+      "label": "Description weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link",
+      "info": "Defaults to the blog page."
+    },
+    {
+      "type": "select",
+      "id": "cta_font_weight",
+      "label": "CTA weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "cta_color",
+      "label": "CTA color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "select",
+      "id": "cards_per_view_desktop",
+      "label": "Cards per row (desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3",
+      "info": "Mobile always shows one card with the next peeking in."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "landscape", "label": "Landscape (4:3)" }
+      ],
+      "default": "square"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show featured image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show author"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "default": true,
+      "label": "Show excerpt"
+    },
+    {
+      "type": "range",
+      "id": "excerpt_lines",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Excerpt lines",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag",
+      "default": false,
+      "label": "Show first tag on the image"
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "label": "Read more label",
+      "default": "Read more"
+    },
+    {
+      "type": "range",
+      "id": "card_corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "card_title_font_weight",
+      "label": "Card title weight",
+      "options": [
+        { "value": "300", "label": "Light (300)" },
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi Bold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "meta_color",
+      "label": "Date / author color",
+      "default": "#6B6B6B"
+    },
+    {
+      "type": "color",
+      "id": "excerpt_color",
+      "label": "Excerpt color",
+      "default": "#3D3D3D"
+    },
+    {
+      "type": "color",
+      "id": "read_more_color",
+      "label": "Read more color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "tag_background",
+      "label": "Tag background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Arrow buttons",
+      "info": "The prev / next controls that move the carousel left and right."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "default": true,
+      "label": "Show arrows"
+    },
+    {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Shape",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "square", "label": "Rounded square" },
+        { "value": "pill", "label": "Pill" },
+        { "value": "bare", "label": "Bare chevron (no shape)" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "range",
+      "id": "arrow_size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "arrow_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Border color",
+      "default": "#D6D6D6"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_color",
+      "label": "Icon color on hover",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_background",
+      "label": "Background on hover",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_border_color",
+      "label": "Border color on hover",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Dash indicators"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dashes",
+      "default": true,
+      "label": "Show dashes"
+    },
+    {
+      "type": "color",
+      "id": "dash_color",
+      "label": "Dash color",
+      "default": "#C8C8C8"
+    },
+    {
+      "type": "color",
+      "id": "dash_active_color",
+      "label": "Active dash color",
+      "default": "#505050"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts carousel"
+    }
+  ]
+}
+{% endschema %}

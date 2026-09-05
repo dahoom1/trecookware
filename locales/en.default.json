@@ -200,7 +200,8 @@
     "cart": {
       "view": "View cart ({{ count }})",
       "view_empty_cart": "View cart",
-      "item_added": "Item added to your cart"
+      "item_added": "Item added to your cart",
+      "item_added_short": "Added"
     },
     "share": {
       "close": "Close share",
@@ -435,7 +436,9 @@
       "shipping_free": "Free",
       "shipping_at_checkout": "Calculated at checkout",
       "savings": "You're saving",
-      "secure_checkout": "Secure Checkout"
+      "trust_easy_returns": "Easy Returns",
+      "trust_warranty": "Backed by Tre Warranty",
+      "trust_fast_delivery": "Fast Delivery"
     },
     "footer": {
       "payment": "Payment methods"

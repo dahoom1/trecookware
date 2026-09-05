@@ -121,3 +121,139 @@
   margin-bottom: 0.5rem;
   margin-top: 0;
 }
+
+/* ===========================================================================
+   TRECOOKWARE — cart toast
+
+   Dawn positions this notification absolutely inside the header section and
+   slides it out from behind the header's bottom edge. This theme uses
+   `headercustom`, which never renders it, so it is mounted in the body instead
+   and has no header box to hang from. These rules re-anchor it as a small
+   popover that drops from the cart icon, with a caret pointing back up at the
+   button it came from. `--header-bottom` is published by the header on load,
+   resize and scroll, so it stays flush in all three sticky modes.
+   =========================================================================== */
+cart-notification .cart-notification-wrapper {
+  position: fixed;
+  top: var(--header-bottom, 6rem);
+  right: 0;
+  left: auto;
+  width: min(32rem, calc(100vw - 1.5rem));
+  padding: 0.6rem 0.75rem 0;
+  z-index: 2860;
+  /* The wrapper spans a corner of the viewport; only the card should intercept
+     clicks, or it would swallow taps on the page behind it. */
+  pointer-events: none;
+}
+
+[dir='rtl'] cart-notification .cart-notification-wrapper {
+  right: auto;
+  left: 0;
+}
+
+/* Overrides Dawn's translateY(-100%) / z-index:-1 parking, which only makes
+   sense when the card is tucked behind a header to slide out from. */
+cart-notification .cart-notification {
+  position: relative;
+  right: auto;
+  width: 100%;
+  max-width: none;
+  z-index: auto;
+  padding: 0.9rem 1rem;
+  border: 0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  /* Drops from just under the caret and settles. */
+  transform: translateY(-8px);
+  transform-origin: top right;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.22s ease;
+  pointer-events: auto;
+}
+
+/* The caret. --cart-toast-caret is measured from the cart button on open, so
+   the point lands under whichever icon triggered it; the fallback keeps it in a
+   sane place if that button is not on the page. */
+cart-notification .cart-notification::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: var(--cart-toast-caret, calc(100% - 3rem));
+  margin-left: -8px;
+  width: 0;
+  height: 0;
+  /* A border triangle rather than a rotated square: the card sets a transform
+     when it opens, which makes it a stacking context, and a z-index:-1 square
+     would then paint over the card face and double its shadow along the join. */
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #fff;
+}
+
+cart-notification .cart-notification.animate,
+cart-notification .cart-notification.active {
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.22s ease;
+}
+
+cart-notification .cart-notification.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* --- Compact contents: a confirmation, not a checkout step ---------------
+   It auto-dismisses, so the second checkout path and the "continue shopping"
+   dismiss button are redundant here - both live in the drawer, one tap away. */
+cart-notification #cart-notification-form,
+cart-notification .cart-notification__links > .button-label {
+  display: none;
+}
+
+cart-notification .cart-notification__heading {
+  font-size: 1.3rem;
+  gap: 0.5rem;
+}
+
+cart-notification .cart-notification__close {
+  margin-top: -0.35rem;
+  margin-right: -0.35rem;
+}
+
+[dir='rtl'] cart-notification .cart-notification__close {
+  margin-right: 0;
+  margin-left: -0.35rem;
+}
+
+cart-notification .cart-notification-product {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  align-items: center;
+}
+
+cart-notification .cart-notification-product__image {
+  margin-top: 0;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+[dir='rtl'] cart-notification .cart-notification-product__image {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+cart-notification .cart-notification-product__name {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+cart-notification .cart-notification__links > * {
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  cart-notification .cart-notification {
+    transition-duration: 0.01ms;
+  }
+}

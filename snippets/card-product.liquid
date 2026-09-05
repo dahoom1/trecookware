@@ -330,7 +330,12 @@
                 </div>
               </quick-add-modal>
             {%- else -%}
-              <product-form data-section-id="{{ section.id }}">
+              {%- comment -%}
+                Single-variant quick add: this form is on the card itself, not in
+                the quick-add modal, so it needs to declare that it is a browsing
+                add. Without this it falls through to the drawer.
+              {%- endcomment -%}
+              <product-form data-section-id="{{ section.id }}" data-quiet-add="true">
                 {%- form 'product',
                   card_product,
                   id: product_form_id,

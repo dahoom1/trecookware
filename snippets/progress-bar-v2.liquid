@@ -16,6 +16,13 @@
 
 <div class="shipping-progress-wrapper"
      data-shipping-wrapper
+     {%- comment -%}
+       The total this markup was rendered against. Section HTML swapped in after
+       a cart change is authoritative and arrives with no extra round-trip, so
+       the script adopts this instead of repainting from the total it happens to
+       be holding.
+     {%- endcomment -%}
+     data-cart-total="{{ cart.total_price }}"
      data-threshold="{{ free_shipping_threshold }}"
      data-currency="{{ cart.currency.iso_code }}"
      data-text-remaining="{{ 'sections.cart.progress_bar.add_for_free_shipping' | t: amount: 'AMOUNT_PLACEHOLDER' | escape }}"
@@ -204,20 +211,41 @@
       });
   };
 
-  // 2. Observer for HTML Replacements (Fixes "Disappearing" issue)
-  // This watches the body for ANY added nodes. If a new cart drawer appears, update it immediately.
+  // 2. Observer for HTML replacements: a re-rendered drawer brings a new bar.
+  //
+  // This used to repaint the new markup from whatever total this script was
+  // holding. On a first add that total is still 0 - the cart was empty when the
+  // page rendered - so a correct server-rendered bar was immediately painted
+  // back to empty, and stayed there until the /cart.js round-trip below
+  // returned. That round-trip is slowest on a first add, when the cart cookie is
+  // still being issued, which is exactly when the stall was visible.
+  //
+  // The incoming markup already carries the total it was rendered against, so
+  // adopt that and paint once, correctly, with nothing to wait for.
+  const findWrapper = (node) => {
+    if (node.nodeType !== 1) return null;
+    if (node.matches && node.matches('[data-shipping-wrapper]')) return node;
+    return node.querySelector ? node.querySelector('[data-shipping-wrapper]') : null;
+  };
+
   const observer = new MutationObserver((mutations) => {
-    let shouldUpdate = false;
+    let fresh = null;
     for (const mutation of mutations) {
-      if (mutation.addedNodes.length) {
-        // Check if the added node contains our progress bar
-        if (mutation.target.querySelector && mutation.target.querySelector('[data-shipping-wrapper]')) {
-          shouldUpdate = true;
-          break;
-        }
+      for (const node of mutation.addedNodes) {
+        fresh = findWrapper(node);
+        if (fresh) break;
       }
+      if (fresh) break;
     }
-    if (shouldUpdate) updateDOM();
+    if (!fresh) return;
+
+    // Read from the node that actually arrived. Another bar elsewhere on the
+    // page (the cart page's own) was not re-rendered and still carries the old
+    // total, so picking the first match in the document could adopt a stale one.
+    const rendered = parseInt(fresh.dataset.cartTotal, 10);
+    if (!Number.isNaN(rendered)) window.shippingBarState.total = rendered;
+
+    updateDOM();
   });
 
   observer.observe(document.body, { childList: true, subtree: true });

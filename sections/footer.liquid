@@ -190,7 +190,7 @@
   /* Social media icons */
   .tre-footer-social {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: center;
     margin-top: 20px;
   }
@@ -199,28 +199,51 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
     color: #ffffff;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease;
   }
 
   .tre-footer-social a:hover {
-    background: #ffffff;
-    border-color: #ffffff;
-  }
-
-  .tre-footer-social a:hover svg {
-    fill: #26231e;
+    opacity: 0.6;
   }
 
   .tre-footer-social svg {
+    width: 22px;
+    height: 22px;
+    fill: #ffffff;
+  }
+
+  /* WhatsApp contact button */
+  .tre-footer-whatsapp {
+    margin-top: 30px;
+  }
+
+  .tre-footer-whatsapp a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: var(--t-small);
+    font-family: var(--font-body-family);
+    line-height: 1;
+    transition: all 0.3s ease;
+  }
+
+  .tre-footer-whatsapp a:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #26231e;
+  }
+
+  .tre-footer-whatsapp svg {
     width: 20px;
     height: 20px;
-    fill: #ffffff;
-    transition: fill 0.3s ease;
+    fill: currentColor;
+    flex-shrink: 0;
   }
 
   /* Legal/copyright section */
@@ -390,38 +413,75 @@
       flex-direction: column !important;
     }
 
-    .tre-footer-social {
-      order: 2 !important;
-      margin-top: 30px !important;
-      margin-bottom: 30px !important;
+    /* Contact band: WhatsApp button + social icons */
+    .tre-footer-whatsapp {
+      order: 1 !important;
+      align-self: stretch !important;
+      margin-top: 32px !important;
+      padding-top: 28px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
 
+    .tre-footer-whatsapp a {
+      display: flex !important;
+      width: 100% !important;
+      justify-content: center !important;
+      padding: 14px 24px !important;
+    }
+
+    .tre-footer-social {
+      order: 2 !important;
+      justify-content: center !important;
+      gap: 28px !important;
+      margin-top: 20px !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* Trust band: payment icons, certificates, then copyright */
     .tre-footer-legal {
       flex-direction: column !important;
-      align-items: flex-start !important;
+      align-items: stretch !important;
       order: 3 !important;
-      margin-top: 0 !important;
-      padding-top: 0 !important;
+      margin-top: 32px !important;
+      padding-top: 28px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
       margin-bottom: 40px !important;
+      gap: 24px !important;
+    }
+
+    .tre-footer-trust {
+      order: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 24px !important;
+    }
+
+    .tre-footer-payment-icons {
+      justify-content: center !important;
+      gap: 10px !important;
+    }
+
+    .tre-footer-certifications {
+      margin-top: 0 !important;
+      justify-content: center !important;
+      gap: 28px !important;
+    }
+
+    .tre-footer-certification-logo {
+      height: 40px !important;
+      max-width: 70px !important;
     }
 
     .tre-footer-legal-links {
+      order: 2 !important;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
     }
 
     .tre-footer-legal-links a {
       margin-right: 0;
-    }
-
-    .tre-footer-certifications {
-      margin-top: 15px;
-      gap: 12px;
-    }
-    
-    .tre-footer-certification-logo {
-      height: 40px !important;
-      max-width: 70px !important;
     }
   }
 </style>
@@ -528,6 +588,31 @@
       {%- endif -%}
     </div>
 
+    <!-- WhatsApp contact button -->
+    {%- if section.settings.whatsapp_enable and section.settings.whatsapp_number != blank -%}
+      {%- liquid
+        assign wa_number = section.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+        assign wa_href = 'https://wa.me/' | append: wa_number
+        if section.settings.whatsapp_message != blank
+          assign wa_text = section.settings.whatsapp_message | url_encode
+          assign wa_href = wa_href | append: '?text=' | append: wa_text
+        endif
+      -%}
+      <div class="tre-footer-whatsapp">
+        <a
+          href="{{ wa_href }}"
+          target="_blank"
+          rel="noopener"
+          aria-label="{{ section.settings.whatsapp_label | default: 'WhatsApp' | escape }}"
+        >
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.359.101 11.945c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.652a11.882 11.882 0 0 0 5.71 1.454h.006c6.585 0 11.946-5.359 11.949-11.945a11.87 11.87 0 0 0-3.48-8.408"/>
+          </svg>
+          <span>{{ section.settings.whatsapp_label | default: 'Chat on WhatsApp' }}</span>
+        </a>
+      </div>
+    {%- endif -%}
+
     <!-- Social media icons -->
     {%- if section.settings.show_social and has_social_icons -%}
       <div class="tre-footer-social">
@@ -598,7 +683,7 @@
         <span>© {{ 'now' | date: '%Y' }}, {{ shop.name | upcase }}</span>
       </div>
 
-      <div>
+      <div class="tre-footer-trust">
         {%- if section.settings.payment_enable -%}
           <div class="tre-footer-payment-icons">
             {%- unless shop.enabled_payment_types == empty -%}
@@ -851,6 +936,34 @@
       "id": "newsletter_heading",
       "default": "Sign in Our Newsletter",
       "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp"
+    },
+    {
+      "type": "checkbox",
+      "id": "whatsapp_enable",
+      "default": false,
+      "label": "Show WhatsApp button"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number",
+      "info": "Full international number, e.g. +966 55 388 6895"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "default": "Chat on WhatsApp",
+      "label": "Button text"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "Pre-filled message",
+      "info": "Optional. Text already typed in the chat when it opens."
     },
     {
       "type": "header",

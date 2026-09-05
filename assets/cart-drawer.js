@@ -1,4 +1,9 @@
 class CartDrawer extends HTMLElement {
+  // Longest delay in the open sequence plus its own duration: the last line item
+  // starts at 0.60s and runs 0.25s. Keep in step with the delays in
+  // snippets/cart-drawer.liquid.
+  static OPENING_SEQUENCE_MS = 900;
+
   constructor() {
     super();
 
@@ -31,8 +36,18 @@ class CartDrawer extends HTMLElement {
     if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
     // here the animation doesn't seem to always get triggered. A timeout seem to help
     setTimeout(() => {
-      this.classList.add('animate', 'active');
+      this.classList.add('animate', 'active', 'is-opening');
     });
+
+    // `is-opening` gates the staggered reveal of the cart contents so it plays on
+    // open and nowhere else. Without it the rows would replay their entrance every
+    // time renderContents() swaps the list in - i.e. on every quantity change.
+    // The resting state is the finished state, so clearing the class simply leaves
+    // the contents visible.
+    clearTimeout(this.openingTimer);
+    this.openingTimer = setTimeout(() => {
+      this.classList.remove('is-opening');
+    }, CartDrawer.OPENING_SEQUENCE_MS);
 
     this.addEventListener(
       'transitionend',
@@ -50,7 +65,8 @@ class CartDrawer extends HTMLElement {
   }
 
   close() {
-    this.classList.remove('active');
+    clearTimeout(this.openingTimer);
+    this.classList.remove('active', 'is-opening');
     removeTrapFocus(this.activeElement);
     document.body.classList.remove('overflow-hidden');
   }
@@ -70,27 +86,52 @@ class CartDrawer extends HTMLElement {
     cartDrawerNote.parentElement.addEventListener('keyup', onKeyUpEscape);
   }
 
-  renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
+  // Refreshes the drawer's markup without opening it. Split out of
+  // renderContents so a quiet add can keep the closed drawer in step with the
+  // cart: the customer may open it a moment later from the toast or the cart
+  // icon, and it would otherwise still show the cart as it was before the add.
+  updateContents(parsedState) {
+    // `is-empty` lives on this element, not on .drawer__inner, and the whole
+    // empty presentation hangs off it: the stylesheet hides .drawer__header,
+    // collapses .drawer__inner to a centred single-row grid with no padding, and
+    // keeps the empty-state warnings on screen. Dawn cleared it from
+    // product-form.js via whichever element that add had targeted - but a quiet
+    // add targets the notification, so after the first add from an empty cart
+    // the drawer kept the class and rendered as a bare strip. Clearing it here
+    // puts it on the path every render goes through. An add always leaves the
+    // cart non-empty; cart.js owns the reverse when a line is removed.
+    this.classList.remove('is-empty');
+
+    const inner = this.querySelector('.drawer__inner');
+    if (inner) inner.classList.remove('is-empty');
     this.productId = parsedState.id;
+
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
         ? document.querySelector(section.selector)
         : document.getElementById(section.id);
 
       if (!sectionElement) return;
-      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
+      const html = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
+      if (html !== null) sectionElement.innerHTML = html;
     });
 
-    setTimeout(() => {
-      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
-      this.open();
-    });
+    // The overlay sits inside #CartDrawer, so the replacement above discards the
+    // node this listener was bound to. Rebinding is part of updating, not of
+    // opening - otherwise a quiet add would leave the overlay inert.
+    const overlay = this.querySelector('#CartDrawer-Overlay');
+    if (overlay) overlay.addEventListener('click', this.close.bind(this));
+  }
+
+  renderContents(parsedState) {
+    this.updateContents(parsedState);
+    setTimeout(() => this.open());
   }
 
   getSectionInnerHTML(html, selector = '.shopify-section') {
-    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+    if (!html) return null;
+    const node = new DOMParser().parseFromString(html, 'text/html').querySelector(selector);
+    return node ? node.innerHTML : null;
   }
 
   getSectionsToRender() {

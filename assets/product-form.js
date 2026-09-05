@@ -8,18 +8,41 @@ if (!customElements.get('product-form')) {
         this.form = this.querySelector('form');
         this.variantIdInput.disabled = false;
         this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
-        this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
         this.submitButton = this.querySelector('[type="submit"]');
         this.submitButtonText = this.submitButton.querySelector('span');
 
-        if (document.querySelector('cart-drawer')) this.submitButton.setAttribute('aria-haspopup', 'dialog');
+        // Only a form that opens the drawer should advertise a dialog. Quick-add
+        // confirms with the notification toast instead, so it must not.
+        if (!this.isQuietAdd && document.querySelector('cart-drawer')) {
+          this.submitButton.setAttribute('aria-haspopup', 'dialog');
+        }
 
         this.hideErrors = this.dataset.hideErrors === 'true';
+      }
+
+      // A browsing add - quick-add from a product card, or an upsell button -
+      // should not interrupt with the full drawer. Those confirm with the toast;
+      // a deliberate add from the product page still opens the drawer.
+      // Resolved live rather than cached in the constructor: quick-add forms are
+      // injected into the modal after upgrade, so `closest` is only reliable here.
+      get isQuietAdd() {
+        return Boolean(this.closest('quick-add-modal') || this.dataset.quietAdd === 'true');
+      }
+
+      resolveCartTarget() {
+        const notification = document.querySelector('cart-notification');
+        const drawer = document.querySelector('cart-drawer');
+        return this.isQuietAdd ? notification || drawer : drawer || notification;
       }
 
       onSubmitHandler(evt) {
         evt.preventDefault();
         if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
+
+        // Resolved here, while the form is still in the DOM. quick-add-modal.hide()
+        // empties the modal and detaches this element, so by the time the response
+        // comes back `closest` can no longer tell us where the add came from.
+        this.cart = this.resolveCartTarget();
 
         this.handleErrorMessage();
 
@@ -33,10 +56,21 @@ if (!customElements.get('product-form')) {
 
         const formData = new FormData(this.form);
         if (this.cart) {
-          formData.append(
-            'sections',
-            this.cart.getSectionsToRender().map((section) => section.id)
-          );
+          const sectionIds = this.cart.getSectionsToRender().map((section) => section.id);
+
+          // A quiet add leaves the drawer closed, but the customer can open it a
+          // moment later from the toast's View cart or from the cart icon. Its
+          // sections ride along in this same request so it is already current
+          // when that happens, instead of showing a pre-add cart.
+          const drawer = this.isQuietAdd ? document.querySelector('cart-drawer') : null;
+          this.silentDrawer = drawer && drawer !== this.cart ? drawer : null;
+          if (this.silentDrawer) {
+            this.silentDrawer.getSectionsToRender().forEach(({ id }) => {
+              if (!sectionIds.includes(id)) sectionIds.push(id);
+            });
+          }
+
+          formData.append('sections', sectionIds);
           formData.append('sections_url', window.location.pathname);
           this.cart.setActiveElement(document.activeElement);
         }
@@ -81,6 +115,13 @@ if (!customElements.get('product-form')) {
                 CartPerformance.measureFromMarker('add:wait-for-subscribers', startMarker);
               });
             this.error = false;
+
+            // Before anything can open it. Guarded on the method so an older
+            // cached cart-drawer.js cannot break the add.
+            if (this.silentDrawer && typeof this.silentDrawer.updateContents === 'function') {
+              this.silentDrawer.updateContents(response);
+            }
+
             const quickAddModal = this.closest('quick-add-modal');
             if (quickAddModal) {
               document.body.addEventListener(

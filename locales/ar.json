@@ -4032,7 +4032,8 @@
     "cart": {
       "view_empty_cart": "عرض سلة التسوق",
       "view": "عرض سلة التسوق ({{ count }})",
-      "item_added": "تمت إضافة المنتج إلى سلة التسوق"
+      "item_added": "تمت إضافة المنتج إلى سلة التسوق",
+      "item_added_short": "تمت الإضافة"
     },
     "slider": {
       "name": "شريط التمرير",
@@ -4369,7 +4370,9 @@
       "shipping_free": "مجاني",
       "shipping_at_checkout": "يُحسب عند الدفع",
       "savings": "أنت توفّر",
-      "secure_checkout": "دفع آمن",
+      "trust_easy_returns": "إرجاع سهل",
+      "trust_warranty": "ضمان تري",
+      "trust_fast_delivery": "توصيل سريع",
       "estimated_total": "الإجمالي التقديري",
       "new_estimated_total": "الإجمالي التقديري الجديد",
       "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "شامل الرسوم والضرائب. تُحسب الخصومات <a href=\"{{ link }}\">والشحن</a> عند الدفع.",

@@ -12,12 +12,235 @@
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
+  /* ===========================
+     DRAWER OPEN MOTION
+     Mirrors the menu drawer in sections/headercustom.liquid so both panels feel
+     like the same gesture: a 0.3s ease slide on transform, a scrim that fades in
+     rather than snapping on, and contents that stagger in behind the panel.
+  =========================== */
+
+  /* The scrim moves off .drawer and onto the overlay child so it can carry its
+     own opacity. Left on .drawer it could only follow `visibility`, which has no
+     intermediate state - the 50% black landed in a single frame while the panel
+     was still sliding, and that hard edge is what made the drawer feel cheap. */
   .drawer {
     visibility: hidden;
     position: fixed;
     inset: 0;
+    background-color: transparent;
+    transition: visibility 0.3s ease;
+  }
+
+  .drawer .cart-drawer__overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .drawer.active .cart-drawer__overlay {
+    opacity: 1;
+  }
+
+  /* 0.3s rather than the 200ms --duration-default, to match the menu exactly.
+     will-change keeps the panel on its own compositor layer for the slide. */
+  .drawer .drawer__inner {
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+
+  /* Line items pick up the menu's item reveal: same 30px offset, same easing,
+     same 0.07s step between neighbours. */
+  @keyframes cart-item-in {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes cart-item-in-rtl {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes cart-panel-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Gated behind .is-opening, which JS adds on open and drops once the sequence
+     has played. The resting state is the finished state, so the cart re-rendering
+     after a quantity change never replays this - and dropping the class mid-flight
+     just leaves everything visible rather than stranding a half-faded row.
+     `backwards` holds each row at its from-state through its own delay. */
+  .drawer.is-opening .cart-items__body .cart-item {
+    animation: cart-item-in 0.25s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  }
+
+  [dir="rtl"] .drawer.is-opening .cart-items__body .cart-item {
+    animation-name: cart-item-in-rtl;
+  }
+
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(1) { animation-delay: 0.25s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(2) { animation-delay: 0.32s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(3) { animation-delay: 0.39s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(4) { animation-delay: 0.46s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(5) { animation-delay: 0.53s; }
+  /* Everything past the fifth row shares the last delay - a long cart should not
+     keep ramping until the tail arrives a second late. */
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(n+6) { animation-delay: 0.60s; }
+
+  /* Header and footer bracket the list rather than joining the stagger. */
+  .drawer.is-opening .drawer__header {
+    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.18s backwards;
+  }
+
+  .drawer.is-opening .drawer__footer {
+    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.42s backwards;
+  }
+
+  /* The empty state has no list to stagger, so it just settles in as one piece. */
+  .drawer.is-opening .drawer__inner-empty {
+    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drawer .drawer__inner,
+    .drawer .cart-drawer__overlay {
+      transition-duration: 0.01ms;
+    }
+
+    .drawer.is-opening .cart-items__body .cart-item,
+    .drawer.is-opening .drawer__header,
+    .drawer.is-opening .drawer__footer,
+    .drawer.is-opening .drawer__inner-empty {
+      animation: none;
+    }
   }
   
+  /* ===========================
+     GROUPED CARD LAYOUT
+     A neutral ground with each section of the cart as its own white group, the
+     way Made In does it. The ground is what separates the groups - there are no
+     divider lines between them, only the gutter showing through.
+  =========================== */
+  /* Scoped to the drawer rather than :root so the tokens cannot leak into the
+     rest of the theme. Change --cart-ground here to reshade every gutter. */
+  #CartDrawer {
+    --cart-ground: #f8f8f8;
+    --cart-card: #ffffff;
+    --cart-gutter: 12px;
+    --cart-card-radius: 10px;
+  }
+
+  /* Panel height follows the *visible* viewport. `height: 100%` on a fixed
+     element resolves against the large viewport on iOS Safari - the height it
+     would have with the URL bar collapsed - so while the bar is expanded the
+     bottom ~120px of the panel sits below the fold, taking the checkout CTA
+     with it until a swipe collapses the bar. `dvh` tracks the bar as it shows
+     and hides, so the footer stays on screen. The `100%` line is the fallback
+     for anything that predates `dvh`. */
+  cart-drawer.drawer {
+    height: 100%;
+    height: 100dvh;
+  }
+
+  /* The ground. .drawer__inner carries the theme's `gradient color-{scheme}`
+     classes, so this needs the #CartDrawer prefix to outrank them. Horizontal
+     padding comes off the panel and moves onto the regions inside it, so the
+     header can run edge to edge while the cards below sit inset from it. */
+  #CartDrawer .drawer__inner {
+    background: var(--cart-ground);
+    padding: 0;
+  }
+
+  /* The header is the one group that meets the panel edges, so it keeps a
+     hairline underneath instead of a gutter to separate it. */
+  #CartDrawer .drawer__header {
+    background: var(--cart-card);
+    padding: 1.25rem;
+    margin: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  #CartDrawer .drawer__close {
+    top: 1.25rem;
+    right: 1.25rem;
+  }
+
+  [dir="rtl"] #CartDrawer .drawer__close {
+    right: auto;
+    left: 1.25rem;
+  }
+
+  /* Free-shipping meter: its own group between the header and the list. */
+  #CartDrawer .shipping-progress-wrapper {
+    background: var(--cart-card);
+    border-radius: var(--cart-card-radius);
+    margin: var(--cart-gutter) var(--cart-gutter) 0;
+    padding: 0.75rem 1rem;
+    width: auto;
+  }
+
+  /* The scroll region becomes gutter: the card inside it does the containing. */
+  #CartDrawer cart-drawer-items {
+    background: var(--cart-ground);
+    padding: var(--cart-gutter);
+  }
+
+  #CartDrawer .drawer__cart-items-wrapper {
+    background: var(--cart-card);
+    border-radius: var(--cart-card-radius);
+    padding: 0 1rem;
+  }
+
+  /* Rows divide from each other inside the card, but the last one stops at the
+     card's edge - a trailing rule would read as a broken border. */
+  #CartDrawer .cart-items__body .cart-item:last-child {
+    border-bottom: 0;
+  }
+
+  /* Footer: neutral ground, with the summary and the checkout CTA joined into a
+     single card. They stay separate elements so their internal spacing is
+     unchanged - only the corners are rounded off at the two outer ends. */
+  #CartDrawer .drawer__footer {
+    background: var(--cart-ground);
+    border-top: 0;
+    padding: var(--cart-gutter);
+  }
+
+  #CartDrawer .cart-drawer__footer,
+  #CartDrawer .cart__ctas {
+    background: var(--cart-card);
+  }
+
+  #CartDrawer .cart-drawer__footer {
+    border-radius: var(--cart-card-radius) var(--cart-card-radius) 0 0;
+    padding: 1rem 1rem 0;
+  }
+
+  #CartDrawer .cart__ctas {
+    border-radius: 0 0 var(--cart-card-radius) var(--cart-card-radius);
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  /* Cart note, when enabled, is a group of its own above the summary. */
+  #CartDrawer .drawer__footer > details {
+    background: var(--cart-card);
+    border-radius: var(--cart-card-radius);
+    margin-bottom: var(--cart-gutter);
+    padding: 0.75rem 1rem;
+  }
+
+  /* Payment marks sit on the ground below the card, not inside it. */
+  #CartDrawer .cart-drawer__payment-icons {
+    background: transparent;
+    padding: 0.5rem 0 0.15rem;
+  }
+
+  /* Empty state has no groups to separate, so it just sits on the ground. */
+  #CartDrawer .drawer__inner-empty {
+    background: var(--cart-ground);
+    padding: 0 1.25rem;
+  }
+
   /* --- RTL SUPPORT FOR CART DRAWER --- */
   [dir="rtl"] .drawer__header {
     direction: rtl;
@@ -129,9 +352,9 @@
 
   .upsell-item img {
     width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
+    height: auto;
+    display: block;
+    border-radius: 6px;
     flex-shrink: 0;
   }
 
@@ -184,7 +407,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 1rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0;
     border-bottom: 1px solid rgba(0,0,0,0.1);
     text-transform: uppercase;
     font-size: var(--t-small);
@@ -206,23 +429,30 @@
     grid-template-columns: 80px 1fr auto;
     grid-template-rows: auto auto;
     gap: 0.75rem 1rem;
-    padding: 1rem;
+    padding: 1rem 0;
     border-bottom: 1px solid rgba(0,0,0,0.08);
   }
 
+  /* The frame follows the photo, not the other way round. A fixed square forced
+     a choice between cropping the product (`cover`) and matting it against a
+     tint that clashes with whatever ground is baked into the shot (`contain`).
+     Pinning the width and letting the height fall out of the image's own ratio
+     means the photo fills its frame edge to edge at every aspect ratio - one
+     column width down the list, no leftover space to keep consistent. */
   #CartDrawer .cart-item__media {
     grid-column: 1;
     grid-row: 1 / 3;
     width: 80px;
-    height: 80px;
+    height: auto;
+    align-self: start;
     position: relative;
   }
 
   #CartDrawer .cart-item__media img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
+    height: auto;
+    display: block;
+    border-radius: 6px;
   }
 
   #CartDrawer .cart-item__details {
@@ -409,31 +639,19 @@
     #CartDrawer .cart-item {
       grid-template-columns: 70px 1fr auto;
       gap: 0.5rem 0.75rem;
-      padding: 0.75rem;
+      padding: 0.75rem 0;
     }
 
     #CartDrawer .cart-item__media {
       width: 70px;
-      height: 70px;
     }
 
     #CartDrawer .cart-items__header {
-      padding: 0.5rem 0.75rem;
+      padding: 0.5rem 0;
     }
 
-    .drawer__header {
-       padding: 2rem 2rem;
-    }
-
-    .drawer__close {
-      top: 1rem;
-      right: 1rem;
-    }
-
-    [dir="rtl"] .drawer__close {
-      right: auto;
-      left: 1rem;
-    }
+    /* Header padding and close-button placement now come from the card layout
+       block above, which is #CartDrawer-scoped and applies at every width. */
   }
   
   /* --- MOBILE OPTIMIZATIONS --- */
@@ -518,23 +736,37 @@
     direction: rtl;
   }
 
-  /* --- SECURE CHECKOUT BADGE --- */
-  .cart-drawer__secure-badge {
+  /* --- TRUST MARKS --- */
+  /* One row, three items, above the payment logos. The check is first in the
+     DOM and every gap here is logical rather than physical, so an RTL container
+     flips the check to the right of its label on its own - no [dir] rule needed. */
+  .cart-drawer__trust {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    margin-bottom: 0.6rem;
-    font-size: 0.8rem;
-    line-height: 1;
-    color: rgba(0, 0, 0, 0.6);
-    font-family: var(--font-body-family);
+    gap: clamp(6px, 2vw, 12px);
+    padding: 0.85rem 0 0;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    line-height: 1.2;
+    opacity: 0.8;
   }
 
-  .cart-drawer__secure-badge svg {
-    height: 14px;
-    width: auto;
+  .cart-drawer__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .cart-drawer__trust-check {
+    display: inline-flex;
     flex-shrink: 0;
+  }
+
+  .cart-drawer__trust-check svg {
+    width: 10px;
+    height: 10px;
+    display: block;
   }
 
   /* --- PAYMENT ICONS --- */
@@ -1044,11 +1276,6 @@
         <!-- CTAs -->
 
         <div class="cart__ctas" {{ block.shopify_attributes }}>
-          <div class="cart-drawer__secure-badge">
-            <span class="svg-wrapper">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
-            <span>{{ 'sections.cart.secure_checkout' | t }}</span>
-          </div>
-
           <button
             type="submit"
             id="CartDrawer-Checkout"
@@ -1071,17 +1298,37 @@
             assign payment_icons = 'pay-applepay.svg,pay-mada.svg,pay-visa.svg,pay-mastercard.svg,pay-amex.svg,pay-tabby.svg,pay-tamara.svg' | split: ','
             assign payment_labels = 'Apple Pay,Mada,Visa,Mastercard,American Express,Tabby,Tamara' | split: ','
           -%}
-          <div class="cart-drawer__payment-icons">
-            {%- for icon in payment_icons -%}
-              <img
-                src="{{ icon | asset_url }}"
-                alt="{{ payment_labels[forloop.index0] }}"
-                class="cart-drawer__payment-icon"
-                loading="lazy"
-                onerror="this.remove()"
-              >
-            {%- endfor -%}
-          </div>
+        </div>
+
+        <div class="cart-drawer__trust">
+          <span class="cart-drawer__trust-item">
+            <span class="cart-drawer__trust-check">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+            <span>{{ 'sections.cart.trust_easy_returns' | t }}</span>
+          </span>
+          <span class="cart-drawer__trust-item">
+            <span class="cart-drawer__trust-check">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+            <span>{{ 'sections.cart.trust_warranty' | t }}</span>
+          </span>
+          <span class="cart-drawer__trust-item">
+            <span class="cart-drawer__trust-check">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+            <span>{{ 'sections.cart.trust_fast_delivery' | t }}</span>
+          </span>
+        </div>
+
+        {%- comment -%}
+          Outside .cart__ctas on purpose: the payment marks sit on the drawer's
+          neutral ground below the summary card, not inside it.
+        {%- endcomment -%}
+        <div class="cart-drawer__payment-icons">
+          {%- for icon in payment_icons -%}
+            <img
+              src="{{ icon | asset_url }}"
+              alt="{{ payment_labels[forloop.index0] }}"
+              class="cart-drawer__payment-icon"
+              loading="lazy"
+              onerror="this.remove()"
+            >
+          {%- endfor -%}
         </div>
       </div>
     </div>

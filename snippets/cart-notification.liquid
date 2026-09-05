@@ -14,15 +14,19 @@
     <div
       id="cart-notification"
       class="cart-notification focus-inset{% if color_scheme %} color-{{ color_scheme }} gradient{% endif %}"
-      aria-modal="true"
+      {% comment %}
+        role="status" rather than a modal dialog: this confirms an add without
+        interrupting, so it must announce itself to a screen reader and then get
+        out of the way. A dialog role would imply focus belongs here.
+      {% endcomment %}
+      role="status"
+      aria-live="polite"
       aria-label="{{ 'general.cart.item_added' | t }}"
-      role="dialog"
-      tabindex="-1"
     >
       <div class="cart-notification__header">
         <h2 class="cart-notification__heading caption-large text-body">
           {{- 'icon-checkmark.svg' | inline_asset_content -}}
-          {{ 'general.cart.item_added' | t }}
+          {{ 'general.cart.item_added_short' | t }}
         </h2>
         <button
           type="button"

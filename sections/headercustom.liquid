@@ -1806,9 +1806,10 @@
 
         {% if section.settings.show_cart %}
           <button type="button" class="custom-header__icon-btn" id="customCartButton" aria-label="Shopping cart">
-            <svg class="custom-header__icon" viewBox="0 0 24 24">
-              <rect x="4" y="7" width="16" height="13" rx="1"/>
-              <path d="M8 7V5a4 4 0 0 1 8 0v2"/>
+            <svg class="custom-header__icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2.8 3.5h2l2.5 12h9.6l2.2-8.6H5.5"/>
+              <circle cx="9.5" cy="19" r="1.5"/>
+              <circle cx="15.8" cy="19" r="1.5"/>
             </svg>
             <span class="custom-header__cart-count {% if cart.item_count > 0 %}visible{% endif %}" id="customCartCount">
               {{ cart.item_count }}

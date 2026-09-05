@@ -294,12 +294,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
       <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
       <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
+      {%- comment -%}
+        The notification lives alongside the drawer, not instead of it: quick-add
+        confirms with the toast while the product page still opens the drawer.
+      {%- endcomment -%}
+      <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
       <noscript>
         {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
         {{ 'component-cart.css' | asset_url | stylesheet_tag }}
         {{ 'component-totals.css' | asset_url | stylesheet_tag }}
         {{ 'component-price.css' | asset_url | stylesheet_tag }}
         {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+        {{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}
       </noscript>
     {%- endif -%}
 
@@ -342,6 +348,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
+      {%- render 'cart-notification', desktop_menu_type: 'drawer' -%}
     {%- endif -%}
 
     {% sections 'header-group' %}
@@ -408,6 +415,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
   </body>
 </html>

@@ -11,12 +11,6 @@
   "markets": {
     "sa": {
       "parent": "@default"
-    },
-    "international": {
-      "parent": "@default"
-    },
-    "saudi-arabia": {
-      "parent": "@default"
     }
   }
 }
