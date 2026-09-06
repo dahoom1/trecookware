@@ -84,3 +84,27 @@ a.tre-lineup__item:hover {
     transition: none;
   }
 }
+
+/* ── As a block inside the product info column ─────────────────────────────
+   That column is much narrower than a full-width section, so the grid is
+   container-aware here rather than relying on the viewport media query. */
+
+.product__cookware-lineup {
+  container-type: inline-size;
+  margin: 24px 0;
+}
+
+.product__cookware-lineup-note {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(18, 18, 18, 0.3);
+  font-size: var(--t-small);
+  line-height: 1.5;
+}
+
+@container (max-width: 460px) {
+  .product__cookware-lineup .tre-lineup__grid--3,
+  .product__cookware-lineup .tre-lineup__grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

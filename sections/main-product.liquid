@@ -793,6 +793,35 @@
                 </p>
               {%- when 'custom_liquid' -%}
                 {{ block.settings.custom_liquid }}
+              {%- when 'cookware_lineup' -%}
+                {%- liquid
+                  assign cl_ns = block.settings.mf_namespace | default: 'custom'
+                  assign cl_key = block.settings.mf_key | default: 'lineup_products'
+                  assign cl_picked = ''
+                  case block.settings.source
+                    when 'metafield'
+                      assign cl_picked = product.metafields[cl_ns][cl_key].value
+                    when 'picker'
+                      assign cl_picked = block.settings.products
+                  endcase
+                -%}
+                <div class="product__cookware-lineup" {{ block.shopify_attributes }}>
+                  {%- if request.design_mode and block.settings.source == 'metafield' and cl_picked == blank -%}
+                    <p class="product__cookware-lineup-note">
+                      Nothing in <strong>{{ cl_ns }}.{{ cl_key }}</strong> for this product, so the
+                      line drawings are showing. Only you can see this note.
+                    </p>
+                  {%- endif -%}
+                  {%- render 'cookware-lineup',
+                    products: cl_picked,
+                    only: block.settings.only,
+                    columns: block.settings.columns,
+                    heading: block.settings.heading,
+                    show_price: block.settings.show_price,
+                    art_ns: block.settings.art_namespace,
+                    art_key: block.settings.art_key
+                  -%}
+                </div>
               {%- when 'collapsible_tab' -%}
               <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
                 <details id="Details-{{ block.id }}-{{ section.id }}" {% if forloop.first %}open{% endif %}>
@@ -2394,6 +2423,116 @@
           "id": "custom_liquid",
           "label": "t:sections.custom-liquid.settings.custom_liquid.label",
           "info": "t:sections.custom-liquid.settings.custom_liquid.info"
+        }
+      ]
+    },
+    {
+      "type": "cookware_lineup",
+      "name": "Cookware lineup",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "info": "Leave blank to show the pieces on their own."
+        },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "Choose pieces from",
+          "options": [
+            {
+              "value": "metafield",
+              "label": "This product's metafield"
+            },
+            {
+              "value": "picker",
+              "label": "Products chosen below"
+            },
+            {
+              "value": "drawings",
+              "label": "Line drawings only"
+            }
+          ],
+          "default": "metafield",
+          "info": "The metafield option lets every product show its own lineup from one block."
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products",
+          "limit": 8,
+          "info": "Used when 'Products chosen below' is selected."
+        },
+        {
+          "type": "text",
+          "id": "only",
+          "label": "Line drawings to show",
+          "info": "Used for 'Line drawings only', and as the fallback when a product has no metafield set. Comma separated, in order. Blank shows all eight. Keys: frying-pan-20, frying-pan-26, frying-pan-28, sauce-pan-16, saute-pan-26, stockpot-20, stockpot-26, steamer-26"
+        },
+        {
+          "type": "select",
+          "id": "columns",
+          "label": "Columns",
+          "options": [
+            {
+              "value": "auto",
+              "label": "Match the number of pieces"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            }
+          ],
+          "default": "auto",
+          "info": "Drops to 2 automatically when the product column is narrow."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price under product titles",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Metafield keys"
+        },
+        {
+          "type": "paragraph",
+          "content": "Only change these if your metafields use different names."
+        },
+        {
+          "type": "text",
+          "id": "mf_namespace",
+          "label": "Product metafield namespace",
+          "default": "custom"
+        },
+        {
+          "type": "text",
+          "id": "mf_key",
+          "label": "Product metafield key",
+          "default": "lineup_products"
+        },
+        {
+          "type": "text",
+          "id": "art_namespace",
+          "label": "Drawing namespace",
+          "default": "custom"
+        },
+        {
+          "type": "text",
+          "id": "art_key",
+          "label": "Drawing key",
+          "default": "lineup_art"
         }
       ]
     },
