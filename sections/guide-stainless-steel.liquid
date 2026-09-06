@@ -1,8 +1,10 @@
 {% comment %}
   Section: Guide — Stainless Steel Cookware
-  Web version of the printed booklet "A Guide to Your Tre Cookware" (EN).
-  Copy and imagery are fixed in this file; only layout settings are exposed.
-  Assets live in /assets as guide-*.jpg / guide-*.png.
+  Web version of the printed booklet "A Guide to Your Tre Cookware".
+  Copy lives in locales/*.json under `sections.guide.*` (EN + AR taken from the
+  booklet's own two halves), so the page follows the store's language switcher.
+  Assets live in /assets as guide-*.jpg / guide-*.png. The five ply diagram has
+  a mirrored Arabic variant (guide-five-ply-ar.png) swapped by locale.
 {% endcomment %}
 
 {%- liquid
@@ -246,6 +248,16 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  if request.locale.iso_code contains 'ar'
+    assign five_ply_src = 'guide-five-ply-ar.png'
+    assign five_ply_h = 1250
+  else
+    assign five_ply_src = 'guide-five-ply.png'
+    assign five_ply_h = 1235
+  endif
+-%}
+
 <div class="color-{{ section.settings.color_scheme }} gradient {{ s }}">
   <div class="{{ s }}-padding">
     <div class="tg__wrap">
@@ -253,21 +265,15 @@
       {%- comment -%} ── Hero ───────────────────────────────────────── {%- endcomment -%}
       <header class="tg__hero{{ anim }}">
         <div>
-          <span class="tg__eyebrow">A Guide to Your</span>
-          <h1 class="tg__hero-title">Tre Cookware</h1>
-          <p class="tg__lede">
-            The Essential Collection is our quiet promise: to care for your kitchen, your meals,
-            and the moments that matter most, with tools built to endure and made to nurture.
-          </p>
-          <p class="tg__lede">
-            Your cookware is crafted with pure, safe, high quality materials, free from harmful
-            additives or coatings.
-          </p>
+          <span class="tg__eyebrow">{{ 'sections.guide.hero_eyebrow' | t }}</span>
+          <h1 class="tg__hero-title">{{ 'sections.guide.hero_title' | t }}</h1>
+          <p class="tg__lede">{{ 'sections.guide.hero_p1' | t }}</p>
+          <p class="tg__lede">{{ 'sections.guide.hero_p2' | t }}</p>
         </div>
         <div>
           <img
             src="{{ 'guide-hero-collection.jpg' | asset_url }}"
-            alt="TRE stainless steel cookware set on a range"
+            alt="{{ 'sections.guide.alt_hero' | t }}"
             width="1400"
             height="1969"
             loading="eager"
@@ -276,129 +282,86 @@
       </header>
 
       {%- comment -%} ── Index ──────────────────────────────────────── {%- endcomment -%}
-      <nav class="tg__index" aria-label="Guide contents">
-        <h2 class="tg__index-title">Index</h2>
+      <nav class="tg__index" aria-label="{{ 'sections.guide.index_title' | t }}">
+        <h2 class="tg__index-title">{{ 'sections.guide.index_title' | t }}</h2>
         <ol class="tg__index-list">
-          <li><a href="#tg-essential">Only What's Essential</a></li>
-          <li><a href="#tg-materials">Materials</a></li>
-          <li><a href="#tg-design">Design</a></li>
-          <li><a href="#tg-care">Cleaning and Care</a></li>
-          <li><a href="#tg-how-to-use">How To Use</a></li>
-          <li><a href="#tg-concerns">Common Concerns</a></li>
-          <li><a href="#tg-warranty">Tre Warranty</a></li>
+          <li><a href="#tg-essential">{{ 'sections.guide.ch1_title' | t }}</a></li>
+          <li><a href="#tg-materials">{{ 'sections.guide.ch2_title' | t }}</a></li>
+          <li><a href="#tg-design">{{ 'sections.guide.ch3_title' | t }}</a></li>
+          <li><a href="#tg-care">{{ 'sections.guide.ch4_title' | t }}</a></li>
+          <li><a href="#tg-how-to-use">{{ 'sections.guide.ch5_title' | t }}</a></li>
+          <li><a href="#tg-concerns">{{ 'sections.guide.ch6_title' | t }}</a></li>
+          <li><a href="#tg-warranty">{{ 'sections.guide.ch7_title' | t }}</a></li>
         </ol>
       </nav>
 
       {%- comment -%} ── 1. Only What's Essential ───────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-essential">
         <div class="tg__chapter-head">
-          <span class="tg__num">One</span>
-          <h2 class="tg__title">Only What's Essential</h2>
+          <span class="tg__num">{{ 'sections.guide.one' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch1_title' | t }}</h2>
         </div>
 
         <div class="tg__split tg__split--top">
-          <h3 class="tg__sub" style="margin-top: 0;">The Essential Collection.</h3>
+          <h3 class="tg__sub" style="margin-top: 0;">{{ 'sections.guide.essential_sub' | t }}</h3>
           <div class="tg__text">
-            <p>
-              The foundation of every kitchen begins with the right tools. The Essential Collection
-              is a carefully chosen set of cookware, timeless pieces crafted from premium stainless
-              steel and designed to meet the rhythm of everyday cooking.
-            </p>
-            <p>
-              Each piece balances versatility with efficiency, giving you the core sizes and
-              functions you'll reach for again and again. Thoughtfully curated and beautifully made,
-              this is the heart of your kitchen.
-            </p>
+            <p>{{ 'sections.guide.essential_p1' | t }}</p>
+            <p>{{ 'sections.guide.essential_p2' | t }}</p>
           </div>
         </div>
 
+        {%- liquid
+          assign p_files = 'guide-frying-pan-20.png,guide-frying-pan-26.png,guide-frying-pan-28.png,guide-sauce-pan-16.png,guide-saute-pan-26.png,guide-stockpot-20.png,guide-stockpot-26.png,guide-steamer-26.png' | split: ','
+          assign p_w = '796,900,900,752,900,736,832,836' | split: ','
+          assign p_h = '244,233,232,388,330,412,472,312' | split: ','
+          assign p_size = 'size_20,size_26,size_28,size_16,size_26,size_20,size_26,size_26' | split: ','
+          assign p_name = 'piece_frying_pan,piece_frying_pan,piece_frying_pan,piece_sauce_pan,piece_saute_pan,piece_stockpot_small,piece_stockpot_large,piece_steamer' | split: ','
+        -%}
         <div class="tg__pieces">
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-frying-pan-20.png' | asset_url }}" alt="20cm frying pan" width="796" height="244" loading="lazy">
+          {%- for file in p_files -%}
+            {%- liquid
+              assign size_key = 'sections.guide.' | append: p_size[forloop.index0]
+              assign name_key = 'sections.guide.' | append: p_name[forloop.index0]
+              assign size = size_key | t
+              assign name = name_key | t
+            -%}
+            <div class="tg__piece">
+              <div class="tg__piece-art">
+                <img
+                  src="{{ file | asset_url }}"
+                  alt="{{ size }} {{ name }}"
+                  width="{{ p_w[forloop.index0] }}"
+                  height="{{ p_h[forloop.index0] }}"
+                  loading="lazy"
+                >
+              </div>
+              <p class="tg__piece-label">{{ size }}<br>{{ name }}</p>
             </div>
-            <p class="tg__piece-label">20cm<br>Frying Pan</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-frying-pan-26.png' | asset_url }}" alt="26cm frying pan" width="900" height="233" loading="lazy">
-            </div>
-            <p class="tg__piece-label">26cm<br>Frying Pan</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-frying-pan-28.png' | asset_url }}" alt="28cm frying pan" width="900" height="232" loading="lazy">
-            </div>
-            <p class="tg__piece-label">28cm<br>Frying Pan</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-sauce-pan-16.png' | asset_url }}" alt="16cm sauce pan" width="752" height="388" loading="lazy">
-            </div>
-            <p class="tg__piece-label">16cm<br>Sauce Pan</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-saute-pan-26.png' | asset_url }}" alt="26cm sauté pan" width="900" height="330" loading="lazy">
-            </div>
-            <p class="tg__piece-label">26cm<br>Sauté Pan</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-stockpot-20.png' | asset_url }}" alt="20cm stockpot" width="736" height="412" loading="lazy">
-            </div>
-            <p class="tg__piece-label">20cm<br>Stockpot</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-stockpot-26.png' | asset_url }}" alt="26cm stockpot" width="832" height="472" loading="lazy">
-            </div>
-            <p class="tg__piece-label">26cm<br>Stockpot</p>
-          </div>
-          <div class="tg__piece">
-            <div class="tg__piece-art">
-              <img src="{{ 'guide-steamer-26.png' | asset_url }}" alt="26cm steamer" width="836" height="312" loading="lazy">
-            </div>
-            <p class="tg__piece-label">26cm<br>Steamer</p>
-          </div>
+          {%- endfor -%}
         </div>
       </section>
 
       {%- comment -%} ── 2. Materials ───────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-materials">
         <div class="tg__chapter-head">
-          <span class="tg__num">Two</span>
-          <h2 class="tg__title">Materials</h2>
+          <span class="tg__num">{{ 'sections.guide.two' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch2_title' | t }}</h2>
         </div>
 
         <div class="tg__split">
           <div>
-            <h3 class="tg__sub" style="margin-top: 0;">Uncoated Stainless Steel.</h3>
+            <h3 class="tg__sub" style="margin-top: 0;">{{ 'sections.guide.uncoated_sub' | t }}</h3>
             <div class="tg__text">
-              <p>
-                Cooking with uncoated stainless steel offers a level of purity and peace of mind
-                that coated alternatives, even those labeled "non-toxic", simply can't match.
-              </p>
-              <p>
-                With no synthetic layers or chemical treatments, uncoated steel is naturally inert,
-                meaning it won't break down, leach, or react with your food, even at high
-                temperatures.
-              </p>
-              <p>
-                Unlike coated pans, which can degrade over time and may contain binders or
-                stabilizers with unknown long-term effects, stainless steel remains stable and
-                reliable for life.
-              </p>
-              <p>
-                It's a healthier choice, no coatings to chip, no hidden risks, just clean, safe
-                cooking, every single time.
-              </p>
+              <p>{{ 'sections.guide.uncoated_p1' | t }}</p>
+              <p>{{ 'sections.guide.uncoated_p2' | t }}</p>
+              <p>{{ 'sections.guide.uncoated_p3' | t }}</p>
+              <p>{{ 'sections.guide.uncoated_p4' | t }}</p>
             </div>
           </div>
           <div>
             <img
               src="{{ 'guide-pan-closeup.jpg' | asset_url }}"
-              alt="Close-up of an uncoated stainless steel pan"
+              alt="{{ 'sections.guide.alt_closeup' | t }}"
               width="1400"
               height="1353"
               loading="lazy"
@@ -406,39 +369,39 @@
           </div>
         </div>
 
-        <h3 class="tg__sub">Five Ply Construction</h3>
+        <h3 class="tg__sub">{{ 'sections.guide.five_ply_sub' | t }}</h3>
         <div class="tg__split tg__split--wide-media">
           <div>
             <img
-              src="{{ 'guide-five-ply.png' | asset_url }}"
-              alt="Cutaway diagram of the five ply construction: 403 stainless steel exterior, three aluminum layers, and an 18/10 stainless steel interior"
+              src="{{ five_ply_src | asset_url }}"
+              alt="{{ 'sections.guide.alt_five_ply' | t }}"
               width="1400"
-              height="1235"
+              height="{{ five_ply_h }}"
               loading="lazy"
             >
           </div>
           <div>
-            <p class="tg__text" style="margin-bottom: 24px;">The multi-layered structure includes:</p>
+            <p class="tg__text" style="margin-bottom: 24px;">{{ 'sections.guide.five_ply_intro' | t }}</p>
             <dl class="tg__layers">
               <div class="tg__layer">
-                <dt>18/10 Stainless Steel Interior</dt>
-                <dd>A non-reactive, non-corrosive, low-maintenance finish that resists sticking and simplifies cleanup.</dd>
+                <dt>{{ 'sections.guide.layer_interior_t' | t }}</dt>
+                <dd>{{ 'sections.guide.layer_interior_d' | t }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>3 Aluminum Layers</dt>
-                <dd>Ensures rapid, even heat diffusion across the surface with precise thermal responsiveness for enhanced temperature control.</dd>
+                <dt>{{ 'sections.guide.layer_aluminum_t' | t }}</dt>
+                <dd>{{ 'sections.guide.layer_aluminum_d' | t }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>403 Stainless Steel Exterior</dt>
-                <dd>A durable, polished surface, built to look elegant and withstand daily use.</dd>
+                <dt>{{ 'sections.guide.layer_exterior_t' | t }}</dt>
+                <dd>{{ 'sections.guide.layer_exterior_d' | t }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>1.0mm Lid</dt>
-                <dd>Thick stainless steel 1.0 mm lid engineered to seal in moisture and flavor during cooking.</dd>
+                <dt>{{ 'sections.guide.layer_lid_t' | t }}</dt>
+                <dd>{{ 'sections.guide.layer_lid_d' | t }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>Handles</dt>
-                <dd>Cast handle built to last for decades.</dd>
+                <dt>{{ 'sections.guide.layer_handles_t' | t }}</dt>
+                <dd>{{ 'sections.guide.layer_handles_d' | t }}</dd>
               </div>
             </dl>
           </div>
@@ -448,15 +411,15 @@
       {%- comment -%} ── 3. Design ──────────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-design">
         <div class="tg__chapter-head">
-          <span class="tg__num">Three</span>
-          <h2 class="tg__title">Design</h2>
+          <span class="tg__num">{{ 'sections.guide.three' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch3_title' | t }}</h2>
         </div>
 
         <div class="tg__split">
           <div>
             <img
               src="{{ 'guide-saucepan.jpg' | asset_url }}"
-              alt="TRE stainless steel sauce pan with lid"
+              alt="{{ 'sections.guide.alt_saucepan' | t }}"
               width="1200"
               height="1020"
               loading="lazy"
@@ -464,19 +427,12 @@
           </div>
           <div class="tg__steps">
             <div>
-              <h3 class="tg__step-title">Complete Sealed Rims Technology</h3>
-              <div class="tg__text">
-                <p>
-                  Although hand washing is the gold standard when it comes to caring for your
-                  beloved cookware, sealed rims are what make cookware truly dishwasher-safe.
-                </p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.design_sealed_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.design_sealed_d' | t }}</p></div>
             </div>
             <div>
-              <h3 class="tg__step-title">Universal Lid Compatibility</h3>
-              <div class="tg__text">
-                <p>Thoughtfully designed lids fit multiple TRE pieces, between sauté pans, frypans and stockpots.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.design_lids_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.design_lids_d' | t }}</p></div>
             </div>
           </div>
         </div>
@@ -484,22 +440,18 @@
         <div class="tg__split" style="margin-top: 56px;">
           <div class="tg__steps">
             <div>
-              <h3 class="tg__step-title">Comfortable Handle</h3>
-              <div class="tg__text">
-                <p>Its thoughtful design ensures easy maneuverability, allowing you to stir, pour, and serve with confidence.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.design_handle_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.design_handle_d' | t }}</p></div>
             </div>
             <div>
-              <h3 class="tg__step-title">Sleek, Flared Edges</h3>
-              <div class="tg__text">
-                <p>For effortless flipping and pouring.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.design_edges_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.design_edges_d' | t }}</p></div>
             </div>
           </div>
           <div>
             <img
               src="{{ 'guide-frypan.jpg' | asset_url }}"
-              alt="TRE stainless steel frying pan"
+              alt="{{ 'sections.guide.alt_frypan' | t }}"
               width="1200"
               height="645"
               loading="lazy"
@@ -511,14 +463,14 @@
       {%- comment -%} ── 4. Cleaning and Care ───────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-care">
         <div class="tg__chapter-head">
-          <span class="tg__num">Four</span>
-          <h2 class="tg__title">Cleaning and Care</h2>
+          <span class="tg__num">{{ 'sections.guide.four' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch4_title' | t }}</h2>
         </div>
 
         <div class="tg__bleed" style="margin-top: 0;">
           <img
             src="{{ 'guide-care-sink.jpg' | asset_url }}"
-            alt="A wooden dish brush resting in a soapy stainless steel pan"
+            alt="{{ 'sections.guide.alt_care' | t }}"
             width="2000"
             height="1116"
             loading="lazy"
@@ -527,44 +479,27 @@
 
         <div class="tg__steps tg__steps--two">
           <div>
-            <span class="tg__step-num">One</span>
-            <h3 class="tg__step-title">Deglaze and Let it Cool</h3>
+            <span class="tg__step-num">{{ 'sections.guide.one' | t }}</span>
+            <h3 class="tg__step-title">{{ 'sections.guide.care_1_t' | t }}</h3>
+            <div class="tg__text"><p>{{ 'sections.guide.care_1_d' | t }}</p></div>
+          </div>
+          <div>
+            <span class="tg__step-num">{{ 'sections.guide.two' | t }}</span>
+            <h3 class="tg__step-title">{{ 'sections.guide.care_2_t' | t }}</h3>
             <div class="tg__text">
-              <p>
-                Right after cooking, while the pan is still hot, add a small amount of water to
-                deglaze the pan of any stuck or burnt food. This will help make cleaning so much
-                easier. Allow the pan to cool naturally before washing.
-              </p>
+              <p>{{ 'sections.guide.care_2_d1' | t }}</p>
+              <p>{{ 'sections.guide.care_2_d2' | t }}</p>
             </div>
           </div>
           <div>
-            <span class="tg__step-num">Two</span>
-            <h3 class="tg__step-title">Wash</h3>
-            <div class="tg__text">
-              <p>Use dish soap and a non abrasive sponge or brush to clean the pan.</p>
-              <p>
-                You can use the dishwasher. Your cookware is dishwasher safe thanks to its sealed
-                rims. That being said, hand washing is always best.
-              </p>
-            </div>
+            <span class="tg__step-num">{{ 'sections.guide.three' | t }}</span>
+            <h3 class="tg__step-title">{{ 'sections.guide.care_3_t' | t }}</h3>
+            <div class="tg__text"><p>{{ 'sections.guide.care_3_d' | t }}</p></div>
           </div>
           <div>
-            <span class="tg__step-num">Three</span>
-            <h3 class="tg__step-title">Dry</h3>
-            <div class="tg__text">
-              <p>Wipe dry with a microfiber towel to reveal the brilliant shine of polished steel.</p>
-            </div>
-          </div>
-          <div>
-            <span class="tg__step-num">Four</span>
-            <h3 class="tg__step-title">Polish</h3>
-            <div class="tg__text">
-              <p>
-                For cookware stained and dulled from regular use, restore shine with vinegar, baking
-                soda, or TRE Treatment Powder for those resistant stains. Apply TRE treatment only
-                occasionally as a refresh.
-              </p>
-            </div>
+            <span class="tg__step-num">{{ 'sections.guide.four' | t }}</span>
+            <h3 class="tg__step-title">{{ 'sections.guide.care_4_t' | t }}</h3>
+            <div class="tg__text"><p>{{ 'sections.guide.care_4_d' | t }}</p></div>
           </div>
         </div>
       </section>
@@ -572,54 +507,45 @@
       {%- comment -%} ── 5. How To Use ──────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-how-to-use">
         <div class="tg__chapter-head">
-          <span class="tg__num">Five</span>
-          <h2 class="tg__title">How to Use Your Cookware</h2>
+          <span class="tg__num">{{ 'sections.guide.five' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch5_title' | t }}</h2>
         </div>
 
-        <p class="tg__lede">
-          Cooking with stainless steel has a learning curve, but once you master the heat, the
-          results are worth it.
-        </p>
+        <p class="tg__lede">{{ 'sections.guide.use_lede' | t }}</p>
 
         <div class="tg__steps tg__steps--two">
           <div>
-            <h3 class="tg__step-title">1. Warm it Up First</h3>
+            <h3 class="tg__step-title">{{ 'sections.guide.use_1_t' | t }}</h3>
             <div class="tg__text">
-              <p>Start with low to medium heat. A few water drops should glide when it's ready.</p>
-              <p>TRE cookware retains heat beautifully — gentle to medium heat is all you need.</p>
+              <p>{{ 'sections.guide.use_1_d1' | t }}</p>
+              <p>{{ 'sections.guide.use_1_d2' | t }}</p>
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">2. Add Oil After Heating</h3>
-              <div class="tg__text">
-                <p>This creates a natural barrier to help prevent sticking.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.use_2_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.use_2_d' | t }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-oil.jpg' | asset_url }}" alt="Droplets of cooking oil" width="600" height="594" loading="lazy">
+              <img src="{{ 'guide-step-oil.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_oil' | t }}" width="600" height="594" loading="lazy">
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">3. Let Food Release Naturally</h3>
-              <div class="tg__text">
-                <p>Food will release on its own when it's ready, no need to force it.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.use_3_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.use_3_d' | t }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-egg.jpg' | asset_url }}" alt="A fried egg" width="600" height="598" loading="lazy">
+              <img src="{{ 'guide-step-egg.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_egg' | t }}" width="600" height="598" loading="lazy">
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">4. Use What You Love</h3>
-              <div class="tg__text">
-                <p>Metal, wood, or silicone utensils, your cookware can handle it.</p>
-              </div>
+              <h3 class="tg__step-title">{{ 'sections.guide.use_4_t' | t }}</h3>
+              <div class="tg__text"><p>{{ 'sections.guide.use_4_d' | t }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-utensils.jpg' | asset_url }}" alt="A wooden spoon and a silicone spatula" width="441" height="924" loading="lazy">
+              <img src="{{ 'guide-step-utensils.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_utensils' | t }}" width="441" height="924" loading="lazy">
             </div>
           </div>
         </div>
@@ -628,42 +554,25 @@
       {%- comment -%} ── 6. Common Concerns ─────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-concerns">
         <div class="tg__chapter-head">
-          <span class="tg__num">Six</span>
-          <h2 class="tg__title">Common Concerns</h2>
+          <span class="tg__num">{{ 'sections.guide.six' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch6_title' | t }}</h2>
         </div>
 
         <div class="tg__concerns">
           <div class="tg__concern">
-            <h3>Discoloration and spots</h3>
+            <h3>{{ 'sections.guide.concern_1_t' | t }}</h3>
             <div class="tg__text">
-              <p>
-                Overheating an empty pan or leaving it unattended on a flame can cause discoloration.
-                This is a natural metal reaction and won't affect performance or safety. If you ever
-                miss the shine, use TRE powder to restore the pan's original look.
-              </p>
-              <p>
-                White spots or stains are often caused by minerals in water. A mixture of vinegar and
-                water can help dissolve them.
-              </p>
+              <p>{{ 'sections.guide.concern_1_d1' | t }}</p>
+              <p>{{ 'sections.guide.concern_1_d2' | t }}</p>
             </div>
           </div>
           <div class="tg__concern">
-            <h3>Food sticking</h3>
-            <div class="tg__text">
-              <p>
-                Try preheating a bit longer and adding oil after the pan is hot. Let food release
-                naturally, it will lift when it's ready.
-              </p>
-            </div>
+            <h3>{{ 'sections.guide.concern_2_t' | t }}</h3>
+            <div class="tg__text"><p>{{ 'sections.guide.concern_2_d' | t }}</p></div>
           </div>
           <div class="tg__concern">
-            <h3>Handles getting hot</h3>
-            <div class="tg__text">
-              <p>
-                TRE handles are stainless steel too, always use a mitt when cooking for longer
-                periods or using the oven.
-              </p>
-            </div>
+            <h3>{{ 'sections.guide.concern_3_t' | t }}</h3>
+            <div class="tg__text"><p>{{ 'sections.guide.concern_3_d' | t }}</p></div>
           </div>
         </div>
       </section>
@@ -671,18 +580,18 @@
       {%- comment -%} ── 7. Warranty ────────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-warranty">
         <div class="tg__chapter-head">
-          <span class="tg__num">Seven</span>
-          <h2 class="tg__title">Tre Warranty</h2>
+          <span class="tg__num">{{ 'sections.guide.seven' | t }}</span>
+          <h2 class="tg__title">{{ 'sections.guide.ch7_title' | t }}</h2>
         </div>
 
         <div class="tg__split tg__split--top">
           <div class="tg__text">
-            <p>TRE cookware makes healthy eating kind to your body and your budget.</p>
-            <p>Backed by a lifetime warranty against manufacturing or craftsmanship issues.</p>
+            <p>{{ 'sections.guide.warranty_p1' | t }}</p>
+            <p>{{ 'sections.guide.warranty_p2' | t }}</p>
           </div>
           <div class="tg__text">
             <p>
-              Warranty claims:<br>
+              {{ 'sections.guide.warranty_claims' | t }}<br>
               <a href="mailto:info@trecookware.com">info@trecookware.com</a>
             </p>
           </div>
@@ -690,17 +599,13 @@
 
         {%- comment -%} Closing spread {%- endcomment -%}
         <div class="tg__closing">
-          <h2 class="tg__closing-title">Good tools cultivate good habits.</h2>
-          <div class="tg__split">
+          <h2 class="tg__closing-title">{{ 'sections.guide.closing_title' | t }}</h2>
+          <div class="tg__split tg__split--top">
             <div class="tg__text">
-              <p>
-                Thank you for choosing TRE to be part of your kitchen. We look forward to seeing how
-                you create delicious meals, one thoughtful dish at a time. Don't forget to share your
-                culinary journey with us.
-              </p>
+              <p>{{ 'sections.guide.closing_p1' | t }}</p>
             </div>
             <div class="tg__text">
-              <p>Bring your recipe to the table and inspire fellow home-chefs in the TRE community.</p>
+              <p>{{ 'sections.guide.closing_p2' | t }}</p>
               <p class="tg__meta">
                 <a href="https://trecookware.com">trecookware.com</a><br>
                 IG: <a href="https://instagram.com/trecookware" rel="noopener" target="_blank">@trecookware</a>
@@ -722,7 +627,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Content is fixed in the section file (sections/guide-stainless-steel.liquid). Images live in Assets as guide-*.jpg / guide-*.png."
+      "content": "Text is edited in locales\/en.default.json and locales\/ar.json under sections.guide. Images live in Assets as guide-*.jpg \/ guide-*.png."
     },
     {
       "type": "range",
