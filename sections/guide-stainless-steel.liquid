@@ -1,8 +1,10 @@
 {% comment %}
   Section: Guide — Stainless Steel Cookware
   Web version of the printed booklet "A Guide to Your Tre Cookware".
-  Copy lives in locales/*.json under `sections.guide.*` (EN + AR taken from the
-  booklet's own two halves), so the page follows the store's language switcher.
+  Copy (EN + AR, both taken from the booklet's own two halves) is assigned in
+  the locale conditional below, so the page follows the store's language
+  switcher without spending keys from the shared locale files — ar.json is
+  near Shopify's 3,400-key ceiling.
   Assets live in /assets as guide-*.jpg / guide-*.png. The five ply diagram has
   a mirrored Arabic variant (guide-five-ply-ar.png) swapped by locale.
 {% endcomment %}
@@ -252,9 +254,189 @@
   if request.locale.iso_code contains 'ar'
     assign five_ply_src = 'guide-five-ply-ar.png'
     assign five_ply_h = 1250
+    assign g_hero_eyebrow = "دليل"
+    assign g_hero_title = "أواني الطهي من تري"
+    assign g_hero_p1 = "أواني طهي تري المصنوعة من الستانلس ستيل عالي الجودة هي وعدٌ هادئ بالاعتناء بمطبخك ووجباتك ولحظاتك الأهم."
+    assign g_hero_p2 = "صُنعت من مواد نقية وآمنة، خالية من الطلاءات والمواد الكيميائية، لتكون مطمئنًا أن ما يلامس طعامك نظيف وآمن، مختارٌ بالعناية نفسها التي تُوليها لمن تطهو لهم."
+    assign g_index_title = "المحتويات"
+    assign g_ch1_title = "كل ما هو أساسي"
+    assign g_ch2_title = "المــواد"
+    assign g_ch3_title = "التصميم"
+    assign g_ch4_title = "العناية والتنظيف"
+    assign g_ch5_title = "كيف تستخدم أواني الطهي"
+    assign g_ch6_title = "المخاوف الشائعة"
+    assign g_ch7_title = "الضمان"
+    assign g_one = "واحد"
+    assign g_two = "إثنان"
+    assign g_three = "ثلاثة"
+    assign g_four = "أربعة"
+    assign g_five = "خمسة"
+    assign g_six = "ستة"
+    assign g_seven = "سبعة"
+    assign g_essential_sub = "مجموعة الأساسيات"
+    assign g_essential_p1 = "مجموعة الأساسيات هي مجموعة منتقاة بعناية من أواني الطهي المصنوعة من الستانلس ستيل الفاخر؛ أوانٍ صممت لتدوم سنوات طويلة، وتتحمّل الطهو اليومي."
+    assign g_essential_p2 = "كل قطعة فيها متينة، أساسية، وقوية، لتبقى رفيقة لمطبخك عامًا بعد عام."
+    assign g_uncoated_sub = "ستانلس ستيل غير مطلي"
+    assign g_uncoated_p1 = "الطهو في الستانلس ستيل غير المطلي يضمن لك نقاءً وراحة بال لا تضاهيها البدائل المطلية والمانعة للالتصاق، حتى تلك التي تُسوَّق على أنها غير سامة."
+    assign g_uncoated_p2 = "فالفولاذ بطبيعته لا يتفكك ولا يتسرب ولا يتفاعل مع الطعام حتى على النار العالية."
+    assign g_uncoated_p3 = "وعلى عكس الأواني المطلية التي قد تتقشّر أو تتحلل مع الوقت والحرارة والخدوش، يبقى الستانلس ستيل خيارًا صحيًا وبسيطًا وموثوقًا مدى الحياة."
+    assign g_uncoated_p4 = "لا طلاءات تتقشر، ولا مخاطر خفية، إنما طهوٌ نظيف وآمن كل مرة."
+    assign g_five_ply_sub = "بنية بخمس طبقات"
+    assign g_five_ply_intro = "تشمل البنية متعددة الطبقات:"
+    assign g_layer_interior_t = "18/10 ستانلس ستيل (داخلي)"
+    assign g_layer_interior_d = "سطح غير تفاعلي ومقاوم للتآكل: سهل العناية، يقلل الالتصاق، ويسهّل التنظيف."
+    assign g_layer_aluminum_t = "3 طبقات ألمنيوم"
+    assign g_layer_aluminum_d = "انتشار سريع ومتساوٍ للحرارة: مع استجابة حرارية دقيقة تمكنك من التحكم بشكل أفضل بدرجة الحرارة."
+    assign g_layer_exterior_t = "403 ستانلس ستيل (خارجي)"
+    assign g_layer_exterior_d = "سطح خارجي متين ولامع: أنيق في المظهر، ومصمم ليقاوم الاستخدام اليومي."
+    assign g_layer_lid_t = "غطاء بسمك 1.0 مم"
+    assign g_layer_lid_d = "الغطاء السميك من الستانلس ستيل بسماكة 1.0 ملم: يحافظ على الرطوبة والنكهات داخل الوعاء أثناء الطهي."
+    assign g_layer_handles_t = "المقابض"
+    assign g_layer_handles_d = "قوية ومصممة لتدوم لسنوات."
+    assign g_design_sealed_t = "حواف مختومة بإحكام"
+    assign g_design_sealed_d = "رغم أن الغسل اليدوي يظل الطريقة المثلى للعناية بالأواني، إلا أن الحواف المغلقة في أواني تري هي ما يجعلها آمنة للغسل في غسالة الصحون."
+    assign g_design_lids_t = "غطاء عملي يلائم أكثر من قدر ومقلاة"
+    assign g_design_lids_d = "الأغطية صُممت بعناية لتلائم عدة قطع من تري، من مقالي السوتيه والمقالي المسطحة وحتى القدور."
+    assign g_design_handle_t = "مقبض مريح"
+    assign g_design_handle_d = "بتصميم مريح ومدروس يسهّل التحكم بالحركة، لتتمكن من التحريك والسكب والتقديم بثبات وراحة."
+    assign g_design_edges_t = "أطراف ناعمة ورقيقة"
+    assign g_design_edges_d = "صُممت لتجعل التقليب والسكب أكثر دقة وانسيابًا."
+    assign g_care_1_t = "تفكيك البقايا"
+    assign g_care_1_d = "بعد الطهو مباشرة، والآنية ما تزال محتفظة بحرارتها، أضف قليلاً من الماء لفصل البقايا العالقة. اترك الآنية تبرد، لا تعرّضها لصدمة ماء بارد، بل دعها تبرد بشكل طبيعي."
+    assign g_care_2_t = "الغسيل"
+    assign g_care_2_d1 = "اغسلها بصابون أطباق وإسفنجة لينة أو فرشاة غير خشنة."
+    assign g_care_2_d2 = "الأواني مصممة لتكون آمنة تمامًا لغسالة الصحون، لكن الغسل اليدوي سيحافظ على لمعانها أكثر."
+    assign g_care_3_t = "التجفيف"
+    assign g_care_3_d = "جففها بمنشفة ناعمة «مايكروفايبر» لتستعيد بريق الفولاذ المصقول."
+    assign g_care_4_t = "التلميع"
+    assign g_care_4_d = "إذا ظهرت بقع أو بهتان، أعد لها لمعانها بالخل أو بيكربونات الصوديوم أو مسحوق تري المخصص لتنظيف الستانلس ستيل."
+    assign g_use_lede = "الطهو بالستانلس ستيل قد يبدو مختلفًا في البداية، لكن مع القليل من الممارسة ومعرفة بعض الأساسيات، ستجد أن النكهة والنتيجة تستحق."
+    assign g_use_1_t = "1. سخّن الآنية أولًا"
+    assign g_use_1_d1 = "ضع الآنية على نار هادئة إلى متوسطة. جرّب نثر قطرات ماء؛ إن انزلقت بسلاسة دون أن تتبخر تمامًا، فالسطح أصبح جاهزًا."
+    assign g_use_1_d2 = "بفضل البنية متعددة الطبقات، سيكفيك الطهو على نار متوسطة لتحصل على أفضل النتائج."
+    assign g_use_2_t = "2. أضف الزيت"
+    assign g_use_2_d = "سيصنع الزيت طبقة رقيقة تمنع الطعام من الالتصاق."
+    assign g_use_3_t = "3. دع الطعام ينفصل طبيعيًا"
+    assign g_use_3_d = "عندما ينضج الطعام، سينفصل عن السطح بسهولة تلقائيًا."
+    assign g_use_4_t = "4. استخدم الأدوات التي تحبها"
+    assign g_use_4_d = "سواء كانت معدنية أو خشبية أو من السيليكون."
+    assign g_concern_1_t = "تغير اللون"
+    assign g_concern_1_d1 = "قد يحدث أن يتغير لون المقلاة أو القدر بسبب السخونة الزائدة أو ترك المقلاة فارغة على النار."
+    assign g_concern_1_d2 = "وهو أمر طبيعي لا يؤثر على الأداء، ويمكن إعادة اللون واللمعان بسهولة بمسحوق تري الخاص بتنظيف الستانلس ستيل."
+    assign g_concern_2_t = "التصاق الطعام"
+    assign g_concern_2_d = "لتجنب التصاق الطعام في المقلاة، سخّنها أولًا ثم أضف الزيت، وسينفصل الطعام عن القدر عندما ينضج من الأسفل."
+    assign g_concern_3_t = "سخونة المقابض"
+    assign g_concern_3_d = "المقابض من الستانلس ستيل أيضًا، استعن بقفاز حماية من الحرارة عند الطهو لمدة طويلة، أو عند إدخالها الفرن."
+    assign g_warranty_p1 = "أواني تري وجدت لتجعل الطهي أنظف وأنقى لصحة جسدك، وأحفظ لميزانيتك."
+    assign g_warranty_p2 = "فجميع منتجاتنا مضمونة مدى الحياة ضد أي عيوب في التصنيع."
+    assign g_warranty_claims = "للاستفسار أو طلب الضمان، تواصل معنا عبر:"
+    assign g_closing_title = "الأدوات الجيدة تخلق عادات جيدة."
+    assign g_closing_p1 = "شكرًا لاختيارك أواني تري لتكون جزءًا من مطبخك."
+    assign g_closing_p2 = "يسعدنا أن نرى أطباقك وإبداعاتك؛ شاركها مع من يشبهك من الهواة والمحترفين في مجتمع تري في المنصات المختلفة عبر:"
+    assign g_alt_hero = "طقم أواني الطهي من تري من الستانلس ستيل على الموقد"
+    assign g_alt_closeup = "لقطة قريبة لمقلاة من الستانلس ستيل غير المطلي"
+    assign g_alt_five_ply = "رسم مقطعي للبنية بخمس طبقات: ستانلس ستيل 403 خارجي، وثلاث طبقات ألمنيوم، وستانلس ستيل 18/10 داخلي"
+    assign g_alt_saucepan = "قدر صلصة من الستانلس ستيل من تري مع غطاء"
+    assign g_alt_frypan = "مقلاة من الستانلس ستيل من تري"
+    assign g_alt_care = "فرشاة أطباق خشبية داخل قدر من الستانلس ستيل مع رغوة الصابون"
+    assign g_alt_oil = "قطرات من زيت الطهي"
+    assign g_alt_egg = "بيضة مقلية"
+    assign g_alt_utensils = "ملعقة خشبية وملعقة سيليكون"
+    assign p_sizes = "20 سم,26 سم,28 سم,16 سم,26 سم,20 سم,26 سم,26 سم" | split: ","
+    assign p_names = "مقلاة,مقلاة,مقلاة,قدر صلصة,مقلاة سوتيه,قدر صغير,قدر كبير,قدر البخار" | split: ","
   else
     assign five_ply_src = 'guide-five-ply.png'
     assign five_ply_h = 1235
+    assign g_hero_eyebrow = "A Guide to Your"
+    assign g_hero_title = "Tre Cookware"
+    assign g_hero_p1 = "The Essential Collection is our quiet promise: to care for your kitchen, your meals, and the moments that matter most, with tools built to endure and made to nurture."
+    assign g_hero_p2 = "Your cookware is crafted with pure, safe, high quality materials, free from harmful additives or coatings."
+    assign g_index_title = "Index"
+    assign g_ch1_title = "Only What's Essential"
+    assign g_ch2_title = "Materials"
+    assign g_ch3_title = "Design"
+    assign g_ch4_title = "Cleaning and Care"
+    assign g_ch5_title = "How to Use Your Cookware"
+    assign g_ch6_title = "Common Concerns"
+    assign g_ch7_title = "Tre Warranty"
+    assign g_one = "One"
+    assign g_two = "Two"
+    assign g_three = "Three"
+    assign g_four = "Four"
+    assign g_five = "Five"
+    assign g_six = "Six"
+    assign g_seven = "Seven"
+    assign g_essential_sub = "The Essential Collection."
+    assign g_essential_p1 = "The foundation of every kitchen begins with the right tools. The Essential Collection is a carefully chosen set of cookware, timeless pieces crafted from premium stainless steel and designed to meet the rhythm of everyday cooking."
+    assign g_essential_p2 = "Each piece balances versatility with efficiency, giving you the core sizes and functions you'll reach for again and again. Thoughtfully curated and beautifully made, this is the heart of your kitchen."
+    assign g_uncoated_sub = "Uncoated Stainless Steel."
+    assign g_uncoated_p1 = "Cooking with uncoated stainless steel offers a level of purity and peace of mind that coated alternatives, even those labeled “non-toxic”, simply can't match."
+    assign g_uncoated_p2 = "With no synthetic layers or chemical treatments, uncoated steel is naturally inert, meaning it won't break down, leach, or react with your food, even at high temperatures."
+    assign g_uncoated_p3 = "Unlike coated pans, which can degrade over time and may contain binders or stabilizers with unknown long-term effects, stainless steel remains stable and reliable for life."
+    assign g_uncoated_p4 = "It's a healthier choice, no coatings to chip, no hidden risks, just clean, safe cooking, every single time."
+    assign g_five_ply_sub = "Five Ply Construction"
+    assign g_five_ply_intro = "The multi-layered structure includes:"
+    assign g_layer_interior_t = "18/10 Stainless Steel Interior"
+    assign g_layer_interior_d = "A non-reactive, non-corrosive, low-maintenance finish that resists sticking and simplifies cleanup."
+    assign g_layer_aluminum_t = "3 Aluminum Layers"
+    assign g_layer_aluminum_d = "Ensures rapid, even heat diffusion across the surface with precise thermal responsiveness for enhanced temperature control."
+    assign g_layer_exterior_t = "403 Stainless Steel Exterior"
+    assign g_layer_exterior_d = "A durable, polished surface, built to look elegant and withstand daily use."
+    assign g_layer_lid_t = "1.0mm Lid"
+    assign g_layer_lid_d = "Thick stainless steel 1.0 mm lid engineered to seal in moisture and flavor during cooking."
+    assign g_layer_handles_t = "Handles"
+    assign g_layer_handles_d = "Cast handle built to last for decades."
+    assign g_design_sealed_t = "Complete Sealed Rims Technology"
+    assign g_design_sealed_d = "Although hand washing is the gold standard when it comes to caring for your beloved cookware, sealed rims are what make cookware truly dishwasher-safe."
+    assign g_design_lids_t = "Universal Lid Compatibility"
+    assign g_design_lids_d = "Thoughtfully designed lids fit multiple TRE pieces, between sauté pans, frypans and stockpots."
+    assign g_design_handle_t = "Comfortable Handle"
+    assign g_design_handle_d = "Its thoughtful design ensures easy maneuverability, allowing you to stir, pour, and serve with confidence."
+    assign g_design_edges_t = "Sleek, Flared Edges"
+    assign g_design_edges_d = "For effortless flipping and pouring."
+    assign g_care_1_t = "Deglaze and Let it Cool"
+    assign g_care_1_d = "Right after cooking, while the pan is still hot, add a small amount of water to deglaze the pan of any stuck or burnt food. This will help make cleaning so much easier. Allow the pan to cool naturally before washing."
+    assign g_care_2_t = "Wash"
+    assign g_care_2_d1 = "Use dish soap and a non abrasive sponge or brush to clean the pan."
+    assign g_care_2_d2 = "You can use the dishwasher. Your cookware is dishwasher safe thanks to its sealed rims. That being said, hand washing is always best."
+    assign g_care_3_t = "Dry"
+    assign g_care_3_d = "Wipe dry with a microfiber towel to reveal the brilliant shine of polished steel."
+    assign g_care_4_t = "Polish"
+    assign g_care_4_d = "For cookware stained and dulled from regular use, restore shine with vinegar, baking soda, or TRE Treatment Powder for those resistant stains. Apply TRE treatment only occasionally as a refresh."
+    assign g_use_lede = "Cooking with stainless steel has a learning curve, but once you master the heat, the results are worth it."
+    assign g_use_1_t = "1. Warm it Up First"
+    assign g_use_1_d1 = "Start with low to medium heat. A few water drops should glide when it's ready."
+    assign g_use_1_d2 = "TRE cookware retains heat beautifully — gentle to medium heat is all you need."
+    assign g_use_2_t = "2. Add Oil After Heating"
+    assign g_use_2_d = "This creates a natural barrier to help prevent sticking."
+    assign g_use_3_t = "3. Let Food Release Naturally"
+    assign g_use_3_d = "Food will release on its own when it's ready, no need to force it."
+    assign g_use_4_t = "4. Use What You Love"
+    assign g_use_4_d = "Metal, wood, or silicone utensils, your cookware can handle it."
+    assign g_concern_1_t = "Discoloration and spots"
+    assign g_concern_1_d1 = "Overheating an empty pan or leaving it unattended on a flame can cause discoloration. This is a natural metal reaction and won't affect performance or safety. If you ever miss the shine, use TRE powder to restore the pan's original look."
+    assign g_concern_1_d2 = "White spots or stains are often caused by minerals in water. A mixture of vinegar and water can help dissolve them."
+    assign g_concern_2_t = "Food sticking"
+    assign g_concern_2_d = "Try preheating a bit longer and adding oil after the pan is hot. Let food release naturally, it will lift when it's ready."
+    assign g_concern_3_t = "Handles getting hot"
+    assign g_concern_3_d = "TRE handles are stainless steel too, always use a mitt when cooking for longer periods or using the oven."
+    assign g_warranty_p1 = "TRE cookware makes healthy eating kind to your body and your budget."
+    assign g_warranty_p2 = "Backed by a lifetime warranty against manufacturing or craftsmanship issues."
+    assign g_warranty_claims = "Warranty claims:"
+    assign g_closing_title = "Good tools cultivate good habits."
+    assign g_closing_p1 = "Thank you for choosing TRE to be part of your kitchen. We look forward to seeing how you create delicious meals, one thoughtful dish at a time. Don't forget to share your culinary journey with us."
+    assign g_closing_p2 = "Bring your recipe to the table and inspire fellow home-chefs in the TRE community."
+    assign g_alt_hero = "TRE stainless steel cookware set on a range"
+    assign g_alt_closeup = "Close-up of an uncoated stainless steel pan"
+    assign g_alt_five_ply = "Cutaway diagram of the five ply construction: 403 stainless steel exterior, three aluminum layers, and an 18/10 stainless steel interior"
+    assign g_alt_saucepan = "TRE stainless steel sauce pan with lid"
+    assign g_alt_frypan = "TRE stainless steel frying pan"
+    assign g_alt_care = "A wooden dish brush resting in a soapy stainless steel pan"
+    assign g_alt_oil = "Droplets of cooking oil"
+    assign g_alt_egg = "A fried egg"
+    assign g_alt_utensils = "A wooden spoon and a silicone spatula"
+    assign p_sizes = "20cm,26cm,28cm,16cm,26cm,20cm,26cm,26cm" | split: ","
+    assign p_names = "Frying Pan,Frying Pan,Frying Pan,Sauce Pan,Sauté Pan,Stockpot,Stockpot,Steamer" | split: ","
   endif
 -%}
 
@@ -265,15 +447,15 @@
       {%- comment -%} ── Hero ───────────────────────────────────────── {%- endcomment -%}
       <header class="tg__hero{{ anim }}">
         <div>
-          <span class="tg__eyebrow">{{ 'sections.guide.hero_eyebrow' | t }}</span>
-          <h1 class="tg__hero-title">{{ 'sections.guide.hero_title' | t }}</h1>
-          <p class="tg__lede">{{ 'sections.guide.hero_p1' | t }}</p>
-          <p class="tg__lede">{{ 'sections.guide.hero_p2' | t }}</p>
+          <span class="tg__eyebrow">{{ g_hero_eyebrow }}</span>
+          <h1 class="tg__hero-title">{{ g_hero_title }}</h1>
+          <p class="tg__lede">{{ g_hero_p1 }}</p>
+          <p class="tg__lede">{{ g_hero_p2 }}</p>
         </div>
         <div>
           <img
             src="{{ 'guide-hero-collection.jpg' | asset_url }}"
-            alt="{{ 'sections.guide.alt_hero' | t }}"
+            alt="{{ g_alt_hero }}"
             width="1400"
             height="1969"
             loading="eager"
@@ -282,31 +464,31 @@
       </header>
 
       {%- comment -%} ── Index ──────────────────────────────────────── {%- endcomment -%}
-      <nav class="tg__index" aria-label="{{ 'sections.guide.index_title' | t }}">
-        <h2 class="tg__index-title">{{ 'sections.guide.index_title' | t }}</h2>
+      <nav class="tg__index" aria-label="{{ g_index_title }}">
+        <h2 class="tg__index-title">{{ g_index_title }}</h2>
         <ol class="tg__index-list">
-          <li><a href="#tg-essential">{{ 'sections.guide.ch1_title' | t }}</a></li>
-          <li><a href="#tg-materials">{{ 'sections.guide.ch2_title' | t }}</a></li>
-          <li><a href="#tg-design">{{ 'sections.guide.ch3_title' | t }}</a></li>
-          <li><a href="#tg-care">{{ 'sections.guide.ch4_title' | t }}</a></li>
-          <li><a href="#tg-how-to-use">{{ 'sections.guide.ch5_title' | t }}</a></li>
-          <li><a href="#tg-concerns">{{ 'sections.guide.ch6_title' | t }}</a></li>
-          <li><a href="#tg-warranty">{{ 'sections.guide.ch7_title' | t }}</a></li>
+          <li><a href="#tg-essential">{{ g_ch1_title }}</a></li>
+          <li><a href="#tg-materials">{{ g_ch2_title }}</a></li>
+          <li><a href="#tg-design">{{ g_ch3_title }}</a></li>
+          <li><a href="#tg-care">{{ g_ch4_title }}</a></li>
+          <li><a href="#tg-how-to-use">{{ g_ch5_title }}</a></li>
+          <li><a href="#tg-concerns">{{ g_ch6_title }}</a></li>
+          <li><a href="#tg-warranty">{{ g_ch7_title }}</a></li>
         </ol>
       </nav>
 
       {%- comment -%} ── 1. Only What's Essential ───────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-essential">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.one' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch1_title' | t }}</h2>
+          <span class="tg__num">{{ g_one }}</span>
+          <h2 class="tg__title">{{ g_ch1_title }}</h2>
         </div>
 
         <div class="tg__split tg__split--top">
-          <h3 class="tg__sub" style="margin-top: 0;">{{ 'sections.guide.essential_sub' | t }}</h3>
+          <h3 class="tg__sub" style="margin-top: 0;">{{ g_essential_sub }}</h3>
           <div class="tg__text">
-            <p>{{ 'sections.guide.essential_p1' | t }}</p>
-            <p>{{ 'sections.guide.essential_p2' | t }}</p>
+            <p>{{ g_essential_p1 }}</p>
+            <p>{{ g_essential_p2 }}</p>
           </div>
         </div>
 
@@ -314,16 +496,12 @@
           assign p_files = 'guide-frying-pan-20.png,guide-frying-pan-26.png,guide-frying-pan-28.png,guide-sauce-pan-16.png,guide-saute-pan-26.png,guide-stockpot-20.png,guide-stockpot-26.png,guide-steamer-26.png' | split: ','
           assign p_w = '796,900,900,752,900,736,832,836' | split: ','
           assign p_h = '244,233,232,388,330,412,472,312' | split: ','
-          assign p_size = 'size_20,size_26,size_28,size_16,size_26,size_20,size_26,size_26' | split: ','
-          assign p_name = 'piece_frying_pan,piece_frying_pan,piece_frying_pan,piece_sauce_pan,piece_saute_pan,piece_stockpot_small,piece_stockpot_large,piece_steamer' | split: ','
         -%}
         <div class="tg__pieces">
           {%- for file in p_files -%}
             {%- liquid
-              assign size_key = 'sections.guide.' | append: p_size[forloop.index0]
-              assign name_key = 'sections.guide.' | append: p_name[forloop.index0]
-              assign size = size_key | t
-              assign name = name_key | t
+              assign size = p_sizes[forloop.index0]
+              assign name = p_names[forloop.index0]
             -%}
             <div class="tg__piece">
               <div class="tg__piece-art">
@@ -344,24 +522,24 @@
       {%- comment -%} ── 2. Materials ───────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-materials">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.two' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch2_title' | t }}</h2>
+          <span class="tg__num">{{ g_two }}</span>
+          <h2 class="tg__title">{{ g_ch2_title }}</h2>
         </div>
 
         <div class="tg__split">
           <div>
-            <h3 class="tg__sub" style="margin-top: 0;">{{ 'sections.guide.uncoated_sub' | t }}</h3>
+            <h3 class="tg__sub" style="margin-top: 0;">{{ g_uncoated_sub }}</h3>
             <div class="tg__text">
-              <p>{{ 'sections.guide.uncoated_p1' | t }}</p>
-              <p>{{ 'sections.guide.uncoated_p2' | t }}</p>
-              <p>{{ 'sections.guide.uncoated_p3' | t }}</p>
-              <p>{{ 'sections.guide.uncoated_p4' | t }}</p>
+              <p>{{ g_uncoated_p1 }}</p>
+              <p>{{ g_uncoated_p2 }}</p>
+              <p>{{ g_uncoated_p3 }}</p>
+              <p>{{ g_uncoated_p4 }}</p>
             </div>
           </div>
           <div>
             <img
               src="{{ 'guide-pan-closeup.jpg' | asset_url }}"
-              alt="{{ 'sections.guide.alt_closeup' | t }}"
+              alt="{{ g_alt_closeup }}"
               width="1400"
               height="1353"
               loading="lazy"
@@ -369,39 +547,39 @@
           </div>
         </div>
 
-        <h3 class="tg__sub">{{ 'sections.guide.five_ply_sub' | t }}</h3>
+        <h3 class="tg__sub">{{ g_five_ply_sub }}</h3>
         <div class="tg__split tg__split--wide-media">
           <div>
             <img
               src="{{ five_ply_src | asset_url }}"
-              alt="{{ 'sections.guide.alt_five_ply' | t }}"
+              alt="{{ g_alt_five_ply }}"
               width="1400"
               height="{{ five_ply_h }}"
               loading="lazy"
             >
           </div>
           <div>
-            <p class="tg__text" style="margin-bottom: 24px;">{{ 'sections.guide.five_ply_intro' | t }}</p>
+            <p class="tg__text" style="margin-bottom: 24px;">{{ g_five_ply_intro }}</p>
             <dl class="tg__layers">
               <div class="tg__layer">
-                <dt>{{ 'sections.guide.layer_interior_t' | t }}</dt>
-                <dd>{{ 'sections.guide.layer_interior_d' | t }}</dd>
+                <dt>{{ g_layer_interior_t }}</dt>
+                <dd>{{ g_layer_interior_d }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>{{ 'sections.guide.layer_aluminum_t' | t }}</dt>
-                <dd>{{ 'sections.guide.layer_aluminum_d' | t }}</dd>
+                <dt>{{ g_layer_aluminum_t }}</dt>
+                <dd>{{ g_layer_aluminum_d }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>{{ 'sections.guide.layer_exterior_t' | t }}</dt>
-                <dd>{{ 'sections.guide.layer_exterior_d' | t }}</dd>
+                <dt>{{ g_layer_exterior_t }}</dt>
+                <dd>{{ g_layer_exterior_d }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>{{ 'sections.guide.layer_lid_t' | t }}</dt>
-                <dd>{{ 'sections.guide.layer_lid_d' | t }}</dd>
+                <dt>{{ g_layer_lid_t }}</dt>
+                <dd>{{ g_layer_lid_d }}</dd>
               </div>
               <div class="tg__layer">
-                <dt>{{ 'sections.guide.layer_handles_t' | t }}</dt>
-                <dd>{{ 'sections.guide.layer_handles_d' | t }}</dd>
+                <dt>{{ g_layer_handles_t }}</dt>
+                <dd>{{ g_layer_handles_d }}</dd>
               </div>
             </dl>
           </div>
@@ -411,15 +589,15 @@
       {%- comment -%} ── 3. Design ──────────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-design">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.three' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch3_title' | t }}</h2>
+          <span class="tg__num">{{ g_three }}</span>
+          <h2 class="tg__title">{{ g_ch3_title }}</h2>
         </div>
 
         <div class="tg__split">
           <div>
             <img
               src="{{ 'guide-saucepan.jpg' | asset_url }}"
-              alt="{{ 'sections.guide.alt_saucepan' | t }}"
+              alt="{{ g_alt_saucepan }}"
               width="1200"
               height="1020"
               loading="lazy"
@@ -427,12 +605,12 @@
           </div>
           <div class="tg__steps">
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.design_sealed_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.design_sealed_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_design_sealed_t }}</h3>
+              <div class="tg__text"><p>{{ g_design_sealed_d }}</p></div>
             </div>
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.design_lids_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.design_lids_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_design_lids_t }}</h3>
+              <div class="tg__text"><p>{{ g_design_lids_d }}</p></div>
             </div>
           </div>
         </div>
@@ -440,18 +618,18 @@
         <div class="tg__split" style="margin-top: 56px;">
           <div class="tg__steps">
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.design_handle_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.design_handle_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_design_handle_t }}</h3>
+              <div class="tg__text"><p>{{ g_design_handle_d }}</p></div>
             </div>
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.design_edges_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.design_edges_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_design_edges_t }}</h3>
+              <div class="tg__text"><p>{{ g_design_edges_d }}</p></div>
             </div>
           </div>
           <div>
             <img
               src="{{ 'guide-frypan.jpg' | asset_url }}"
-              alt="{{ 'sections.guide.alt_frypan' | t }}"
+              alt="{{ g_alt_frypan }}"
               width="1200"
               height="645"
               loading="lazy"
@@ -463,14 +641,14 @@
       {%- comment -%} ── 4. Cleaning and Care ───────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-care">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.four' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch4_title' | t }}</h2>
+          <span class="tg__num">{{ g_four }}</span>
+          <h2 class="tg__title">{{ g_ch4_title }}</h2>
         </div>
 
         <div class="tg__bleed" style="margin-top: 0;">
           <img
             src="{{ 'guide-care-sink.jpg' | asset_url }}"
-            alt="{{ 'sections.guide.alt_care' | t }}"
+            alt="{{ g_alt_care }}"
             width="2000"
             height="1116"
             loading="lazy"
@@ -479,27 +657,27 @@
 
         <div class="tg__steps tg__steps--two">
           <div>
-            <span class="tg__step-num">{{ 'sections.guide.one' | t }}</span>
-            <h3 class="tg__step-title">{{ 'sections.guide.care_1_t' | t }}</h3>
-            <div class="tg__text"><p>{{ 'sections.guide.care_1_d' | t }}</p></div>
+            <span class="tg__step-num">{{ g_one }}</span>
+            <h3 class="tg__step-title">{{ g_care_1_t }}</h3>
+            <div class="tg__text"><p>{{ g_care_1_d }}</p></div>
           </div>
           <div>
-            <span class="tg__step-num">{{ 'sections.guide.two' | t }}</span>
-            <h3 class="tg__step-title">{{ 'sections.guide.care_2_t' | t }}</h3>
+            <span class="tg__step-num">{{ g_two }}</span>
+            <h3 class="tg__step-title">{{ g_care_2_t }}</h3>
             <div class="tg__text">
-              <p>{{ 'sections.guide.care_2_d1' | t }}</p>
-              <p>{{ 'sections.guide.care_2_d2' | t }}</p>
+              <p>{{ g_care_2_d1 }}</p>
+              <p>{{ g_care_2_d2 }}</p>
             </div>
           </div>
           <div>
-            <span class="tg__step-num">{{ 'sections.guide.three' | t }}</span>
-            <h3 class="tg__step-title">{{ 'sections.guide.care_3_t' | t }}</h3>
-            <div class="tg__text"><p>{{ 'sections.guide.care_3_d' | t }}</p></div>
+            <span class="tg__step-num">{{ g_three }}</span>
+            <h3 class="tg__step-title">{{ g_care_3_t }}</h3>
+            <div class="tg__text"><p>{{ g_care_3_d }}</p></div>
           </div>
           <div>
-            <span class="tg__step-num">{{ 'sections.guide.four' | t }}</span>
-            <h3 class="tg__step-title">{{ 'sections.guide.care_4_t' | t }}</h3>
-            <div class="tg__text"><p>{{ 'sections.guide.care_4_d' | t }}</p></div>
+            <span class="tg__step-num">{{ g_four }}</span>
+            <h3 class="tg__step-title">{{ g_care_4_t }}</h3>
+            <div class="tg__text"><p>{{ g_care_4_d }}</p></div>
           </div>
         </div>
       </section>
@@ -507,45 +685,45 @@
       {%- comment -%} ── 5. How To Use ──────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-how-to-use">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.five' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch5_title' | t }}</h2>
+          <span class="tg__num">{{ g_five }}</span>
+          <h2 class="tg__title">{{ g_ch5_title }}</h2>
         </div>
 
-        <p class="tg__lede">{{ 'sections.guide.use_lede' | t }}</p>
+        <p class="tg__lede">{{ g_use_lede }}</p>
 
         <div class="tg__steps tg__steps--two">
           <div>
-            <h3 class="tg__step-title">{{ 'sections.guide.use_1_t' | t }}</h3>
+            <h3 class="tg__step-title">{{ g_use_1_t }}</h3>
             <div class="tg__text">
-              <p>{{ 'sections.guide.use_1_d1' | t }}</p>
-              <p>{{ 'sections.guide.use_1_d2' | t }}</p>
+              <p>{{ g_use_1_d1 }}</p>
+              <p>{{ g_use_1_d2 }}</p>
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.use_2_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.use_2_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_use_2_t }}</h3>
+              <div class="tg__text"><p>{{ g_use_2_d }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-oil.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_oil' | t }}" width="600" height="594" loading="lazy">
+              <img src="{{ 'guide-step-oil.jpg' | asset_url }}" alt="{{ g_alt_oil }}" width="600" height="594" loading="lazy">
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.use_3_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.use_3_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_use_3_t }}</h3>
+              <div class="tg__text"><p>{{ g_use_3_d }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-egg.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_egg' | t }}" width="600" height="598" loading="lazy">
+              <img src="{{ 'guide-step-egg.jpg' | asset_url }}" alt="{{ g_alt_egg }}" width="600" height="598" loading="lazy">
             </div>
           </div>
           <div class="tg__usestep">
             <div>
-              <h3 class="tg__step-title">{{ 'sections.guide.use_4_t' | t }}</h3>
-              <div class="tg__text"><p>{{ 'sections.guide.use_4_d' | t }}</p></div>
+              <h3 class="tg__step-title">{{ g_use_4_t }}</h3>
+              <div class="tg__text"><p>{{ g_use_4_d }}</p></div>
             </div>
             <div class="tg__usestep-art">
-              <img src="{{ 'guide-step-utensils.jpg' | asset_url }}" alt="{{ 'sections.guide.alt_utensils' | t }}" width="441" height="924" loading="lazy">
+              <img src="{{ 'guide-step-utensils.jpg' | asset_url }}" alt="{{ g_alt_utensils }}" width="441" height="924" loading="lazy">
             </div>
           </div>
         </div>
@@ -554,25 +732,25 @@
       {%- comment -%} ── 6. Common Concerns ─────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-concerns">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.six' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch6_title' | t }}</h2>
+          <span class="tg__num">{{ g_six }}</span>
+          <h2 class="tg__title">{{ g_ch6_title }}</h2>
         </div>
 
         <div class="tg__concerns">
           <div class="tg__concern">
-            <h3>{{ 'sections.guide.concern_1_t' | t }}</h3>
+            <h3>{{ g_concern_1_t }}</h3>
             <div class="tg__text">
-              <p>{{ 'sections.guide.concern_1_d1' | t }}</p>
-              <p>{{ 'sections.guide.concern_1_d2' | t }}</p>
+              <p>{{ g_concern_1_d1 }}</p>
+              <p>{{ g_concern_1_d2 }}</p>
             </div>
           </div>
           <div class="tg__concern">
-            <h3>{{ 'sections.guide.concern_2_t' | t }}</h3>
-            <div class="tg__text"><p>{{ 'sections.guide.concern_2_d' | t }}</p></div>
+            <h3>{{ g_concern_2_t }}</h3>
+            <div class="tg__text"><p>{{ g_concern_2_d }}</p></div>
           </div>
           <div class="tg__concern">
-            <h3>{{ 'sections.guide.concern_3_t' | t }}</h3>
-            <div class="tg__text"><p>{{ 'sections.guide.concern_3_d' | t }}</p></div>
+            <h3>{{ g_concern_3_t }}</h3>
+            <div class="tg__text"><p>{{ g_concern_3_d }}</p></div>
           </div>
         </div>
       </section>
@@ -580,18 +758,18 @@
       {%- comment -%} ── 7. Warranty ────────────────────────────────── {%- endcomment -%}
       <section class="tg__chapter{{ anim }}" id="tg-warranty">
         <div class="tg__chapter-head">
-          <span class="tg__num">{{ 'sections.guide.seven' | t }}</span>
-          <h2 class="tg__title">{{ 'sections.guide.ch7_title' | t }}</h2>
+          <span class="tg__num">{{ g_seven }}</span>
+          <h2 class="tg__title">{{ g_ch7_title }}</h2>
         </div>
 
         <div class="tg__split tg__split--top">
           <div class="tg__text">
-            <p>{{ 'sections.guide.warranty_p1' | t }}</p>
-            <p>{{ 'sections.guide.warranty_p2' | t }}</p>
+            <p>{{ g_warranty_p1 }}</p>
+            <p>{{ g_warranty_p2 }}</p>
           </div>
           <div class="tg__text">
             <p>
-              {{ 'sections.guide.warranty_claims' | t }}<br>
+              {{ g_warranty_claims }}<br>
               <a href="mailto:info@trecookware.com">info@trecookware.com</a>
             </p>
           </div>
@@ -599,13 +777,13 @@
 
         {%- comment -%} Closing spread {%- endcomment -%}
         <div class="tg__closing">
-          <h2 class="tg__closing-title">{{ 'sections.guide.closing_title' | t }}</h2>
+          <h2 class="tg__closing-title">{{ g_closing_title }}</h2>
           <div class="tg__split tg__split--top">
             <div class="tg__text">
-              <p>{{ 'sections.guide.closing_p1' | t }}</p>
+              <p>{{ g_closing_p1 }}</p>
             </div>
             <div class="tg__text">
-              <p>{{ 'sections.guide.closing_p2' | t }}</p>
+              <p>{{ g_closing_p2 }}</p>
               <p class="tg__meta">
                 <a href="https://trecookware.com">trecookware.com</a><br>
                 IG: <a href="https://instagram.com/trecookware" rel="noopener" target="_blank">@trecookware</a>
@@ -627,7 +805,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Text is edited in locales\/en.default.json and locales\/ar.json under sections.guide. Images live in Assets as guide-*.jpg \/ guide-*.png."
+      "content": "Text is edited at the top of sections\/guide-stainless-steel.liquid (English and Arabic). Images live in Assets as guide-*.jpg \/ guide-*.png."
     },
     {
       "type": "range",
