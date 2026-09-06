@@ -1,7 +1,7 @@
 {% comment %}
   Section: Email Signup (minimal)
   Description: Redesign of Dawn's newsletter section. Copy on the left, a rule-only
-               email field with a long arrow on the right; stacks on mobile.
+               email field with an animated arrow on the right; stacks on mobile.
   Note: Uses the global type scale and font vars from base.css, so Arabic picks up
         --font-arabic-heading-family automatically. Layout is direction-agnostic —
         the grid and flex rows flip under RTL and the arrow mirrors with it.
@@ -135,30 +135,40 @@ html[lang^="ar-"] .es-heading {
   padding: 4px;
   cursor: pointer;
   color: {{ section.settings.arrow_color }};
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  font-size: var(--t-subtitle);
+  line-height: 1;
+  transition: opacity 0.2s ease;
 }
 
-/* The carousel dash from Why-Stainlesssteel (20x2, 1px radius, grows to 28)
-   used as the submit, with a fixed chevron head so it still reads as an arrow. */
-.es-submit__dash {
-  width: 20px;
-  height: 2px;
-  border-radius: 1px;
-  background: currentColor;
-  transition: width 0.25s ease;
+/* Same arrow as the hero banner CTA: the → glyph, nudged gently ~3px. */
+.es-submit::after {
+  content: '\2192'; /* → */
+  display: inline-block;
+  line-height: 1;
+  animation: es-arrow-nudge 1.6s ease-in-out infinite;
 }
 
-.es-submit:hover .es-submit__dash,
-.es-submit:focus-visible .es-submit__dash,
-.es-field:focus-within .es-submit__dash {
-  width: 28px;
+@keyframes es-arrow-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
 }
 
-.es-submit svg {
-  width: 6px;
-  height: 10px;
-  display: block;
-  margin-inline-start: 2px;
+/* RTL (Arabic): forward direction is leftward, so flip the glyph and the nudge. */
+[dir="rtl"] .es-submit::after {
+  content: '\2190'; /* ← */
+  animation-name: es-arrow-nudge-rtl;
+}
+
+@keyframes es-arrow-nudge-rtl {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-3px); }
+}
+
+/* Respect users who prefer less motion — hold the arrow still. */
+@media (prefers-reduced-motion: reduce) {
+  .es-submit::after {
+    animation: none;
+  }
 }
 
 .es-submit:hover {
@@ -168,11 +178,6 @@ html[lang^="ar-"] .es-heading {
 .es-submit:focus-visible {
   outline: 2px solid {{ section.settings.heading_color }};
   outline-offset: 3px;
-}
-
-/* The arrow points the reading direction, so mirror it under RTL. */
-[dir="rtl"] .es-submit svg {
-  transform: scaleX(-1);
 }
 
 .es-message {
@@ -297,12 +302,7 @@ html[lang^="ar-"] .es-heading {
               class="es-submit"
               name="commit"
               aria-label="{{ 'newsletter.button_label' | t }}"
-            >
-              <span class="es-submit__dash"></span>
-              <svg viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
-                <path d="m1 1 4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+            ></button>
           </div>
 
           {%- if form.errors -%}

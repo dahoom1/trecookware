@@ -49,11 +49,15 @@
       "settings": {
         "footer_logo": "shopify://shop_images/546d1e0e7a89339a0da053bad406a44363d72bfe.png",
         "tagline": "",
-        "newsletter_enable": true,
+        "newsletter_enable": false,
         "newsletter_heading": "<strong>Stay in Touch</strong>",
-        "show_social": false,
+        "whatsapp_enable": true,
+        "whatsapp_number": "+966 55 388 6895",
+        "whatsapp_label": "Chat on WhatsApp",
+        "whatsapp_message": "",
+        "show_social": true,
         "payment_enable": true,
-        "show_policy": false,
+        "show_policy": true,
         "saudi_business_logo": "shopify://shop_images/commercial-register.avif",
         "saudi_business_url": "#",
         "saudi_business_caption": "رقم السجل التجاري 1010629246",
@@ -61,7 +65,7 @@
         "vat_certificate_url": "#",
         "vat_certificate_caption": "الرقم الضريبي 31062677740003",
         "heading_size": 18,
-        "link_size": 12,
+        "link_size": 13,
         "margin_top": 0
       }
     }

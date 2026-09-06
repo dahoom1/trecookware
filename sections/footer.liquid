@@ -233,9 +233,12 @@
     transition: all 0.3s ease;
   }
 
-  .tre-footer-whatsapp a:hover {
-    background: #ffffff;
-    border-color: #ffffff;
+  /* Brand green fill on hover; text and icon take the footer's own dark
+     tone so the label stays legible instead of washing out. */
+  .tre-footer-whatsapp a:hover,
+  .tre-footer-whatsapp a:focus-visible {
+    background: #c8d5b9;
+    border-color: #c8d5b9;
     color: #26231e;
   }
 
