@@ -1,25 +1,32 @@
 {% comment %}
   Snippet: Cookware lineup
-  The Essential Collection drawn as line art — the grid lifted out of the guide
-  page so it can be reused anywhere. Self-contained: carries its own styles and
-  its own EN/AR labels, so it needs nothing from the surrounding section.
+  Renders the Essential Collection as a grid. Two sources:
 
-  Accepts:
-    columns  - 2, 3 or 4 across on desktop (default 4). Always 2 on mobile.
-    heading  - optional heading rendered above the grid.
-    only     - comma separated keys to show a subset, in the order given.
-               Keys: frying-pan-20, frying-pan-26, frying-pan-28, sauce-pan-16,
-                     saute-pan-26, stockpot-20, stockpot-26, steamer-26
+    products - an array of products (from a metafield or a picker). Each item
+               links to its product. The drawing is taken from the product's
+               art metafield when it names one, otherwise the product's
+               featured image is used.
+    only     - comma separated drawing keys, when there are no products to
+               bind to. Keys: frying-pan-20, frying-pan-26, frying-pan-28,
+               sauce-pan-16, saute-pan-26, stockpot-20, stockpot-26, steamer-26
+
+  Give it one or the other; `products` wins. With neither, all eight drawings
+  render.
+
+  Other params:
+    columns      - 2, 3, 4, or 'auto' to match the number of items (max 4).
+    heading      - optional heading above the grid.
+    show_price   - true to print the price under a product's title.
+    art_ns       - product metafield namespace holding the drawing key.
+    art_key      - product metafield key holding the drawing key.
 
   Usage:
     {% render 'cookware-lineup' %}
-    {% render 'cookware-lineup', columns: 3, heading: 'The Essential Collection' %}
     {% render 'cookware-lineup', only: 'frying-pan-26,stockpot-26' %}
+    {% render 'cookware-lineup', products: collection.metafields.custom.lineup_products.value %}
 {% endcomment %}
 
 {%- liquid
-  assign cols = columns | default: 4
-
   assign keys = 'frying-pan-20,frying-pan-26,frying-pan-28,sauce-pan-16,saute-pan-26,stockpot-20,stockpot-26,steamer-26' | split: ','
   assign widths = '796,900,900,752,900,736,832,836' | split: ','
   assign heights = '244,233,232,388,330,412,472,312' | split: ','
@@ -32,54 +39,31 @@
     assign names = 'Frying Pan,Frying Pan,Frying Pan,Sauce Pan,Sauté Pan,Stockpot,Stockpot,Steamer' | split: ','
   endif
 
-  assign wanted = keys
-  if only != blank
-    assign wanted = only | split: ','
+  assign ns = art_ns | default: 'custom'
+  assign akey = art_key | default: 'lineup_art'
+
+  assign use_products = false
+  if products != blank and products.size > 0
+    assign use_products = true
+    assign count = products.size
+  else
+    assign wanted = keys
+    if only != blank
+      assign wanted = only | split: ','
+    endif
+    assign count = wanted.size
+  endif
+
+  assign cols = columns | default: 'auto'
+  if cols == 'auto'
+    assign cols = count
+    if cols > 4
+      assign cols = 4
+    endif
   endif
 -%}
 
-{%- style -%}
-  .tre-lineup__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px 20px;
-  }
-  .tre-lineup__heading {
-    margin: 0 0 32px;
-    font-family: var(--font-heading-family);
-    font-size: var(--t-h3);
-    font-weight: 400;
-    line-height: 1.2;
-  }
-  .tre-lineup__item { text-align: center; }
-  .tre-lineup__art {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 90px;
-  }
-  .tre-lineup__art img {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
-  }
-  .tre-lineup__label {
-    margin: 14px 0 0;
-    font-family: var(--font-body-family);
-    font-size: var(--t-small);
-    line-height: 1.5;
-  }
-
-  @media screen and (min-width: 750px) {
-    .tre-lineup__grid--2 { grid-template-columns: repeat(2, 1fr); }
-    .tre-lineup__grid--3 { grid-template-columns: repeat(3, 1fr); }
-    .tre-lineup__grid--4 { grid-template-columns: repeat(4, 1fr); }
-    .tre-lineup__grid { gap: 40px 32px; }
-    .tre-lineup__art { height: 110px; }
-  }
-{%- endstyle -%}
+{{ 'cookware-lineup.css' | asset_url | stylesheet_tag }}
 
 <div class="tre-lineup">
   {%- if heading != blank -%}
@@ -87,36 +71,77 @@
   {%- endif -%}
 
   <div class="tre-lineup__grid tre-lineup__grid--{{ cols }}">
-    {%- for key in wanted -%}
-      {%- liquid
-        assign k = key | strip
-        assign i = -1
-        for candidate in keys
-          if candidate == k
-            assign i = forloop.index0
-            break
-          endif
-        endfor
-      -%}
-      {%- if i >= 0 -%}
+    {%- if use_products -%}
+
+      {%- for item in products -%}
         {%- liquid
-          assign size = sizes[i]
-          assign name = names[i]
-          assign file = 'guide-' | append: k | append: '.png'
+          assign art = item.metafields[ns][akey].value | default: '' | strip
+          assign i = -1
+          if art != blank
+            for candidate in keys
+              if candidate == art
+                assign i = forloop.index0
+                break
+              endif
+            endfor
+          endif
         -%}
-        <div class="tre-lineup__item">
+        <a class="tre-lineup__item" href="{{ item.url }}">
           <div class="tre-lineup__art">
-            <img
-              src="{{ file | asset_url }}"
-              alt="{{ size }} {{ name }}"
-              width="{{ widths[i] }}"
-              height="{{ heights[i] }}"
-              loading="lazy"
-            >
+            {%- if i >= 0 -%}
+              <img
+                src="{{ 'guide-' | append: art | append: '.png' | asset_url }}"
+                alt="{{ item.title | escape }}"
+                width="{{ widths[i] }}"
+                height="{{ heights[i] }}"
+                loading="lazy"
+              >
+            {%- elsif item.featured_image -%}
+              {{
+                item.featured_image
+                | image_url: width: 600
+                | image_tag: loading: 'lazy', widths: '200,300,400,600', alt: item.title
+              }}
+            {%- endif -%}
           </div>
-          <p class="tre-lineup__label">{{ size }}<br>{{ name }}</p>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
+          <p class="tre-lineup__label">
+            {{ item.title }}
+            {%- if show_price -%}
+              <span class="tre-lineup__price">{{ item.price | money }}</span>
+            {%- endif -%}
+          </p>
+        </a>
+      {%- endfor -%}
+
+    {%- else -%}
+
+      {%- for key in wanted -%}
+        {%- liquid
+          assign k = key | strip
+          assign i = -1
+          for candidate in keys
+            if candidate == k
+              assign i = forloop.index0
+              break
+            endif
+          endfor
+        -%}
+        {%- if i >= 0 -%}
+          <div class="tre-lineup__item">
+            <div class="tre-lineup__art">
+              <img
+                src="{{ 'guide-' | append: k | append: '.png' | asset_url }}"
+                alt="{{ sizes[i] }} {{ names[i] }}"
+                width="{{ widths[i] }}"
+                height="{{ heights[i] }}"
+                loading="lazy"
+              >
+            </div>
+            <p class="tre-lineup__label">{{ sizes[i] }}<br>{{ names[i] }}</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    {%- endif -%}
   </div>
 </div>

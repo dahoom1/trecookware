@@ -1,0 +1,86 @@
+/* Cookware lineup — shared by snippets/cookware-lineup.liquid and
+   sections/cookware-lineup.liquid. Kept in an asset so the styles load once
+   however many lineups a page renders. */
+
+.tre-lineup__heading {
+  margin: 0 0 32px;
+  font-family: var(--font-heading-family);
+  font-size: var(--t-h3);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.tre-lineup__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 20px;
+}
+
+.tre-lineup__grid--1 {
+  grid-template-columns: 1fr;
+  max-width: 320px;
+  margin-inline: auto;
+}
+
+.tre-lineup__item {
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.tre-lineup__item {
+  transition: opacity 0.2s ease;
+}
+
+a.tre-lineup__item:hover {
+  opacity: 0.62;
+}
+
+.tre-lineup__art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 90px;
+}
+
+.tre-lineup__art img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.tre-lineup__label {
+  margin: 14px 0 0;
+  font-family: var(--font-body-family);
+  font-size: var(--t-small);
+  line-height: 1.5;
+}
+
+.tre-lineup__price {
+  display: block;
+  margin-top: 4px;
+  opacity: 0.62;
+}
+
+@media screen and (min-width: 750px) {
+  .tre-lineup__grid {
+    gap: 40px 32px;
+  }
+
+  .tre-lineup__grid--2 { grid-template-columns: repeat(2, 1fr); }
+  .tre-lineup__grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .tre-lineup__grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+  .tre-lineup__art {
+    height: 110px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.tre-lineup__item {
+    transition: none;
+  }
+}
