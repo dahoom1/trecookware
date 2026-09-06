@@ -133,26 +133,8 @@
   .{{ s }} .tg__split { display: grid; gap: 32px; align-items: center; }
   .{{ s }} .tg__split--top { align-items: start; }
 
-  /* ── Collection grid (line drawings) ──────────────── */
-  .{{ s }} .tg__pieces {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px 20px;
-    margin-top: 40px;
-  }
-  .{{ s }} .tg__piece { text-align: center; }
-  .{{ s }} .tg__piece-art {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 90px;
-  }
-  .{{ s }} .tg__piece-art img { width: auto; max-width: 100%; max-height: 100%; }
-  .{{ s }} .tg__piece-label {
-    margin: 14px 0 0;
-    font-size: var(--t-small);
-    line-height: 1.5;
-  }
+  /* ── Collection grid — markup + styles live in snippets/cookware-lineup.liquid ── */
+  .{{ s }} .tg__pieces { margin-top: 40px; }
 
   /* ── Layer list (five ply) ────────────────────────── */
   .{{ s }} .tg__layers { margin: 0; padding: 0; list-style: none; }
@@ -240,8 +222,6 @@
     .{{ s }} .tg__chapter { padding-top: 96px; }
     .{{ s }} .tg__split { grid-template-columns: 1fr 1fr; gap: 64px; }
     .{{ s }} .tg__split--wide-media { grid-template-columns: 1.15fr 1fr; }
-    .{{ s }} .tg__pieces { grid-template-columns: repeat(4, 1fr); gap: 40px 32px; }
-    .{{ s }} .tg__piece-art { height: 110px; }
     .{{ s }} .tg__steps--two { grid-template-columns: repeat(2, 1fr); gap: 56px 64px; }
     .{{ s }} .tg__usestep { grid-template-columns: 1fr 120px; }
     .{{ s }} .tg__concerns { grid-template-columns: repeat(3, 1fr); gap: 40px; }
@@ -342,8 +322,6 @@
     assign g_alt_oil = "قطرات من زيت الطهي"
     assign g_alt_egg = "بيضة مقلية"
     assign g_alt_utensils = "ملعقة خشبية وملعقة سيليكون"
-    assign p_sizes = "20 سم,26 سم,28 سم,16 سم,26 سم,20 سم,26 سم,26 سم" | split: ","
-    assign p_names = "مقلاة,مقلاة,مقلاة,قدر صلصة,مقلاة سوتيه,قدر صغير,قدر كبير,قدر البخار" | split: ","
   else
     assign five_ply_src = 'guide-five-ply.png'
     assign five_ply_h = 1235
@@ -435,8 +413,6 @@
     assign g_alt_oil = "Droplets of cooking oil"
     assign g_alt_egg = "A fried egg"
     assign g_alt_utensils = "A wooden spoon and a silicone spatula"
-    assign p_sizes = "20cm,26cm,28cm,16cm,26cm,20cm,26cm,26cm" | split: ","
-    assign p_names = "Frying Pan,Frying Pan,Frying Pan,Sauce Pan,Sauté Pan,Stockpot,Stockpot,Steamer" | split: ","
   endif
 -%}
 
@@ -492,30 +468,8 @@
           </div>
         </div>
 
-        {%- liquid
-          assign p_files = 'guide-frying-pan-20.png,guide-frying-pan-26.png,guide-frying-pan-28.png,guide-sauce-pan-16.png,guide-saute-pan-26.png,guide-stockpot-20.png,guide-stockpot-26.png,guide-steamer-26.png' | split: ','
-          assign p_w = '796,900,900,752,900,736,832,836' | split: ','
-          assign p_h = '244,233,232,388,330,412,472,312' | split: ','
-        -%}
         <div class="tg__pieces">
-          {%- for file in p_files -%}
-            {%- liquid
-              assign size = p_sizes[forloop.index0]
-              assign name = p_names[forloop.index0]
-            -%}
-            <div class="tg__piece">
-              <div class="tg__piece-art">
-                <img
-                  src="{{ file | asset_url }}"
-                  alt="{{ size }} {{ name }}"
-                  width="{{ p_w[forloop.index0] }}"
-                  height="{{ p_h[forloop.index0] }}"
-                  loading="lazy"
-                >
-              </div>
-              <p class="tg__piece-label">{{ size }}<br>{{ name }}</p>
-            </div>
-          {%- endfor -%}
+          {%- render 'cookware-lineup' -%}
         </div>
       </section>
 

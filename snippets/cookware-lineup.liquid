@@ -1,0 +1,122 @@
+{% comment %}
+  Snippet: Cookware lineup
+  The Essential Collection drawn as line art — the grid lifted out of the guide
+  page so it can be reused anywhere. Self-contained: carries its own styles and
+  its own EN/AR labels, so it needs nothing from the surrounding section.
+
+  Accepts:
+    columns  - 2, 3 or 4 across on desktop (default 4). Always 2 on mobile.
+    heading  - optional heading rendered above the grid.
+    only     - comma separated keys to show a subset, in the order given.
+               Keys: frying-pan-20, frying-pan-26, frying-pan-28, sauce-pan-16,
+                     saute-pan-26, stockpot-20, stockpot-26, steamer-26
+
+  Usage:
+    {% render 'cookware-lineup' %}
+    {% render 'cookware-lineup', columns: 3, heading: 'The Essential Collection' %}
+    {% render 'cookware-lineup', only: 'frying-pan-26,stockpot-26' %}
+{% endcomment %}
+
+{%- liquid
+  assign cols = columns | default: 4
+
+  assign keys = 'frying-pan-20,frying-pan-26,frying-pan-28,sauce-pan-16,saute-pan-26,stockpot-20,stockpot-26,steamer-26' | split: ','
+  assign widths = '796,900,900,752,900,736,832,836' | split: ','
+  assign heights = '244,233,232,388,330,412,472,312' | split: ','
+
+  if request.locale.iso_code contains 'ar'
+    assign sizes = '20 سم,26 سم,28 سم,16 سم,26 سم,20 سم,26 سم,26 سم' | split: ','
+    assign names = 'مقلاة,مقلاة,مقلاة,قدر صلصة,مقلاة سوتيه,قدر صغير,قدر كبير,قدر البخار' | split: ','
+  else
+    assign sizes = '20cm,26cm,28cm,16cm,26cm,20cm,26cm,26cm' | split: ','
+    assign names = 'Frying Pan,Frying Pan,Frying Pan,Sauce Pan,Sauté Pan,Stockpot,Stockpot,Steamer' | split: ','
+  endif
+
+  assign wanted = keys
+  if only != blank
+    assign wanted = only | split: ','
+  endif
+-%}
+
+{%- style -%}
+  .tre-lineup__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 20px;
+  }
+  .tre-lineup__heading {
+    margin: 0 0 32px;
+    font-family: var(--font-heading-family);
+    font-size: var(--t-h3);
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .tre-lineup__item { text-align: center; }
+  .tre-lineup__art {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 90px;
+  }
+  .tre-lineup__art img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+  }
+  .tre-lineup__label {
+    margin: 14px 0 0;
+    font-family: var(--font-body-family);
+    font-size: var(--t-small);
+    line-height: 1.5;
+  }
+
+  @media screen and (min-width: 750px) {
+    .tre-lineup__grid--2 { grid-template-columns: repeat(2, 1fr); }
+    .tre-lineup__grid--3 { grid-template-columns: repeat(3, 1fr); }
+    .tre-lineup__grid--4 { grid-template-columns: repeat(4, 1fr); }
+    .tre-lineup__grid { gap: 40px 32px; }
+    .tre-lineup__art { height: 110px; }
+  }
+{%- endstyle -%}
+
+<div class="tre-lineup">
+  {%- if heading != blank -%}
+    <h2 class="tre-lineup__heading">{{ heading }}</h2>
+  {%- endif -%}
+
+  <div class="tre-lineup__grid tre-lineup__grid--{{ cols }}">
+    {%- for key in wanted -%}
+      {%- liquid
+        assign k = key | strip
+        assign i = -1
+        for candidate in keys
+          if candidate == k
+            assign i = forloop.index0
+            break
+          endif
+        endfor
+      -%}
+      {%- if i >= 0 -%}
+        {%- liquid
+          assign size = sizes[i]
+          assign name = names[i]
+          assign file = 'guide-' | append: k | append: '.png'
+        -%}
+        <div class="tre-lineup__item">
+          <div class="tre-lineup__art">
+            <img
+              src="{{ file | asset_url }}"
+              alt="{{ size }} {{ name }}"
+              width="{{ widths[i] }}"
+              height="{{ heights[i] }}"
+              loading="lazy"
+            >
+          </div>
+          <p class="tre-lineup__label">{{ size }}<br>{{ name }}</p>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>

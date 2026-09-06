@@ -1,0 +1,113 @@
+{% comment %}
+  Section: Cookware lineup
+  Theme-editor wrapper around the `cookware-lineup` snippet, so the Essential
+  Collection line drawings can be added to any template from the customizer.
+{% endcomment %}
+
+{%- style -%}
+  .cl-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.6 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.6 | round: 0 }}px;
+  }
+  .cl-{{ section.id }}__inner {
+    max-width: {{ section.settings.content_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cl-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    .cl-{{ section.id }}__inner { padding: 0 40px; }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="cl-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="cl-{{ section.id }}__inner">
+      {%- render 'cookware-lineup',
+        columns: section.settings.columns,
+        heading: section.settings.heading,
+        only: section.settings.only
+      -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cookware lineup",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to show the drawings on their own."
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "text",
+      "id": "only",
+      "label": "Show only these pieces",
+      "info": "Comma separated, in the order you want them. Leave blank for all eight. Keys: frying-pan-20, frying-pan-26, frying-pan-28, sauce-pan-16, saute-pan-26, stockpot-20, stockpot-26, steamer-26"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width",
+      "default": 1120
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    { "name": "Cookware lineup" }
+  ]
+}
+{% endschema %}
