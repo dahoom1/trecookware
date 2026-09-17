@@ -9,7 +9,35 @@
   if section.blocks.size > 0
     assign announcement_bar = true
   endif
+
+  comment
+    Colors for this bar alone. Blank (or fully transparent) falls back to the
+    color scheme, so the shared scheme stays untouched.
+  endcomment
+  assign bar_background = section.settings.custom_background
+  assign bar_text = section.settings.custom_text
+  if bar_background.alpha == 0
+    assign bar_background = ''
+  endif
+  if bar_text.alpha == 0
+    assign bar_text = ''
+  endif
 -%}
+
+{%- if bar_background != blank or bar_text != blank -%}
+  {% style %}
+    #shopify-section-{{ section.id }} .utility-bar {
+      {%- if bar_background != blank %}
+        --color-background: {{ bar_background.red }},{{ bar_background.green }},{{ bar_background.blue }};
+        --gradient-background: {{ bar_background }};
+      {%- endif %}
+      {%- if bar_text != blank %}
+        --color-foreground: {{ bar_text.red }},{{ bar_text.green }},{{ bar_text.blue }};
+        --color-link: {{ bar_text.red }},{{ bar_text.green }},{{ bar_text.blue }};
+      {%- endif %}
+    }
+  {% endstyle %}
+{%- endif -%}
 
 {% if social_icons %}
   {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
@@ -175,6 +203,17 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-4"
+    },
+    {
+      "type": "color",
+      "id": "custom_background",
+      "label": "Background override"
+    },
+    {
+      "type": "color",
+      "id": "custom_text",
+      "label": "Text override",
+      "info": "These two apply to this bar only. Leave them blank to follow the color scheme above."
     },  
     {
       "type": "checkbox",
