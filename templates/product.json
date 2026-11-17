@@ -15,7 +15,7 @@
         "product_tags_xeKAhF": {
           "type": "product_tags",
           "settings": {
-            "tag_1_text": "Ready To Ship",
+            "tag_1_text": "Ready to ship",
             "tag_1_bg_color": "#f3f3ee",
             "tag_1_text_color": "#26231e",
             "tag_1_show_dot": true,
@@ -23,7 +23,7 @@
             "tag_1_enable_info": false,
             "tag_1_info_heading": "",
             "tag_1_info_body": "",
-            "tag_2_text": "5-PLY",
+            "tag_2_text": "5-Ply",
             "tag_2_bg_color": "#f3f3ee",
             "tag_2_text_color": "#26231e",
             "tag_2_show_dot": false,
@@ -74,25 +74,25 @@
             "enable_marquee": false,
             "marquee_speed": 20,
             "icon_1_image": "shopify://shop_images/5ply.svg",
-            "icon_1_label": "5-Ply Construction",
+            "icon_1_label": "5 Ply construction",
             "icon_1_description": "",
             "icon_2_image": "shopify://shop_images/oven.svg",
-            "icon_2_label": "Oven-safe up to 295°C",
+            "icon_2_label": "Oven safe Up to 295°C",
             "icon_2_description": "",
             "icon_3_image": "shopify://shop_images/tools.svg",
-            "icon_3_label": "Scratch-resistant",
+            "icon_3_label": "Scratch Resistant",
             "icon_3_description": "",
             "icon_4_image": "shopify://shop_images/dishwasher.svg",
-            "icon_4_label": "Dishwasher-safe",
+            "icon_4_label": "Dishwasher Safe",
             "icon_4_description": "",
             "icon_5_image": "shopify://shop_images/delivery.svg",
-            "icon_5_label": "Fast delivery",
+            "icon_5_label": "Delivers Fast",
             "icon_5_description": "",
             "icon_6_image": "shopify://shop_images/heat.svg",
-            "icon_6_label": "Even heat distribution",
+            "icon_6_label": "Even Heat Distribution",
             "icon_6_description": "",
             "icon_7_image": "shopify://shop_images/sustainable.svg",
-            "icon_7_label": "Eco-friendly",
+            "icon_7_label": "Eco-Friendly",
             "icon_7_description": "",
             "icon_8_label": "",
             "icon_8_description": ""
@@ -156,7 +156,7 @@
         "collapsible_tab_nN7mVt": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Care Instructions",
+            "heading": "Care and Guides",
             "icon": "none",
             "content": "{{ product.metafields.custom.collapsable_row_2 | metafield_tag }}",
             "page": ""
@@ -165,7 +165,7 @@
         "collapsible_tab_XfEKfq": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Shipping & Delivery",
+            "heading": "Delivery",
             "icon": "none",
             "content": "{{ product.metafields.custom.collapsable_row_3 | metafield_tag }}",
             "page": ""
@@ -176,9 +176,9 @@
           "settings": {
             "videos_namespace": "custom",
             "videos_key": "product_videos",
-            "heading_text": "How To Use Stainless Steel Cookware?",
-            "link_text": "Learn More",
-            "link_url": "shopify://pages/our-materials",
+            "heading_text": "How To Use Stainless Steel",
+            "link_text": "Learn More!",
+            "link_url": "shopify://pages/use-care-instruction",
             "thumbnail_width": 210,
             "thumbnail_width_mobile": 150,
             "thumbnail_radius": 0,
@@ -223,7 +223,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "People Also Checked:",
+        "heading": "People Also Liked:",
         "heading_size": "h1",
         "products_to_show": 4,
         "columns_desktop": 4,
@@ -244,14 +244,14 @@
         "heading_VzUEC7": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>Your Food Is Healthy And Clean, But Are Your Cooking Tools The Same?</strong>",
+            "heading": "Your food is healthy and clean, but are your cookware tools?",
             "heading_size": "h2"
           }
         },
         "text_BXxKtm": {
           "type": "text",
           "settings": {
-            "text": "<p>Millions of \"non-stick\" cookware items end up in landfills every year. Once their chemical coatings get damaged and start to peel, they instantly turn into sticky pans or worse, they become toxic, releasing microplastic particles right into your food and body. Over time, this disrupts your hormonal balance and long-term health.</p>"
+            "text": "<p>Millions of non-stick cookware pieces end up in landfills every year. Once their chemical coatings wear off and peel, they turn right back into sticky pans. Even worse, they become toxic and release microplastics directly into your food and body, disrupting your hormonal balance and long-term health. At Tree, we believe your kitchen and health deserve better. That is why we chose stainless steel that lasts a lifetime. It does not wear out easily, you will not need to replace it every season, and most importantly, it never interferes with your body or hormonal balance.</p>"
           }
         }
       },
@@ -267,219 +267,6 @@
         "full_width": true,
         "padding_top": 16,
         "padding_bottom": 52
-      }
-    },
-    "1772670324cdb7360c": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_reviews_grid_widget_fg7eVE": {
-          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": false,
-            "review_selection": "all",
-            "products": [],
-            "filter_pinned": false,
-            "filter_featured": false,
-            "filter_custom_tags": "",
-            "show_media_only": false,
-            "display_order": "media_first",
-            "card_grouping": "per_review",
-            "columns_desktop": 3,
-            "rows_desktop": 3,
-            "columns_mobile": "2",
-            "rows_mobile": 6,
-            "show_stars": false,
-            "show_reviewer_name": false,
-            "show_review_title_on_hover_desktop": true,
-            "max_width": 1100,
-            "corner_styling": "square",
-            "card_spacing": "small",
-            "header_text_color": "#26231e",
-            "star_and_reviewer_name_color": "#26231e",
-            "drop_shadow_color": "#c8d5b9",
-            "overlay_and_background_color": "#c8d5b9",
-            "content_color": "#26231e",
-            "header_text": "From our customers",
-            "show_average_rating": true,
-            "rating_display": "default"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_reviews_grid_widget_fg7eVE"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "why_stainlesssteel_rV6rbQ": {
-      "type": "Why-Stainlesssteel",
-      "blocks": {
-        "feature_6PbW9H": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/a3a01972a53c0fc5b4984ee9516334dd6e8b4401.png",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": true,
-            "reveal_delay": 3,
-            "feature_title": "حرارة متساوية",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "على كامل السطح",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>تصميم من خمس طبقات لضمان توزيع حرارة متساوي</p>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_46dnjM": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/a3a01972a53c0fc5b4984ee9516334dd6e8b4401.png",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": true,
-            "reveal_delay": 3,
-            "feature_title": "سريع التسخين",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "يوفر الوقت",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>تسخين سريع يختصر الوقت، ويبدأ الطبخ من أول لحظة</p>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        },
-        "feature_D3TXgz": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/fad91d3991c7bfdc544a7d25296775945efcf77b.png",
-            "banner_background_color": "#c8d5b9",
-            "enable_expand": true,
-            "reveal_delay": 3,
-            "feature_title": "صحي",
-            "feature_title_color": "#000000",
-            "feature_title_font_weight": "600",
-            "feature_title_font_style": "normal",
-            "feature_title_size_desktop": 24,
-            "feature_title_size_mobile": 20,
-            "feature_subtitle": "غير متفاعل",
-            "feature_subtitle_color": "#000000",
-            "feature_subtitle_font_weight": "700",
-            "feature_subtitle_font_style": "normal",
-            "feature_subtitle_size_desktop": 16,
-            "feature_subtitle_size_mobile": 14,
-            "feature_description": "<p>خالي من السموم، ولا يتفاعل مع الأطعمة</p>",
-            "feature_description_color": "#333333",
-            "feature_desc_font_weight": "400",
-            "feature_desc_font_style": "normal",
-            "feature_description_size_desktop": 16,
-            "feature_description_size_mobile": 14
-          }
-        }
-      },
-      "block_order": [
-        "feature_6PbW9H",
-        "feature_46dnjM",
-        "feature_D3TXgz"
-      ],
-      "disabled": true,
-      "name": "Why Stainless Steel",
-      "settings": {
-        "background_color": "#f5f5f5",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "title": "لماذا الستانلس ستيل",
-        "title_font_weight": "300",
-        "title_font_style": "normal",
-        "title_color": "#000000",
-        "title_size_desktop": 56,
-        "title_size_mobile": 32,
-        "description": "<p>أواني تقتنيها مرة، وتدوم معك عمر. لذلك الستانلس ستيل خماسي الطبقات إضافة أساسية لمطبخ مستدام، واعي وصحي لك ولعائلتك.</p>",
-        "description_font_weight": "400",
-        "description_font_style": "normal",
-        "description_color": "#000000",
-        "description_size_desktop": 18,
-        "description_size_mobile": 16,
-        "cta_text": "اكتشف أكثر",
-        "cta_link": "",
-        "cta_font_weight": "400",
-        "cta_font_style": "normal",
-        "cta_color": "#000000",
-        "cta_size_desktop": 16,
-        "cta_size_mobile": 14
-      }
-    },
-    "multicolumn_VHYkyj": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_bWU9BA": {
-          "type": "column",
-          "settings": {
-            "title": "{{ product.metafields.custom.multicolumn_head.value }}",
-            "text": "{{ product.metafields.custom.multicolumn_a | metafield_tag }}",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_7KUGXH": {
-          "type": "column",
-          "settings": {
-            "title": "{{ product.metafields.custom.multicolumn_b_head.value }}",
-            "text": "{{ product.metafields.custom.multicolumn_b | metafield_tag }}",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_7NnyMb": {
-          "type": "column",
-          "settings": {
-            "title": "{{ product.metafields.custom.multicolumn_c_head.value }}",
-            "text": "{{ product.metafields.custom.multicolumn_c | metafield_tag }}<p></p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column_bWU9BA",
-        "column_7KUGXH",
-        "column_7NnyMb"
-      ],
-      "settings": {
-        "title": "Features And Benefits of 5-Ply Stainless Steel",
-        "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
-        "button_label": "",
-        "button_link": "",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "primary",
-        "color_scheme": "scheme-5",
-        "columns_mobile": "1",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
       }
     },
     "faq_custom_ynVmnG": {
@@ -526,17 +313,109 @@
       ],
       "name": "FAQ",
       "settings": {
-        "heading": "Frequently Asked Questions",
-        "color_scheme": "",
+        "heading": "Frequently Answered Questions!",
+        "color_scheme": "scheme-1",
         "open_first_collapsible_row": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
     },
-    "17780954409657dc9c": {
+    "multicolumn_VHYkyj": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_bWU9BA": {
+          "type": "column",
+          "settings": {
+            "title": "{{ product.metafields.custom.multicolumn_head.value }}",
+            "text": "{{ product.metafields.custom.multicolumn_a | metafield_tag }}",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_7KUGXH": {
+          "type": "column",
+          "settings": {
+            "title": "{{ product.metafields.custom.multicolumn_b_head.value }}",
+            "text": "{{ product.metafields.custom.multicolumn_b | metafield_tag }}",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_7NnyMb": {
+          "type": "column",
+          "settings": {
+            "title": "{{ product.metafields.custom.multicolumn_c_head.value }}",
+            "text": "{{ product.metafields.custom.multicolumn_c | metafield_tag }}<p></p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_bWU9BA",
+        "column_7KUGXH",
+        "column_7NnyMb"
+      ],
+      "settings": {
+        "title": "Features & Benefits: 5-Ply Stainless Steel",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "color_scheme": "scheme-5",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "178975471379a33beb": {
       "type": "apps",
+      "blocks": {
+        "judge_me_reviews_all_reviews_page_fULnXa": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "max_width": 1200,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": true,
+            "show_first": "product",
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_all_reviews_page_fULnXa"
+      ],
       "settings": {
         "include_margins": true
+      }
+    },
+    "email_signup_minimal_ARHiXc": {
+      "type": "email-signup-minimal",
+      "name": "Email signup (minimal)",
+      "settings": {
+        "eyebrow": "Join Our newsletter and",
+        "heading": "Cook Like The Pros!",
+        "text": "<p>Trusted by home cooks looking for safe, professional-quality cookware.</p>",
+        "placeholder": "Enter Your Email",
+        "heading_font": "heading",
+        "heading_font_weight": "400",
+        "heading_size_mobile": 32,
+        "heading_size_desktop": 56,
+        "form_width": 480,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "background_color": "#f9fbf8",
+        "heading_color": "#1a1a1a",
+        "eyebrow_color": "#1a1a1a",
+        "text_color": "#3d3d3d",
+        "placeholder_color": "#8a8a85",
+        "line_color": "#b8b8b2",
+        "arrow_color": "#1a1a1a"
       }
     }
   },
@@ -544,10 +423,9 @@
     "main",
     "related-products",
     "rich_text_4mDnzT",
-    "1772670324cdb7360c",
-    "why_stainlesssteel_rV6rbQ",
-    "multicolumn_VHYkyj",
     "faq_custom_ynVmnG",
-    "17780954409657dc9c"
+    "multicolumn_VHYkyj",
+    "178975471379a33beb",
+    "email_signup_minimal_ARHiXc"
   ]
 }

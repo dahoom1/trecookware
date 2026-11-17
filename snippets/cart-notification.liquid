@@ -1,5 +1,8 @@
 {% comment %}
-  Renders cart notification
+  Renders the added-to-cart pop-down: a card that drops from the top of the
+  viewport with the product just added, a View cart link that opens the drawer,
+  and a Check out button. The product row is filled in by
+  sections/cart-notification-product.liquid on each add.
 
   Accepts:
   - color_scheme: {String} sets the color scheme of the notification (optional)
@@ -14,48 +17,54 @@
     <div
       id="cart-notification"
       class="cart-notification focus-inset{% if color_scheme %} color-{{ color_scheme }} gradient{% endif %}"
-      {% comment %}
-        role="status" rather than a modal dialog: this confirms an add without
-        interrupting, so it must announce itself to a screen reader and then get
-        out of the way. A dialog role would imply focus belongs here.
-      {% endcomment %}
-      role="status"
-      aria-live="polite"
-      aria-label="{{ 'general.cart.item_added' | t }}"
     >
-      <div class="cart-notification__header">
-        <h2 class="cart-notification__heading caption-large text-body">
+      <div class="cart-notification__main">
+        <span class="cart-notification__check" aria-hidden="true">
           {{- 'icon-checkmark.svg' | inline_asset_content -}}
-          {{ 'general.cart.item_added_short' | t }}
-        </h2>
-        <button
-          type="button"
-          class="cart-notification__close modal__close-button link link--text focus-inset"
-          aria-label="{{ 'accessibility.close' | t }}"
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-close.svg' | inline_asset_content -}}
-          </span>
-        </button>
+        </span>
+        <div id="cart-notification-product" class="cart-notification-product"></div>
       </div>
-      <div id="cart-notification-product" class="cart-notification-product"></div>
       <div class="cart-notification__links">
         <a
           href="{{ routes.cart_url }}"
           id="cart-notification-button"
-          class="button button--secondary button--full-width"
+          class="cart-notification__action cart-notification__action--view"
         >
           {{- 'general.cart.view_empty_cart' | t -}}
         </a>
         <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width" name="checkout">
-            {{ 'sections.cart.checkout' | t }}
+          <button class="cart-notification__action cart-notification__action--checkout" name="checkout">
+            {{- 'sections.cart.checkout' | t -}}
           </button>
         </form>
-        <button type="button" class="link button-label">{{ 'general.continue_shopping' | t }}</button>
       </div>
+      <button
+        type="button"
+        class="cart-notification__close"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
+      {%- comment -%}
+        Counts down to the auto-dismiss: runs from full to empty over
+        CartNotification.AUTO_DISMISS_MS and holds while the card is hovered or
+        focused.
+      {%- endcomment -%}
+      <span class="cart-notification__timer" aria-hidden="true">
+        <span class="cart-notification__timer-fill"></span>
+      </span>
     </div>
   </div>
+  {%- comment -%}
+    The announcement lives here, always rendered and never hidden, rather than
+    on the card. The card sits at visibility:hidden while its contents are
+    swapped in and is only then revealed, and a live region that changes while
+    hidden is not reliably read out. It confirms an add without interrupting,
+    so it is a status message, not a dialog: focus stays where the customer is.
+  {%- endcomment -%}
+  <p id="cart-notification-live" class="visually-hidden" role="status" aria-live="polite"></p>
 </cart-notification>
 {% style %}
   .cart-notification {

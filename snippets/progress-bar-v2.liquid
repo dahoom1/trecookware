@@ -149,6 +149,9 @@
 
       // Update Visuals
       fill.style.width = `${percentage}%`;
+      // Remembered so a freshly rendered bar can start from here and travel to
+      // its new level instead of appearing there (see the observer below).
+      window.shippingBarState.painted = percentage;
 
       // Update Text
       if (remaining > 0) {
@@ -244,6 +247,19 @@
     // total, so picking the first match in the document could adopt a stale one.
     const rendered = parseInt(fresh.dataset.cartTotal, 10);
     if (!Number.isNaN(rendered)) window.shippingBarState.total = rendered;
+
+    // The new markup arrives already at its new width, so on its own it would
+    // snap there. Parking it at the level last painted - before the browser
+    // gets to draw it, since observers run ahead of paint - lets updateDOM's
+    // width change below run as a transition from old level to new.
+    const freshFill = fresh.querySelector('.shipping-progress-fill');
+    const painted = window.shippingBarState.painted;
+    if (freshFill && typeof painted === 'number') {
+      freshFill.style.transition = 'none';
+      freshFill.style.width = `${painted}%`;
+      void freshFill.offsetWidth;
+      freshFill.style.transition = '';
+    }
 
     updateDOM();
   });

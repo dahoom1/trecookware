@@ -2,6 +2,12 @@ if (!customElements.get('product-form')) {
   customElements.define(
     'product-form',
     class ProductForm extends HTMLElement {
+      // Every add confirms with the added-to-cart pop-down, and the drawer opens
+      // from its View cart button or the cart icon. Set to false to go back to a
+      // product-page add opening the drawer directly (quick-add from a product
+      // card keeps the pop-down either way).
+      static CONFIRM_EVERY_ADD_WITH_POPDOWN = true;
+
       constructor() {
         super();
 
@@ -26,7 +32,11 @@ if (!customElements.get('product-form')) {
       // Resolved live rather than cached in the constructor: quick-add forms are
       // injected into the modal after upgrade, so `closest` is only reliable here.
       get isQuietAdd() {
-        return Boolean(this.closest('quick-add-modal') || this.dataset.quietAdd === 'true');
+        return Boolean(
+          ProductForm.CONFIRM_EVERY_ADD_WITH_POPDOWN ||
+            this.closest('quick-add-modal') ||
+            this.dataset.quietAdd === 'true'
+        );
       }
 
       resolveCartTarget() {

@@ -201,7 +201,8 @@
       "view": "View cart ({{ count }})",
       "view_empty_cart": "View cart",
       "item_added": "Item added to your cart",
-      "item_added_short": "Added"
+      "item_added_short": "Added",
+      "added_to_cart": "Added to cart!"
     },
     "share": {
       "close": "Close share",

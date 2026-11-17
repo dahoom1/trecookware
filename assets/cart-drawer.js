@@ -1,15 +1,50 @@
 class CartDrawer extends HTMLElement {
   // Longest delay in the open sequence plus its own duration: the last line item
-  // starts at 0.60s and runs 0.25s. Keep in step with the delays in
+  // starts at 0.42s and runs 0.4s. Keep in step with the delays in
   // snippets/cart-drawer.liquid.
-  static OPENING_SEQUENCE_MS = 900;
+  static OPENING_SEQUENCE_MS = 850;
+
+  // How far into the panel's 0.38s slide the free-shipping bar starts filling:
+  // late enough that the bar is on screen to be seen moving.
+  static SHIPPING_BAR_DELAY_MS = 150;
 
   constructor() {
     super();
 
     this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    // Bound here on the element itself, which survives every re-render, rather
+    // than on the rows, which are replaced each time the cart changes.
+    this.addEventListener('click', this.onRemoveClick.bind(this));
     this.setHeaderCartIconAccessibility();
+  }
+
+  // Lifts and fades the row the moment remove is pressed, instead of leaving it
+  // sitting there until the cart round-trip returns. On success the re-render
+  // replaces the row, so nothing needs undoing. cart.js has two failure paths
+  // (a network error, and an inventory error it reports inline) and neither
+  // re-renders, so the row would stay invisible. Both end in disableLoading(),
+  // which drops `cart__items--disabled` from the items container - that is the
+  // signal to bring the row back if it is still on the page. The container is
+  // looked up the way cart.js looks it up: on /cart that is the page's own
+  // list, even for a remove made in the drawer.
+  onRemoveClick(event) {
+    const removeButton = event.target.closest('cart-remove-button');
+    if (!removeButton) return;
+
+    const row = removeButton.closest('.cart-item');
+    const container =
+      document.getElementById('main-cart-items') || this.querySelector('#CartDrawer-CartItems');
+    if (!row || !container) return;
+
+    row.classList.add('is-removing');
+
+    const observer = new MutationObserver(() => {
+      if (container.classList.contains('cart__items--disabled')) return;
+      observer.disconnect();
+      if (row.isConnected) row.classList.remove('is-removing');
+    });
+    observer.observe(container, { attributes: true, attributeFilter: ['class'] });
   }
 
   setHeaderCartIconAccessibility() {
@@ -32,6 +67,13 @@ class CartDrawer extends HTMLElement {
 
   open(triggeredBy) {
     if (triggeredBy) this.setActiveElement(triggeredBy);
+    if (!this.classList.contains('active')) this.replayShippingBar();
+
+    // The added-to-cart pop-down points at the drawer; once the drawer is open
+    // it has done its job, whichever way the drawer was opened.
+    const notification = document.querySelector('cart-notification');
+    if (notification && typeof notification.close === 'function') notification.close();
+
     const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
     if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
     // here the animation doesn't seem to always get triggered. A timeout seem to help
@@ -62,6 +104,35 @@ class CartDrawer extends HTMLElement {
     );
 
     document.body.classList.add('overflow-hidden');
+  }
+
+  // Plays the free-shipping bar filling up on every open, so the customer sees
+  // how far this cart carries them - all the way across once it qualifies -
+  // rather than a bar already sitting at its level. The fill is parked at empty
+  // with transitions off, then released to its real width as the panel slides
+  // in, and the stylesheet's width transition does the moving. If
+  // progress-bar-v2 repaints the fill in the meantime (it refreshes the total
+  // after an add), its fresher value is left to stand.
+  replayShippingBar() {
+    const fill = this.querySelector('.shipping-progress-fill');
+    if (!fill) return;
+
+    clearTimeout(this.shippingBarTimer);
+    // A replay cut short by another leaves the fill at 0%, so the real width is
+    // kept on the element until the release has happened.
+    const target = fill.dataset.replayTarget || fill.style.width;
+    if (!target) return;
+    fill.dataset.replayTarget = target;
+
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    void fill.offsetWidth;
+    fill.style.transition = '';
+
+    this.shippingBarTimer = setTimeout(() => {
+      if (fill.style.width === '0%') fill.style.width = target;
+      delete fill.dataset.replayTarget;
+    }, CartDrawer.SHIPPING_BAR_DELAY_MS);
   }
 
   close() {

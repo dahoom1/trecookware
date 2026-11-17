@@ -1,6 +1,7 @@
 {% comment %}
   Renders cart drawer with Upsells, Progress Bar and Smart Conversion features
   Version 2.0: Added RTL support for Arabic
+  Version 3.0: Flat white panel with a pinned footer (cart drawer test branch)
   Usage:
   {% render 'cart-drawer' %}
 {% endcomment %}
@@ -13,51 +14,74 @@
 
 <style>
   /* ===========================
-     DRAWER OPEN MOTION
-     Mirrors the menu drawer in sections/headercustom.liquid so both panels feel
-     like the same gesture: a 0.3s ease slide on transform, a scrim that fades in
-     rather than snapping on, and contents that stagger in behind the panel.
-  =========================== */
+     TRE CART DRAWER
+     One white panel in three bands: a header, a scrolling body (free-shipping
+     banner, column heads, line items) and a pinned footer (totals, checkout,
+     trust marks, payment logos). Every rule is #CartDrawer-scoped so the tokens
+     and overrides cannot leak into the rest of the theme, and so they outrank
+     Dawn's `.cart-drawer ...` rules without !important.
 
-  /* The scrim moves off .drawer and onto the overlay child so it can carry its
-     own opacity. Left on .drawer it could only follow `visibility`, which has no
-     intermediate state - the 50% black landed in a single frame while the panel
-     was still sliding, and that hard edge is what made the drawer feel cheap. */
+     Sizes are in px on purpose: Dawn sets the root font-size to 62.5%, so rem
+     values here would read 10px-based and drift from the design.
+  =========================== */
+  #CartDrawer {
+    --tre-forest: #084a32;
+    --tre-terracotta: #c04001;
+    --tre-terracotta-hover: #a33600;
+    --tre-soft-bg: #f7f7f7;
+    --tre-hairline: #f3f4f6;
+    --tre-ink: #111827;
+    --tre-ink-soft: #1f2937;
+    --tre-muted: #6b7280;
+    --tre-faint: #9ca3af;
+    --tre-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --tre-gutter: 20px;
+    /* A barely-there 2px on every corner: square like the rest of the theme,
+       without the knife edge of a true 0. One value changes them all. */
+    --tre-radius: 2px;
+  }
+
+  @media screen and (min-width: 640px) {
+    #CartDrawer {
+      --tre-gutter: 24px;
+    }
+  }
+
+  /* ===========================
+     OPEN / CLOSE MOTION
+     The scrim lives on the overlay child rather than on .drawer so it can fade
+     on its own opacity. Left on .drawer it could only follow `visibility`,
+     which has no intermediate state, and the dark layer landed in one frame
+     while the panel was still sliding.
+  =========================== */
   .drawer {
     visibility: hidden;
     position: fixed;
     inset: 0;
     background-color: transparent;
-    transition: visibility 0.3s ease;
+    transition: visibility 0.38s ease;
   }
 
   .drawer .cart-drawer__overlay {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.35s ease-in-out;
   }
 
   .drawer.active .cart-drawer__overlay {
     opacity: 1;
   }
 
-  /* 0.3s rather than the 200ms --duration-default, to match the menu exactly.
-     will-change keeps the panel on its own compositor layer for the slide. */
+  /* A fast start that settles gently. will-change keeps the panel on its own
+     compositor layer for the slide. */
   .drawer .drawer__inner {
-    transition: transform 0.3s ease;
+    transition: transform 0.38s var(--tre-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
     will-change: transform;
   }
 
-  /* Line items pick up the menu's item reveal: same 30px offset, same easing,
-     same 0.07s step between neighbours. */
   @keyframes cart-item-in {
-    from { opacity: 0; transform: translateX(-30px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes cart-item-in-rtl {
-    from { opacity: 0; transform: translateX(30px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes cart-panel-in {
@@ -65,237 +89,1060 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Gated behind .is-opening, which JS adds on open and drops once the sequence
-     has played. The resting state is the finished state, so the cart re-rendering
-     after a quantity change never replays this - and dropping the class mid-flight
-     just leaves everything visible rather than stranding a half-faded row.
-     `backwards` holds each row at its from-state through its own delay. */
+  /* Gated behind .is-opening, which cart-drawer.js adds on open and drops once
+     the sequence has played. The resting state is the finished state, so a
+     re-render after a quantity change never replays this, and dropping the
+     class mid-flight leaves everything visible rather than half-faded.
+     `backwards` holds each row at its from-state through its own delay.
+     Keep CartDrawer.OPENING_SEQUENCE_MS in step with the last delay here. */
   .drawer.is-opening .cart-items__body .cart-item {
-    animation: cart-item-in 0.25s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    animation: cart-item-in 0.4s var(--tre-ease-out) backwards;
   }
 
-  [dir="rtl"] .drawer.is-opening .cart-items__body .cart-item {
-    animation-name: cart-item-in-rtl;
-  }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(1) { animation-delay: 0.12s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(2) { animation-delay: 0.18s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(3) { animation-delay: 0.24s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(4) { animation-delay: 0.30s; }
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(5) { animation-delay: 0.36s; }
+  /* Everything past the fifth row shares the last delay, so a long cart does
+     not keep ramping until the tail arrives a second late. */
+  .drawer.is-opening .cart-items__body .cart-item:nth-child(n+6) { animation-delay: 0.42s; }
 
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(1) { animation-delay: 0.25s; }
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(2) { animation-delay: 0.32s; }
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(3) { animation-delay: 0.39s; }
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(4) { animation-delay: 0.46s; }
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(5) { animation-delay: 0.53s; }
-  /* Everything past the fifth row shares the last delay - a long cart should not
-     keep ramping until the tail arrives a second late. */
-  .drawer.is-opening .cart-items__body .cart-item:nth-child(n+6) { animation-delay: 0.60s; }
-
-  /* Header and footer bracket the list rather than joining the stagger. */
-  .drawer.is-opening .drawer__header {
-    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.18s backwards;
-  }
-
-  .drawer.is-opening .drawer__footer {
-    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.42s backwards;
-  }
-
-  /* The empty state has no list to stagger, so it just settles in as one piece. */
+  /* The empty state has no list to stagger, so it settles in as one piece. */
   .drawer.is-opening .drawer__inner-empty {
-    animation: cart-panel-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+    animation: cart-panel-in 0.4s var(--tre-ease-out) 0.12s backwards;
+  }
+
+  /* A removed row lifts and fades while the cart round-trip is in flight; the
+     re-render then takes it out for good. cart-drawer.js adds the class on
+     click and clears it again if the removal fails. */
+  #CartDrawer .cart-item {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  #CartDrawer .cart-item.is-removing {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .drawer .drawer__inner,
-    .drawer .cart-drawer__overlay {
+    .drawer .cart-drawer__overlay,
+    #CartDrawer .cart-item,
+    #CartDrawer .shipping-progress-fill {
       transition-duration: 0.01ms;
     }
 
     .drawer.is-opening .cart-items__body .cart-item,
-    .drawer.is-opening .drawer__header,
-    .drawer.is-opening .drawer__footer,
     .drawer.is-opening .drawer__inner-empty {
       animation: none;
     }
   }
-  
-  /* ===========================
-     GROUPED CARD LAYOUT
-     A neutral ground with each section of the cart as its own white group, the
-     way Made In does it. The ground is what separates the groups - there are no
-     divider lines between them, only the gutter showing through.
-  =========================== */
-  /* Scoped to the drawer rather than :root so the tokens cannot leak into the
-     rest of the theme. Change --cart-ground here to reshade every gutter. */
-  #CartDrawer {
-    --cart-ground: #f8f8f8;
-    --cart-card: #ffffff;
-    --cart-gutter: 12px;
-    --cart-card-radius: 10px;
-  }
 
+  /* ===========================
+     PANEL
+  =========================== */
   /* Panel height follows the *visible* viewport. `height: 100%` on a fixed
      element resolves against the large viewport on iOS Safari - the height it
      would have with the URL bar collapsed - so while the bar is expanded the
-     bottom ~120px of the panel sits below the fold, taking the checkout CTA
-     with it until a swipe collapses the bar. `dvh` tracks the bar as it shows
-     and hides, so the footer stays on screen. The `100%` line is the fallback
-     for anything that predates `dvh`. */
+     bottom of the panel sits below the fold, taking the checkout CTA with it.
+     `dvh` tracks the bar as it shows and hides. `100%` is the fallback. */
   cart-drawer.drawer {
     height: 100%;
     height: 100dvh;
   }
 
-  /* The ground. .drawer__inner carries the theme's `gradient color-{scheme}`
-     classes, so this needs the #CartDrawer prefix to outrank them. Horizontal
-     padding comes off the panel and moves onto the regions inside it, so the
-     header can run edge to edge while the cards below sit inset from it. */
+  /* .drawer__inner carries the theme's `gradient color-{scheme}` classes, so
+     this needs the #CartDrawer prefix to outrank them. Full width on phones,
+     a 448px sheet from there up. */
   #CartDrawer .drawer__inner {
-    background: var(--cart-ground);
+    width: 448px;
+    max-width: 100vw;
+    padding: 0;
+    border: 0;
+    background: #fff;
+    color: var(--tre-ink);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* ===========================
+     HEADER
+  =========================== */
+  /* Sticky so the close button stays on screen when the whole panel becomes
+     the scroller - component-cart-drawer.css does that below 650px of
+     viewport height, and at full phone width there is no overlay strip left
+     to tap instead. */
+  #CartDrawer .drawer__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding: var(--tre-gutter) var(--tre-gutter) 16px;
+    background: #fff;
+    border-bottom: 1px solid var(--tre-hairline);
+  }
+
+  #CartDrawer .drawer__heading {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: var(--tre-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* In the header the close button sits in the flex row beside the title
+     instead of floating over it, so it never needs space reserved for it. */
+  #CartDrawer .drawer__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    min-width: 0;
+    min-height: 0;
+    padding: 8px;
+    border-radius: var(--tre-radius);
+    color: var(--tre-faint);
+    box-shadow: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  #CartDrawer .drawer__close:hover {
+    color: #374151;
+    background-color: var(--tre-hairline);
+  }
+
+  #CartDrawer .drawer__close .svg-wrapper {
+    width: 14px;
+    height: 14px;
+  }
+
+  #CartDrawer .drawer__header .drawer__close {
+    position: static;
+  }
+
+  /* Empty cart: Dawn hides the header and footer with (0,2,1) selectors, which
+     the ID-scoped display rules in this block outrank, so the hiding is
+     restated here at matching strength. The empty-state block then owns the
+     panel, with its own close button in the corner. */
+  cart-drawer.is-empty #CartDrawer .drawer__header,
+  #CartDrawer cart-drawer-items.is-empty + .drawer__footer {
+    display: none;
+  }
+
+  #CartDrawer cart-drawer-items.is-empty {
     padding: 0;
   }
 
-  /* The header is the one group that meets the panel edges, so it keeps a
-     hairline underneath instead of a gutter to separate it. */
-  #CartDrawer .drawer__header {
-    background: var(--cart-card);
-    padding: 1.25rem;
-    margin: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  /* The empty state has no header row, so its close button stays pinned to
+     the panel corner. */
+  #CartDrawer .cart-drawer__warnings .drawer__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
   }
 
-  #CartDrawer .drawer__close {
-    top: 1.25rem;
-    right: 1.25rem;
-  }
-
-  [dir="rtl"] #CartDrawer .drawer__close {
+  [dir="rtl"] #CartDrawer .cart-drawer__warnings .drawer__close {
     right: auto;
-    left: 1.25rem;
+    left: 16px;
   }
 
-  /* Free-shipping meter: its own group between the header and the list. */
+  /* ===========================
+     FREE-SHIPPING BANNER
+     Restyles snippets/progress-bar-v2.liquid inside the drawer only. The
+     snippet keeps its own markup, script and threshold.
+  =========================== */
   #CartDrawer .shipping-progress-wrapper {
-    background: var(--cart-card);
-    border-radius: var(--cart-card-radius);
-    margin: var(--cart-gutter) var(--cart-gutter) 0;
-    padding: 0.75rem 1rem;
     width: auto;
+    margin: var(--tre-gutter) var(--tre-gutter) 0;
+    padding: 14px;
+    text-align: center;
+    background: linear-gradient(to right, #f0f9ff, #eff6ff);
+    border: 1px solid rgba(224, 242, 254, 0.8);
+    border-radius: var(--tre-radius);
   }
 
-  /* The scroll region becomes gutter: the card inside it does the containing. */
+  /* A white track with a hairline edge: the pale fill would disappear into a
+     tinted track on the banner's light-blue ground. */
+  #CartDrawer .shipping-progress-bar {
+    height: 8px;
+    margin-bottom: 10px;
+    border-radius: var(--tre-radius);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(192, 221, 233, 0.6);
+  }
+
+  /* Long and front-loaded, so the fill is seen travelling: from empty each
+     time the drawer opens (cart-drawer.js replayShippingBar), and from its old
+     level to the new one when the cart changes with the drawer open
+     (progress-bar-v2's observer). */
+  #CartDrawer .shipping-progress-fill {
+    border-radius: var(--tre-radius);
+    background: #c0dde9;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  #CartDrawer .shipping-progress-shine {
+    display: none;
+  }
+
+  /* The snippet colours its unlocked message with !important, so matching it
+     is the only way to bring both states onto one green. */
+  #CartDrawer .shipping-progress-text p,
+  #CartDrawer .shipping-progress-text .success-text {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #059669 !important;
+  }
+
+  #CartDrawer .shipping-progress-text strong {
+    font-weight: 700;
+    color: inherit;
+  }
+
+  @media screen and (min-width: 640px) {
+    #CartDrawer .shipping-progress-text p,
+    #CartDrawer .shipping-progress-text .success-text {
+      font-size: 14px;
+    }
+  }
+
+  /* ===========================
+     SCROLLING BODY
+  =========================== */
   #CartDrawer cart-drawer-items {
-    background: var(--cart-ground);
-    padding: var(--cart-gutter);
+    padding: var(--tre-gutter);
+    background: #fff;
   }
 
-  #CartDrawer .drawer__cart-items-wrapper {
-    background: var(--cart-card);
-    border-radius: var(--cart-card-radius);
-    padding: 0 1rem;
+  /* Firefox only. Chromium 121+ drops all ::-webkit-scrollbar styling on an
+     element that sets either standard property, so they must not reach it. */
+  @supports not selector(::-webkit-scrollbar) {
+    #CartDrawer cart-drawer-items {
+      scrollbar-width: thin;
+      scrollbar-color: #ccc #f1f1f1;
+    }
   }
 
-  /* Rows divide from each other inside the card, but the last one stops at the
-     card's edge - a trailing rule would read as a broken border. */
-  #CartDrawer .cart-items__body .cart-item:last-child {
-    border-bottom: 0;
+  #CartDrawer cart-drawer-items::-webkit-scrollbar {
+    width: 4px;
   }
 
-  /* Footer: neutral ground, with the summary and the checkout CTA joined into a
-     single card. They stay separate elements so their internal spacing is
-     unchanged - only the corners are rounded off at the two outer ends. */
+  #CartDrawer cart-drawer-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  #CartDrawer cart-drawer-items::-webkit-scrollbar-track-piece {
+    margin-top: 0;
+  }
+
+  #CartDrawer cart-drawer-items::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: var(--tre-radius);
+  }
+
+  #CartDrawer cart-drawer-items::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+
+  /* Column heads: a quiet label row, not a table header. */
+  #CartDrawer .cart-items__header {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--tre-hairline);
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--tre-faint);
+  }
+
+  #CartDrawer .cart-items__header-row {
+    display: contents;
+  }
+
+  #CartDrawer .cart-items__header-cell {
+    width: auto;
+    padding: 0;
+    border: 0;
+    opacity: 1;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+  }
+
+  #CartDrawer .cart-items__header-cell:last-child {
+    text-align: end;
+  }
+
+  /* ===========================
+     LINE ITEMS
+     [ photo ] [ title          | line total ]
+     [       ] [ stepper  remove             ]
+  =========================== */
+  #CartDrawer .cart-items__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 20px;
+  }
+
+  #CartDrawer .cart-item {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr;
+    column-gap: 16px;
+    row-gap: 12px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  /* The media cell is excluded: this selector is (1,1,1) and would otherwise
+     beat the tile's own padding below. */
+  #CartDrawer .cart-item > td:not(.cart-item__media) {
+    padding: 0;
+  }
+
+  /* A square tile on the soft ground, with the product contained inside it so
+     every photo sits at the same size down the list whatever its ratio. */
+  #CartDrawer .cart-item__media {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: start;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 80px;
+    height: 80px;
+    padding: 8px;
+    overflow: hidden;
+    background: var(--tre-soft-bg);
+    border: 1px solid var(--tre-hairline);
+    border-radius: var(--tre-radius);
+  }
+
+  #CartDrawer .cart-item__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    border-radius: var(--tre-radius);
+  }
+
+  /* Bundle child lines: a smaller tile pushed to the end of its column, and a
+     tighter gap to the parent, so they read as part of the line above rather
+     than as products of their own. */
+  #CartDrawer .cart-item__nested-line .cart-item__media {
+    justify-self: end;
+    width: 56px;
+    height: 56px;
+    padding: 4px;
+  }
+
+  #CartDrawer .cart-items__body .cart-item__nested-line {
+    margin-top: -12px;
+  }
+
+  /* No flex gap: the details cell always renders an empty discounts list, and
+     a <dl> whose options are hidden, and a gap would add their spacing anyway
+     and push the stepper down. They are taken out of the flow instead. */
+  #CartDrawer .cart-item__details {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+  }
+
+  #CartDrawer .cart-item__details > * + * {
+    margin-top: 0;
+  }
+
+  #CartDrawer .cart-item__details > dl,
+  #CartDrawer .cart-item__details > .discounts:empty {
+    display: none;
+  }
+
+  #CartDrawer .cart-item__name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: normal;
+    color: var(--tre-ink);
+    text-decoration: none;
+  }
+
+  #CartDrawer .cart-item__totals {
+    grid-column: 3;
+    grid-row: 1;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    font-family: var(--font-body-family);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--tre-ink);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  #CartDrawer .cart-item__totals .price {
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: normal;
+    color: inherit;
+  }
+
+  #CartDrawer .cart-item__totals .cart-item__old-price {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--tre-faint);
+  }
+
+  #CartDrawer .cart-item__price-wrapper .cart-item__discounted-prices {
+    gap: 2px;
+  }
+
+  #CartDrawer .cart-item .loading__spinner {
+    padding-top: 0;
+  }
+
+  #CartDrawer .cart-item__quantity {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    display: block;
+    padding: 0;
+  }
+
+  #CartDrawer .cart-item__quantity-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #CartDrawer .quantity-popover-container {
+    padding: 0;
+  }
+
+  /* Variant options, selling plans and the in-details sale price stay hidden:
+     the row carries the title and the line total only. */
+  #CartDrawer .product-option,
+  #CartDrawer .cart-item__details .cart-item__discounted-prices {
+    display: none !important;
+  }
+
+  /* Product-level discounts sit under the title as small tags in the savings
+     colour, matching the discount box in the footer. */
+  #CartDrawer .cart-item__details .discounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 6px 0 0;
+    padding: 0;
+    font-family: var(--font-body-family);
+    font-size: 11px;
+  }
+
+  #CartDrawer .cart-item__details .discounts__discount {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 2px 6px;
+    border-radius: var(--tre-radius);
+    background: rgba(192, 64, 1, 0.07);
+    color: var(--tre-terracotta);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  #CartDrawer .cart-item__details .discounts__discount > .icon {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin: 0;
+    color: inherit;
+  }
+
+  #CartDrawer .caption-with-letter-spacing {
+    margin: 0;
+    font-family: var(--font-body-family);
+    font-size: 12px;
+  }
+
+  /* --- Quantity stepper --- */
+  /* Dawn draws the input border with ::before/::after box-shadows; a plain
+     border replaces them so the stepper reads as one outlined control. */
+  #CartDrawer .quantity {
+    display: inline-flex;
+    align-items: stretch;
+    width: auto;
+    min-height: 0;
+    height: 32px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--tre-faint);
+    border-radius: var(--tre-radius);
+  }
+
+  #CartDrawer .quantity::before,
+  #CartDrawer .quantity::after {
+    display: none;
+  }
+
+  #CartDrawer .quantity__button {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 100%;
+    padding: 0;
+    color: #4b5563;
+    background: transparent;
+    border: 0;
+    transition: background-color 0.2s ease;
+  }
+
+  #CartDrawer .quantity__button:not([disabled]):hover {
+    background-color: var(--tre-hairline);
+  }
+
+  /* The stepper clips overflow for its outline, which would also clip a focus
+     ring drawn outside the buttons, so the ring is drawn inside them. */
+  #CartDrawer .quantity__button:focus-visible,
+  #CartDrawer .quantity__input:focus-visible {
+    outline: 2px solid var(--tre-ink);
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+
+  #CartDrawer .quantity__button .svg-wrapper,
+  #CartDrawer .quantity__button svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  #CartDrawer .quantity__input {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-body-family);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--tre-ink-soft);
+    text-align: center;
+    opacity: 1;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  #CartDrawer .quantity__input::-webkit-outer-spin-button,
+  #CartDrawer .quantity__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* --- Remove --- */
+  #CartDrawer cart-remove-button {
+    display: inline-flex;
+    margin: 0;
+  }
+
+  #CartDrawer .cart-remove-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 4px;
+    color: var(--tre-faint);
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    opacity: 1;
+    transition: color 0.2s ease;
+  }
+
+  #CartDrawer .cart-remove-button::before,
+  #CartDrawer .cart-remove-button::after {
+    display: none;
+  }
+
+  #CartDrawer .cart-remove-button:hover {
+    color: #dc2626;
+  }
+
+  /* Dawn's .button focus ring is a box-shadow, which the rule above clears. */
+  #CartDrawer .cart-remove-button:focus-visible,
+  #CartDrawer .drawer__inner-empty .button:focus-visible {
+    outline: 2px solid var(--tre-ink);
+    outline-offset: 2px;
+  }
+
+  #CartDrawer .cart-remove-button .svg-wrapper {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ===========================
+     FOOTER
+  =========================== */
   #CartDrawer .drawer__footer {
-    background: var(--cart-ground);
-    border-top: 0;
-    padding: var(--cart-gutter);
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: var(--tre-gutter);
+    background: #fff;
+    border-top: 1px solid var(--tre-hairline);
+    box-shadow: 0 -8px 24px -12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Cart note, when enabled, is a light outlined disclosure above the totals. */
+  #CartDrawer .drawer__footer > details {
+    margin: 0;
+    padding: 0 12px;
+    border: 1px solid var(--tre-hairline);
+    border-radius: var(--tre-radius);
+  }
+
+  #CartDrawer .drawer__footer > details[open] {
+    padding-bottom: 12px;
+  }
+
+  #CartDrawer .drawer__footer > details + .cart-drawer__footer {
+    padding-top: 0;
   }
 
   #CartDrawer .cart-drawer__footer,
   #CartDrawer .cart__ctas {
-    background: var(--cart-card);
+    margin: 0;
+    padding: 0;
+    background: none;
   }
 
-  #CartDrawer .cart-drawer__footer {
-    border-radius: var(--cart-card-radius) var(--cart-card-radius) 0 0;
-    padding: 1rem 1rem 0;
+  #CartDrawer .cart-drawer__footer > * + * {
+    margin-top: 0;
   }
 
-  #CartDrawer .cart__ctas {
-    border-radius: 0 0 var(--cart-card-radius) var(--cart-card-radius);
-    padding: 0.75rem 1rem 1rem;
+  /* --- Applied discounts --- */
+  /* A coupon: dashed edge and a faint wash in the savings colour, so it reads
+     as money off rather than as another line of totals. Each discount is one
+     row - name on the start side, amount off on the end side. */
+  #CartDrawer .cart-drawer__discounts {
+    padding: 10px 12px;
+    background: rgba(192, 64, 1, 0.04);
+    border: 1px dashed rgba(192, 64, 1, 0.4);
+    border-radius: var(--tre-radius);
   }
 
-  /* Cart note, when enabled, is a group of its own above the summary. */
-  #CartDrawer .drawer__footer > details {
-    background: var(--cart-card);
-    border-radius: var(--cart-card-radius);
-    margin-bottom: var(--cart-gutter);
-    padding: 0.75rem 1rem;
+  #CartDrawer .cart-drawer__discount-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
   }
 
-  /* Payment marks sit on the ground below the card, not inside it. */
+  #CartDrawer .cart-drawer__discount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-body-family);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  #CartDrawer .cart-drawer__discount-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-weight: 500;
+    color: var(--tre-ink);
+  }
+
+  #CartDrawer .cart-drawer__discount-name .icon-discount {
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    color: var(--tre-terracotta);
+  }
+
+  #CartDrawer .cart-drawer__discount-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* A typed code reads like a code; an automatic discount keeps its wording. */
+  #CartDrawer .cart-drawer__discount--code .cart-drawer__discount-title {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  [dir="rtl"] #CartDrawer .cart-drawer__discount--code .cart-drawer__discount-title {
+    letter-spacing: 0;
+  }
+
+  #CartDrawer .cart-drawer__discount-amount {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--tre-terracotta);
+    white-space: nowrap;
+  }
+
+  /* --- Totals --- */
+  #CartDrawer .cart-drawer__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0;
+    font-family: var(--font-body-family);
+  }
+
+  #CartDrawer .cart-drawer__summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--tre-muted);
+  }
+
+  #CartDrawer .cart-drawer__summary-value {
+    font-weight: 500;
+    color: var(--tre-ink-soft);
+    white-space: nowrap;
+  }
+
+  #CartDrawer .cart-drawer__summary-row--total .cart-drawer__summary-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tre-ink);
+  }
+
+  #CartDrawer .cart-drawer__summary-row--total .cart-drawer__summary-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--tre-ink);
+  }
+
+  #CartDrawer .cart-drawer__summary-row--savings .cart-drawer__summary-value {
+    color: var(--tre-terracotta);
+  }
+
+  /* --- Checkout --- */
+  #CartDrawer .cart__checkout-button {
+    --shadow-opacity: 0;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 14px 16px;
+    border: 0;
+    border-radius: var(--tre-radius);
+    background-color: var(--tre-terracotta);
+    color: #fff;
+    font-family: var(--font-body-family);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.025em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    outline: none;
+    transition: background-color 0.2s ease;
+  }
+
+  #CartDrawer .cart__checkout-button:not([disabled]):hover {
+    background-color: var(--tre-terracotta-hover);
+  }
+
+  #CartDrawer .cart__checkout-button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  #CartDrawer .cart__checkout-button:focus-visible {
+    outline: 2px solid var(--tre-terracotta);
+    outline-offset: 2px;
+  }
+
+  /* Dawn paints button borders and shadows on these pseudo-elements. */
+  #CartDrawer .cart__checkout-button::after,
+  #CartDrawer .cart__checkout-button::before {
+    box-shadow: none !important;
+  }
+
+  @media screen and (min-width: 640px) {
+    #CartDrawer .cart__checkout-button {
+      font-size: 16px;
+    }
+  }
+
+  /* --- Checkout glare (matches the ATC button: 0.6s, on hover, snaps back) --- */
+  @keyframes drawer-glare-ltr {
+    from { left: -100%; opacity: 1; }
+    to   { left:  100%; opacity: 1; }
+  }
+  @keyframes drawer-glare-rtl {
+    from { right: -100%; opacity: 1; }
+    to   { right:  100%; opacity: 1; }
+  }
+
+  #CartDrawer-Checkout {
+    overflow: hidden;
+  }
+
+  #CartDrawer-Checkout span {
+    position: relative;
+    z-index: 3;
+    display: block;
+    width: 100%;
+  }
+
+  /* Parked off-screen and invisible by default. */
+  #CartDrawer-Checkout span::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 100%;
+    height: 300%;
+    opacity: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #CartDrawer-Checkout:not([disabled]):hover span::before {
+    animation: drawer-glare-ltr 0.6s linear;
+  }
+
+  [dir="rtl"] #CartDrawer-Checkout span::before {
+    background: linear-gradient(-120deg, transparent, rgba(255,255,255,0.3), transparent);
+    left: auto;
+    right: -100%;
+  }
+
+  [dir="rtl"] #CartDrawer-Checkout:not([disabled]):hover span::before {
+    animation: drawer-glare-rtl 0.6s linear;
+  }
+
+  /* --- Trust marks --- */
+  /* The check is first in the DOM and every gap is logical, so an RTL
+     container flips the check to the right of its label with no [dir] rule. */
+  #CartDrawer .cart-drawer__trust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 12px;
+    margin-top: 4px;
+    padding: 0;
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    line-height: 1.3;
+    color: var(--tre-muted);
+    opacity: 1;
+  }
+
+  #CartDrawer .cart-drawer__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  #CartDrawer .cart-drawer__trust-check {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--tre-faint);
+  }
+
+  #CartDrawer .cart-drawer__trust-check svg {
+    display: block;
+    width: 9px;
+    height: 9px;
+  }
+
+  /* --- Payment logos --- */
+  /* The footer's 16px gap plus this pulls the logos to 12px under the trust
+     row, so the two read as one block. */
   #CartDrawer .cart-drawer__payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: -4px;
+    padding: 0;
     background: transparent;
-    padding: 0.5rem 0 0.15rem;
+    opacity: 0.9;
   }
 
-  /* Empty state has no groups to separate, so it just sits on the ground. */
+  #CartDrawer .cart-drawer__payment-icon {
+    display: block;
+    width: auto;
+    height: 22px;
+    max-width: 42px;
+    border-radius: var(--tre-radius);
+  }
+
+  /* ===========================
+     EMPTY STATE
+  =========================== */
   #CartDrawer .drawer__inner-empty {
-    background: var(--cart-ground);
-    padding: 0 1.25rem;
+    padding: 0 24px;
+    background: #fff;
   }
 
-  /* --- RTL SUPPORT FOR CART DRAWER --- */
-  [dir="rtl"] .drawer__header {
-    direction: rtl;
+  #CartDrawer .cart-drawer__empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
-  [dir="rtl"] .drawer__heading {
-    text-align: right;
+  #CartDrawer .cart__empty-text {
+    margin: 0 0 20px;
+    font-family: var(--font-heading-family);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--tre-ink-soft);
   }
 
-  [dir="rtl"] .drawer__close {
-    left: 0;
-    right: auto;
+  #CartDrawer .drawer__inner-empty .button {
+    min-height: 0;
+    padding: 12px 24px;
+    border-radius: var(--tre-radius);
+    background-color: #27231e;
+    color: #fff;
+    font-family: var(--font-body-family);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: none;
   }
 
-  [dir="rtl"] .cart-drawer__upsell-title {
-    text-align: right;
+  #CartDrawer .drawer__inner-empty .button::before,
+  #CartDrawer .drawer__inner-empty .button::after {
+    box-shadow: none;
   }
 
-  [dir="rtl"] .upsell-scroll-container {
-    direction: rtl;
+  #CartDrawer .cart__login-title {
+    margin: 28px 0 4px;
+    font-size: 14px;
   }
 
-  [dir="rtl"] .cart-items__header-cell:last-child {
-    text-align: left;
+  #CartDrawer .cart__login-paragraph {
+    margin: 0;
+    font-size: 12px;
+    color: var(--tre-muted);
+  }
+
+  /* ===========================
+     RTL
+     Layout is flex/grid with logical alignment, so it mirrors on its own.
+     Only letter-spacing needs undoing: tracking pulls Arabic letters apart
+     and breaks the joins between them.
+  =========================== */
+  [dir="rtl"] #CartDrawer .cart-items__header,
+  [dir="rtl"] #CartDrawer .cart__checkout-button {
+    letter-spacing: 0;
+  }
+
+  /* ===========================
+     SHARED WITH THE /cart PAGE AND HEADER MENU
+     This snippet renders on every page, so these unscoped rules have long been
+     styling main-cart-footer, main-cart-items and Dawn's header drawer too.
+     They are kept as they were so the drawer restyle does not move anything
+     outside the drawer. The drawer's own versions above are #CartDrawer-scoped
+     and win inside it.
+  =========================== */
+  .totals__total,
+  .totals__total-value,
+  .tax-note {
+    font-family: var(--font-body-family);
+  }
+
+  .cart__ctas {
+    padding-top: 0.75rem;
+  }
+
+  .cart__checkout-button:not(#CartDrawer-Checkout) {
+    --color-button: 192, 64, 1;
+    --color-button-text: 255, 255, 255;
+    --shadow-opacity: 0;
+    background-color: #c04001;
+    color: #ffffff;
+    font-family: var(--font-body-family);
+    border: 1px solid #c04001 !important;
+    border-radius: 2px;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .cart__checkout-button:not(#CartDrawer-Checkout)::after,
+  .cart__checkout-button:not(#CartDrawer-Checkout)::before,
+  .cart__checkout-button:not(#CartDrawer-Checkout):focus::after,
+  .cart__checkout-button:not(#CartDrawer-Checkout):focus-visible::after {
+    box-shadow: none !important;
+  }
+
+  .cart__checkout-button:not(#CartDrawer-Checkout):focus,
+  .cart__checkout-button:not(#CartDrawer-Checkout):focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 
   [dir="rtl"] .cart-item__totals {
     text-align: left;
     justify-content: flex-start;
-  }
-
-  /* Ensure proper spacing between title and close button */
-  .drawer__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    position: relative;
-  }
-
-  .drawer__heading {
-    flex: 1;
-    min-width: 0;
-    margin: 0;
-    padding-right: 2rem; /* Space for close button */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: var(--font-heading-family);
-  }
-
-  [dir="rtl"] .drawer__heading {
-    padding-right: 0;
-    padding-left: 2rem; /* Space for close button on left in RTL */
   }
 
   .drawer__close {
@@ -309,8 +1156,10 @@
     right: auto;
     left: 1.5rem;
   }
-  
-  /* --- CUSTOM UPSELL & SMART CONVERSION STYLES --- */
+
+  /* ===========================
+     UPSELL (styles for the CartUpsell script below; no markup renders it yet)
+  =========================== */
   .cart-drawer__upsell-wrapper {
     padding: 1rem;
     background-color: #fafafa;
@@ -326,6 +1175,10 @@
     font-family: var(--font-body-family);
   }
 
+  [dir="rtl"] .cart-drawer__upsell-title {
+    text-align: right;
+  }
+
   .upsell-scroll-container {
     display: flex;
     overflow-x: auto;
@@ -333,6 +1186,10 @@
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+  }
+
+  [dir="rtl"] .upsell-scroll-container {
+    direction: rtl;
   }
 
   .upsell-item {
@@ -401,281 +1258,7 @@
     pointer-events: none;
   }
 
-
-  /* --- HORIZONTAL CART ITEM LAYOUT --- */
-  #CartDrawer .cart-items__header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    text-transform: uppercase;
-    font-size: var(--t-small);
-    letter-spacing: 0.5px;
-    font-weight: 600;
-    font-family: var(--font-body-family);
-  }
-
-  #CartDrawer .cart-items__header-row {
-    display: contents;
-  }
-
-  #CartDrawer .cart-items__header-cell:last-child {
-    text-align: right;
-  }
-
-  #CartDrawer .cart-item {
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 0.75rem 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-  }
-
-  /* The frame follows the photo, not the other way round. A fixed square forced
-     a choice between cropping the product (`cover`) and matting it against a
-     tint that clashes with whatever ground is baked into the shot (`contain`).
-     Pinning the width and letting the height fall out of the image's own ratio
-     means the photo fills its frame edge to edge at every aspect ratio - one
-     column width down the list, no leftover space to keep consistent. */
-  #CartDrawer .cart-item__media {
-    grid-column: 1;
-    grid-row: 1 / 3;
-    width: 80px;
-    height: auto;
-    align-self: start;
-    position: relative;
-  }
-
-  #CartDrawer .cart-item__media img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 6px;
-  }
-
-  #CartDrawer .cart-item__details {
-    grid-column: 2;
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  #CartDrawer .cart-item__name {
-    font-size: var(--t-body);
-    font-weight: 500;
-    margin: 0;
-    line-height: 1.3;
-    text-decoration: none;
-    color: inherit;
-    font-family: var(--font-heading-family);
-  }
-
-  #CartDrawer .cart-item__totals {
-    grid-column: 3;
-    grid-row: 1;
-    text-align: right;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    font-weight: 300;
-    font-family: var(--font-body-family);
-  }
-
-  #CartDrawer .cart-item__quantity {
-    grid-column: 2;
-    grid-row: 2;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  #CartDrawer .product-option,
-  #CartDrawer .cart-item__details .cart-item__discounted-prices {
-    display: none !important;
-  }
-
-  #CartDrawer .quantity-popover-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  #CartDrawer .cart-remove-button {
-    margin: 0;
-    padding: 0;
-  }
-
-  #CartDrawer .cart-remove-button button {
-    background: transparent;
-    border: none;
-    padding: 0.25rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-  }
-
-  #CartDrawer .cart-remove-button button:hover {
-    opacity: 1;
-  }
-
-  #CartDrawer .cart-remove-button .svg-wrapper {
-    width: 18px;
-    height: 18px;
-  }
-
-  #CartDrawer .discounts {
-    font-size: var(--t-small);
-    margin-top: 0.25rem;
-    font-family: var(--font-body-family);
-  }
-
-  #CartDrawer .caption-with-letter-spacing {
-    font-size: var(--t-small);
-    margin-bottom: 0.25rem;
-    font-family: var(--font-body-family);
-  }
-
-  /* Cart footer typography */
-  .totals__total,
-  .totals__total-value,
-  .tax-note {
-    font-family: var(--font-body-family);
-  }
-
-  .cart__checkout-button {
-    --color-button: 192, 64, 1;
-    --color-button-text: 255, 255, 255;
-    --shadow-opacity: 0;
-    background-color: #c04001;
-    color: #ffffff;
-    font-family: var(--font-body-family);
-    border: 1px solid #c04001 !important;
-    border-radius: 2px;
-    outline: none;
-    box-shadow: none;
-  }
-
-  .cart__checkout-button::after,
-  .cart__checkout-button::before {
-    box-shadow: none !important;
-  }
-
-  .cart__checkout-button:focus,
-  .cart__checkout-button:focus-visible {
-    outline: none;
-    box-shadow: none;
-  }
-
-  .cart__checkout-button:focus::after,
-  .cart__checkout-button:focus-visible::after {
-    box-shadow: none !important;
-  }
-
-  .cart-drawer__footer {
-    padding-bottom: 0;
-  }
-
-  .cart__ctas {
-    padding-top: 0.75rem;
-  }
-
-  /* --- CHECKOUT BUTTON GLARE (matches ATC button: 0.6s, hover-triggered, opacity snap-back) --- */
-  @keyframes drawer-glare-ltr {
-    from { left: -100%; opacity: 1; }
-    to   { left:  100%; opacity: 1; }
-  }
-  @keyframes drawer-glare-rtl {
-    from { right: -100%; opacity: 1; }
-    to   { right:  100%; opacity: 1; }
-  }
-
-  #CartDrawer-Checkout {
-    overflow: hidden;
-  }
-
-  #CartDrawer-Checkout span {
-    position: relative;
-    z-index: 3;
-    display: block;
-    width: 100%;
-  }
-
-  /* Parked off-screen and invisible by default */
-  #CartDrawer-Checkout span::before {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 100%;
-    height: 300%;
-    opacity: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  /* Fires on hover — opacity snaps back to 0 the instant animation ends */
-  #CartDrawer-Checkout:not([disabled]):hover span::before {
-    animation: drawer-glare-ltr 0.6s linear;
-  }
-
-  [dir="rtl"] #CartDrawer-Checkout span::before {
-    background: linear-gradient(-120deg, transparent, rgba(255,255,255,0.3), transparent);
-    left: auto;
-    right: -100%;
-  }
-
-  [dir="rtl"] #CartDrawer-Checkout:not([disabled]):hover span::before {
-    animation: drawer-glare-rtl 0.6s linear;
-  }
-
   @media screen and (max-width: 750px) {
-    #CartDrawer .cart-item {
-      grid-template-columns: 70px 1fr auto;
-      gap: 0.5rem 0.75rem;
-      padding: 0.75rem 0;
-    }
-
-    #CartDrawer .cart-item__media {
-      width: 70px;
-    }
-
-    #CartDrawer .cart-items__header {
-      padding: 0.5rem 0;
-    }
-
-    /* Header padding and close-button placement now come from the card layout
-       block above, which is #CartDrawer-scoped and applies at every width. */
-  }
-  
-  /* --- MOBILE OPTIMIZATIONS --- */
-  
-  /* Compact Quantity Selectors (Overrides standard Dawn bulkiness) */
-  #CartDrawer .quantity {
-    width: 70px;
-    min-height: 28px;
-    height: 28px;
-  }
-  #CartDrawer .quantity__button {
-    width: 22px;
-    height: 28px;
-  }
-  #CartDrawer .quantity__input {
-    height: 28px;
-    font-size: var(--t-small);
-    font-family: var(--font-body-family);
-    padding: 0;
-  }
-  
-  /* Adjust layout for smaller screens */
-  @media screen and (max-width: 750px) {
-    /* Compact Upsell to prevent footer taking all space */
     .cart-drawer__upsell-title {
       margin-bottom: 0.5rem;
     }
@@ -694,97 +1277,6 @@
     .upsell-btn {
       padding: 0.4rem 0.6rem;
     }
-  }
-
-  /* --- CART SUMMARY (Total / Shipping / You're saving) --- */
-  .cart-drawer__summary {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 0.25rem;
-    font-family: var(--font-body-family);
-  }
-
-  .cart-drawer__summary-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    font-size: var(--t-body);
-    line-height: 1.2;
-  }
-
-  .cart-drawer__summary-label {
-    color: rgba(0, 0, 0, 0.65);
-  }
-
-  .cart-drawer__summary-value {
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .cart-drawer__summary-row--total .cart-drawer__summary-label,
-  .cart-drawer__summary-row--total .cart-drawer__summary-value {
-    color: #000;
-  }
-
-  .cart-drawer__summary-row--savings .cart-drawer__summary-value {
-    color: #c04001;
-  }
-
-  [dir="rtl"] .cart-drawer__summary-row {
-    direction: rtl;
-  }
-
-  /* --- TRUST MARKS --- */
-  /* One row, three items, above the payment logos. The check is first in the
-     DOM and every gap here is logical rather than physical, so an RTL container
-     flips the check to the right of its label on its own - no [dir] rule needed. */
-  .cart-drawer__trust {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(6px, 2vw, 12px);
-    padding: 0.85rem 0 0;
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    line-height: 1.2;
-    opacity: 0.8;
-  }
-
-  .cart-drawer__trust-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-  }
-
-  .cart-drawer__trust-check {
-    display: inline-flex;
-    flex-shrink: 0;
-  }
-
-  .cart-drawer__trust-check svg {
-    width: 10px;
-    height: 10px;
-    display: block;
-  }
-
-  /* --- PAYMENT ICONS --- */
-  .cart-drawer__payment-icons {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0.85rem 0 0.25rem;
-  }
-
-  .cart-drawer__payment-icon {
-    height: 22px;
-    width: auto;
-    max-width: 42px;
-    border-radius: 3px;
-    display: block;
   }
 </style>
 
@@ -1220,23 +1712,31 @@
           </details>
         {%- endif -%}
 
-        <!-- Start blocks -->
+        {%- comment -%}
+          Applied discounts: codes (from checkout or a /discount/ link) and
+          automatic discounts, each with what it takes off. Only rendered when
+          one applies, so the footer does not grow for everyone else.
+        {%- endcomment -%}
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <div class="cart-drawer__discounts">
+            <ul class="cart-drawer__discount-list list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <li class="cart-drawer__discount{% if discount.type == 'discount_code' %} cart-drawer__discount--code{% endif %}">
+                  <span class="cart-drawer__discount-name">
+                    {{- 'icon-discount.svg' | inline_asset_content -}}
+                    <span class="cart-drawer__discount-title">{{ discount.title | escape }}</span>
+                  </span>
+                  {%- comment -%} dir=ltr keeps the minus in front of the number in Arabic. {%- endcomment -%}
+                  <span class="cart-drawer__discount-amount" dir="ltr">-{{ discount.total_allocated_amount | money }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
         <!-- Subtotals -->
 
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
-          <div>
-            {%- if cart.cart_level_discount_applications.size > 0 -%}
-              <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                {%- for discount in cart.cart_level_discount_applications -%}
-                  <li class="discounts__discount discounts__discount--end">
-                    {{- 'icon-discount.svg' | inline_asset_content -}}
-                    {{ discount.title | escape }}
-                    (-{{ discount.total_allocated_amount | money }})
-                  </li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
 
           {%- liquid
             assign cart_savings = 0
@@ -1266,7 +1766,7 @@
             {%- if cart_savings > 0 -%}
               <div class="cart-drawer__summary-row cart-drawer__summary-row--savings">
                 <span class="cart-drawer__summary-label">{{ 'sections.cart.savings' | t }}</span>
-                <span class="cart-drawer__summary-value">-{{ cart_savings | money }}</span>
+                <span class="cart-drawer__summary-value" dir="ltr">-{{ cart_savings | money }}</span>
               </div>
             {%- endif -%}
           </div>
@@ -1325,6 +1825,8 @@
               src="{{ icon | asset_url }}"
               alt="{{ payment_labels[forloop.index0] }}"
               class="cart-drawer__payment-icon"
+              width="38"
+              height="24"
               loading="lazy"
               onerror="this.remove()"
             >

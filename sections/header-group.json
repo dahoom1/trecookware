@@ -37,7 +37,9 @@
       "settings": {
         "auto_rotate": false,
         "change_slides_speed": 3,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-3",
+        "custom_background": "#C8D4C1",
+        "custom_text": "#222122",
         "show_line_separator": true,
         "show_social": false,
         "enable_country_selector": false,

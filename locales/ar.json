@@ -4033,7 +4033,8 @@
       "view_empty_cart": "عرض سلة التسوق",
       "view": "عرض سلة التسوق ({{ count }})",
       "item_added": "تمت إضافة المنتج إلى سلة التسوق",
-      "item_added_short": "تمت الإضافة"
+      "item_added_short": "تمت الإضافة",
+      "added_to_cart": "تمت الإضافة إلى السلة"
     },
     "slider": {
       "name": "شريط التمرير",
